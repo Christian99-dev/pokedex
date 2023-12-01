@@ -21,4 +21,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
 
 export default Layout;
 
-const LayoutWrapper = styled.div``;
+const LayoutWrapper = styled.div`
+
+background-color: var(--dark);
+`;

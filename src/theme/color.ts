@@ -5,6 +5,6 @@ export default css`
     --pink: #F1b2d7;
     --dark-pink: #b76fb6;
     --purple: #633c7d;
-    --dark: #201743;
+    --dark:#231d24;
   }
 `;

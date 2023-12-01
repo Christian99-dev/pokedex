@@ -49,7 +49,7 @@ flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  background-color: var(--dark);
+
   
   h1 {
     font-size: 50px;
