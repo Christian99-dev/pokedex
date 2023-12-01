@@ -3,7 +3,6 @@ import Head from "next/head";
 import React, { ReactNode } from "react";
 import styled from "styled-components";
 
-const LayoutWrapper = styled.div``;
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
@@ -20,3 +19,5 @@ const Layout = ({ children }: { children: ReactNode }) => {
 };
 
 export default Layout;
+
+const LayoutWrapper = styled.div``;

@@ -2,12 +2,12 @@ import { device } from "./breakpoints";
 
 export const responsiveCSS = (
   name: string,
-  desktopXL: number,
-  desktop: number,
-  laptop: number,
-  tablet: number,
-  tablet_sm: number,
-  mobile: number,
+  desktopXL: number| string ,
+  desktop: number| string ,
+  laptop: number| string ,
+  tablet: number| string ,
+  tablet_sm: number| string ,
+  mobile: number| string ,
   end = "px"
 ) => {
   return `
