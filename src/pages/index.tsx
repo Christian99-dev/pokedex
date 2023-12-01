@@ -3,10 +3,6 @@ import Layout from "@/components/Layout";
 import { device } from "@/theme/breakpoints";
 import { GetStaticProps } from "next";
 import styled from "styled-components";
-import { responsiveCSS } from "@/theme/responsive";
-
-
-
 
 type PageProps = {
   data: any
@@ -33,12 +29,12 @@ export default function Home({ data }: PageProps) {
   return (
     <Layout>
       <PageWrapper>
-        <h1> MyPokDex</h1>
+        <h1> MyPokeDex</h1>
         <img src={front_default} alt="pokemon" />
         <div className="buttons"> 
           <Button text="Pokedex" route="/pokedex" />
           <Button text="Fight" route="/fight" />
-          <Button text="add Pokemon" route="/addPokemon" />
+          <Button text="Custom" route="/addPokemon" />
         </div>
       </PageWrapper>
     </Layout>
@@ -47,17 +43,19 @@ export default function Home({ data }: PageProps) {
 }
 
 const PageWrapper = styled.div`  
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+display: flex;
+flex-direction: column;
+  height: 100vh;
   justify-content: center;
-  height: 100%;
+  align-items: center;
+
+  background-color: var(--dark);
   
   h1 {
-    font-size: var(--fs-1);
-    color: #4caf50;
-    margin-bottom: var(--space-xl);;
+    font-size: 50px;
+    color: var(--dark-pink);
+    letter-spacing: 2px;
+    margin-bottom: var(--space-xxl);
   }
 
   h2 {
@@ -76,19 +74,27 @@ const PageWrapper = styled.div`
     width: 100%;
     color: white;
   }
-
-  @media ${device.tablet} {
-    flex-direction: column; 
-  }
-
+  
   img{
     height: 300px;
-    margin: var(--space-md) 0;
+    margin-bottom: var(--space-md);    
+  }
+  
+  .buttons{
+    display: flex;
+    gap: var(--space-md);
 
+    
   }
-  > button {
-    margin-bottom: var(--space-md);
-  }
+  
+  
+    @media ${device.tablet} {
+      flex-direction: column; 
+
+      .buttons{
+        flex-direction: column;
+      }
+    }
 
 `;
 
