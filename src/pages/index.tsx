@@ -89,9 +89,9 @@ const PageWrapper = styled.div`
 const AnimatedPokemonImage = styled.img`
   height: 300px;
   margin-bottom: var(--space-md);
-  animation: floatAndSpin 15s linear infinite; // Cool infinite animation
+  animation: floatAndSpin 15s linear infinite;
 
-  /* @keyframes floatAndSpin {
+  @keyframes floatAndSpin {
     0% {
       transform: translateY(0) rotate(0deg) scale(1);
       opacity: 0;
@@ -112,31 +112,5 @@ const AnimatedPokemonImage = styled.img`
       transform: translateY(0);
       opacity: 0;
     }
-  } */
+  }
 `;
-
-/**const AnimatedPokemonImage= styled.img`
-    height: 300px; 
-    margin-bottom: var(--space-md); 
-    animation: fadeIn 1.5s ease-in-out; 
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0; 
-        transform: translateY(-20px); 
-      }
-      to {
-        opacity: 1; 
-        transform:translateY(0); 
-      }
-    }
-`; 
- */
-
-/**  }
-  .buttons {
-    display: flex;
-    justify-content: center;
-    ${responsiveCSS("flex-direction", "row", "row", "row", "column", "column", "column")};
-    ${responsiveCSS("margin", "var(--space-md)", "var(--space-md)", "var(--space-md)", "var(--space-md)", "var(--space-md)", "var(--space-md)")};
-  } */

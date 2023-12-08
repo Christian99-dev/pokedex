@@ -6,7 +6,6 @@ import { GetStaticProps } from "next";
 import styled from "styled-components";
 import { device } from "@/theme/breakpoints";
 import vsIcon from "@/icons_img/vs_icon..png"; 
-import Button from '@/components/Button';
 
 type pokemonData={
   name: string; 
