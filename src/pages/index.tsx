@@ -4,6 +4,7 @@ import { device } from "@/theme/breakpoints";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { PokemonProvider, usePokemonContext } from "@/context/PokemonContext";
+import LoadingBanner from "@/components/LoadingBanner";
 
 export default function Home({ data }: { data: any }) {
   const { isLoading, getAllPokemon } = usePokemonContext();
@@ -19,7 +20,12 @@ export default function Home({ data }: { data: any }) {
 
   //   const { sprites: { front_default } } = data[currentPokemonIndex];
 
-  if (isLoading) return <div>loading...</div>;
+  if (true)
+    return (
+      <Layout>
+        <LoadingBanner />
+      </Layout>
+    );
 
   return (
     <Layout>
