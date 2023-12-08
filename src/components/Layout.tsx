@@ -1,3 +1,4 @@
+import { usePokemonContext } from "@/context/PokemonContext";
 import GlobalStyle from "@/theme/globalStyles";
 import Head from "next/head";
 import React, { ReactNode } from "react";

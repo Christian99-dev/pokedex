@@ -1,55 +1,13 @@
 import Button from "@/components/Button";
 import Layout from "@/components/Layout";
 import { device } from "@/theme/breakpoints";
-import { GetStaticProps } from "next";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { gql } from "@apollo/client";
-import createApolloClient from "../../apollo-client";
+import { PokemonProvider, usePokemonContext } from "@/context/PokemonContext";
 
-type PageProps = {
-  data: any;
-};
-
-export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  const numberOfPokemon = 492;
-
-  // const data = await Promise.all(
-  //   Array.from({ length: numberOfPokemon }, () =>
-  //     fetch(`https://pokeapi.co/api/v2/pokemon/${Math.floor(Math.random() * numberOfPokemon) + 1}`).then((response) => response.json())
-  //   )
-  // );
-
-  const client = createApolloClient();
-  const { data } = await client.query({
-    query: gql`
-      query pokemons($limit: Int, $offset: Int) {
-        pokemons(limit: $limit, offset: $offset) {
-          count
-          next
-          previous
-          status
-          message
-          results {
-            url
-            name
-            image
-          }
-        }
-      }
-    `,
-    variables: { limit: 1200, offset: 0 }, // Hier die Variablen limit und offset übergeben
-  });
-
-  return {
-    props: {
-      data,
-    },
-  };
-};
-export default function Home({ data }: PageProps) {
-
-  console.log("asd")
+export default function Home({ data }: { data: any }) {
+  const { isLoading, getAllPokemon } = usePokemonContext();
+  const allPokemons = getAllPokemon();
   // const [currentPokemonIndex, setCurrentPokemonIndex] = useState(0);
   //   useEffect(() => {
   //     const intervalId = setInterval(() => {
@@ -61,11 +19,13 @@ export default function Home({ data }: PageProps) {
 
   //   const { sprites: { front_default } } = data[currentPokemonIndex];
 
+  if (isLoading) return <div>loading...</div>;
+
   return (
     <Layout>
       <PageWrapper>
         <h1> MyPokeDex</h1>
-        <AnimatedPokemonImage src={data.pokemons.results[0].image} alt="pokemon" />
+        <AnimatedPokemonImage src={allPokemons[0].image} alt="pokemon" />
         <div className="buttons">
           <Button text="Pokedex" route="/pokedex" />
           <Button text="Fight" route="/fight" />
@@ -131,7 +91,7 @@ const AnimatedPokemonImage = styled.img`
   margin-bottom: var(--space-md);
   animation: floatAndSpin 15s linear infinite; // Cool infinite animation
 
-  @keyframes floatAndSpin {
+  /* @keyframes floatAndSpin {
     0% {
       transform: translateY(0) rotate(0deg) scale(1);
       opacity: 0;
@@ -152,7 +112,7 @@ const AnimatedPokemonImage = styled.img`
       transform: translateY(0);
       opacity: 0;
     }
-  }
+  } */
 `;
 
 /**const AnimatedPokemonImage= styled.img`
