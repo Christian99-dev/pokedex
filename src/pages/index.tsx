@@ -3,48 +3,57 @@ import Layout from "@/components/Layout";
 import { device } from "@/theme/breakpoints";
 import { GetStaticProps } from "next";
 import styled from "styled-components";
+import { useEffect, useState } from "react";
 
 type PageProps = {
   data: any
-}
+}; 
 
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
+  const numberOfPokemon = 10;
 
-  const randomPokemonId = Math.floor(Math.random() * 898) + 1;
-  const data = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomPokemonId}`);
-  const jsonData = await data.json();
-  console.log(jsonData); 
+  const data = await Promise.all(
+    Array.from({ length: numberOfPokemon }, () =>
+      fetch(`https://pokeapi.co/api/v2/pokemon/${Math.floor(Math.random() * numberOfPokemon) + 1}`).then((response) => response.json())
+    )
+  );
+
   return {
     props: {
-      data: jsonData,
+      data,
     },
   };
-}
-
-
+};
 export default function Home({ data }: PageProps) {
-  const { sprites: {
-    front_default
-  } } = data;
-  return (
-    <Layout>
-      <PageWrapper>
-        <h1> MyPokeDex</h1>
-        <img src={front_default} alt="pokemon" />
-        <div className="buttons"> 
-          <Button text="Pokedex" route="/pokedex" />
-          <Button text="Fight" route="/fight" />
-          <Button text="Custom" route="/addPokemon" />
-        </div>
-      </PageWrapper>
-    </Layout>
-
-  );
-}
-
+  const [currentPokemonIndex, setCurrentPokemonIndex] = useState(0);
+    useEffect(() => {
+      const intervalId = setInterval(() => {
+        setCurrentPokemonIndex((prevIndex) => Math.floor(Math.random() * data.length));
+      }, 15000);
+  
+      return () => clearInterval(intervalId);
+    }, [data.length]);
+  
+    const { sprites: { front_default } } = data[currentPokemonIndex];
+  
+    return (
+      <Layout>
+        <PageWrapper>
+          <h1> MyPokeDex</h1>
+          <AnimatedPokemonImage src={front_default} alt="pokemon" />
+          <div className="buttons">
+            <Button text="Pokedex" route="/pokedex" />
+            <Button text="Fight" route="/fight" />
+            <Button text="Custom" route="/addPokemon" />
+          </div>
+        </PageWrapper>
+      </Layout>
+    );
+  }
+  
 const PageWrapper = styled.div`  
-display: flex;
-flex-direction: column;
+  display: flex;
+  flex-direction: column;
   height: 100vh;
   justify-content: center;
   align-items: center;
@@ -99,6 +108,34 @@ flex-direction: column;
 `;
 
 
+const AnimatedPokemonImage= styled.img`
+  height: 300px;
+  margin-bottom: var(--space-md);
+  animation: floatAndSpin 15s linear infinite; // Cool infinite animation
+
+  @keyframes floatAndSpin {
+    0% {
+      transform: translateY(0) rotate(0deg) scale(1);
+      opacity: 0.;
+    }
+    25% {
+      transform: translateY(-10px) rotate(90deg) scale(1.1);
+      opacity: 0.8;
+    }
+    50% {
+      transform: translateY(0) rotate(0deg) scale(1);
+      opacity: 1;
+    }
+    75% {
+      transform: translateY(10px) rotate(-300deg) scale(1.3);
+      opacity: 0.2;
+    }
+    100%{
+      transform: translateY(0); 
+      opacity: 0; 
+    }
+  }
+`;
 
 
 
@@ -107,6 +144,23 @@ flex-direction: column;
 
 
 
+/**const AnimatedPokemonImage= styled.img`
+    height: 300px; 
+    margin-bottom: var(--space-md); 
+    animation: fadeIn 1.5s ease-in-out; 
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0; 
+        transform: translateY(-20px); 
+      }
+      to {
+        opacity: 1; 
+        transform:translateY(0); 
+      }
+    }
+`; 
+ */
 
 
 /**  }
