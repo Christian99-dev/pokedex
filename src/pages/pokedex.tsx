@@ -1,12 +1,32 @@
 import Layout from "@/components/Layout";
 import LoadingBanner from "@/components/LoadingBanner";
+import PokemonDisplay from "@/components/PokemonDisplay";
 import PokemonPreviewCard from "@/components/PokemonPreviewCard";
 import { usePokemonContext } from "@/context/PokemonContext";
+import { useState } from "react";
 import styled from "styled-components";
 
 const Pokedex = () => {
-  const { getAllPokemon, isLoading } = usePokemonContext();
+  const { getAllPokemon, isLoading, getIdBoundaries } = usePokemonContext();
   const allPokemon = getAllPokemon();
+  const {first, last} = getIdBoundaries();
+  const [activePokemonID, setActivePokemonID] = useState(2);
+
+  const nextPokemon = () => {
+    if (activePokemonID < last) {
+      setActivePokemonID((prevID) => prevID + 1);
+    } else {
+      setActivePokemonID(first);
+    }
+  };
+  
+  const prevPokemon = () => {
+    if (activePokemonID > first) {
+      setActivePokemonID((prevID) => prevID - 1);
+    } else {
+      setActivePokemonID(last);
+    }
+  };
 
   if (isLoading)
     return (
@@ -29,7 +49,13 @@ const Pokedex = () => {
             ))}
           </div>
         </div>
-        <div className="details"></div>
+        <div className="details">
+          <PokemonDisplay
+            pokemonID={activePokemonID}
+            nextButton={() => nextPokemon()}
+            prevButton={() => prevPokemon()}
+          />
+        </div>
       </PageWrapper>
     </Layout>
   );
@@ -43,6 +69,7 @@ const PageWrapper = styled.div`
 
   .details {
     width: 100%;
+    margin: auto var(--space-xxxl);
   }
 
   .preview {

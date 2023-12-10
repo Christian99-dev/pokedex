@@ -11,12 +11,14 @@ type ContextValue = {
   getPokemonById: (id: number) => Pokemon | null | undefined;
   getAllPokemon: () => Pokemon[] | [];
   isLoading: boolean;
+  getIdBoundaries: () => { first: number; last: number };
 };
 
 const PokemonContext = createContext<ContextValue>({
   getPokemonById: () => null,
   getAllPokemon: () => [],
   isLoading: true,
+  getIdBoundaries: () => ({ first: 0, last: 0 }),
 });
 
 export const usePokemonContext = () => useContext(PokemonContext);
@@ -39,7 +41,7 @@ export const PokemonProvider = ({
         const { data } = await client.query({
           query: gql`
             query GetAllPokemons {
-              pokemons(limit: 1000) {
+              pokemons(limit: 10) {
                 results {
                   name
                   image
@@ -51,7 +53,14 @@ export const PokemonProvider = ({
         });
 
         if (data && data.pokemons && data.pokemons.results) {
-          setPokemonData(data.pokemons.results);
+          const modifiedPokemons = data.pokemons.results.map(
+            (pokemon: Pokemon) => ({
+              ...pokemon,
+              name: pokemon.name[0].toUpperCase() + pokemon.name.slice(1),
+            })
+          );
+
+          setPokemonData(modifiedPokemons);
         }
       } catch (error) {
         console.error("Error fetching Pokemon data:", error);
@@ -68,9 +77,15 @@ export const PokemonProvider = ({
 
   const getAllPokemon = () => (isLoading ? [] : pokemonData);
 
+  const getIdBoundaries = () => {
+    const first = isLoading ? 0 : pokemonData[0].id || 0;
+    const last = isLoading ? 0 : pokemonData[pokemonData.length - 1].id || 0;
+    return { first, last };
+  };
+
   return (
     <PokemonContext.Provider
-      value={{ getPokemonById, getAllPokemon, isLoading }}
+      value={{ getPokemonById, getAllPokemon, isLoading, getIdBoundaries }}
     >
       {children}
     </PokemonContext.Provider>
