@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { gql, ApolloClient, InMemoryCache } from "@apollo/client";
 
-type Pokemon = {
+export type Pokemon = {
   id: number;
   image: string;
   name: string;
@@ -9,11 +9,15 @@ type Pokemon = {
 
 type ContextValue = {
   getPokemonById: (id: number) => Pokemon | null | undefined;
-  getAllPokemon: () => Pokemon[] | null;
+  getAllPokemon: () => Pokemon[] | [];
   isLoading: boolean;
 };
 
-const PokemonContext = createContext<ContextValue | null>(null);
+const PokemonContext = createContext<ContextValue>({
+  getPokemonById: () => null,
+  getAllPokemon: () => [],
+  isLoading: true,
+});
 
 export const usePokemonContext = () => useContext(PokemonContext);
 
@@ -35,7 +39,7 @@ export const PokemonProvider = ({
         const { data } = await client.query({
           query: gql`
             query GetAllPokemons {
-              pokemons(limit: 1292) {
+              pokemons(limit: 1000) {
                 results {
                   name
                   image
@@ -62,7 +66,7 @@ export const PokemonProvider = ({
   const getPokemonById = (id: number) =>
     isLoading ? null : pokemonData.find((pokemon) => pokemon.id === id);
 
-  const getAllPokemon = () => (isLoading ? null : pokemonData);
+  const getAllPokemon = () => (isLoading ? [] : pokemonData);
 
   return (
     <PokemonContext.Provider
