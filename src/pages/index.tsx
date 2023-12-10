@@ -20,7 +20,7 @@ export default function Home({ data }: { data: any }) {
 
   //   const { sprites: { front_default } } = data[currentPokemonIndex];
 
-  if (true)
+  if (isLoading)
     return (
       <Layout>
         <LoadingBanner />
