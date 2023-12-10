@@ -31,7 +31,7 @@ export const PokemonProvider = ({ children }: {children: React.ReactNode}) => {
         const { data } = await client.query({
           query: gql`
             query GetAllPokemons {
-              pokemons(limit: 8000) {
+              pokemons(limit: 1292) {
                 results {
                   name
                   image
