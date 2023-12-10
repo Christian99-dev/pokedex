@@ -1,16 +1,23 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import {
-  useApolloClient,
   gql,
   ApolloClient,
-  InMemoryCache,
+  InMemoryCache
 } from "@apollo/client";
 
-const PokemonContext = createContext();
+type Pokemon = any;
+
+type ContextValue = {
+  getPokemonById: (id: number) => Pokemon | null;
+  getAllPokemon: () => Pokemon[] | null;
+  isLoading: boolean;
+};
+
+const PokemonContext = createContext<ContextValue | undefined>(undefined);
 
 export const usePokemonContext = () => useContext(PokemonContext);
 
-export const PokemonProvider = ({ children }) => {
+export const PokemonProvider = ({ children }: {children: React.ReactNode}) => {
   const client = new ApolloClient({
     uri: "https://graphql-pokeapi.graphcdn.app",
     cache: new InMemoryCache(),
@@ -47,8 +54,8 @@ export const PokemonProvider = ({ children }) => {
     fetchPokemons();
   }, []);
 
-  const getPokemonById = (id) =>
-    isLoading ? null : pokemonData.find((pokemon) => pokemon.id === id);
+  const getPokemonById = (id: number) =>
+    isLoading ? null : pokemonData.find((pokemon) => true);
 
   const getAllPokemon = () => (isLoading ? null : pokemonData);
 
