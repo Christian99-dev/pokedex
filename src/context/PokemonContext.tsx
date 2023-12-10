@@ -1,13 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import {
-  gql,
-  ApolloClient,
-  InMemoryCache
-} from "@apollo/client";
+import { gql, ApolloClient, InMemoryCache } from "@apollo/client";
 
 type Pokemon = {
-  image: string,
-  name: string,
+  id: number;
+  image: string;
+  name: string;
 };
 
 type ContextValue = {
@@ -20,7 +17,11 @@ const PokemonContext = createContext<ContextValue | null>(null);
 
 export const usePokemonContext = () => useContext(PokemonContext);
 
-export const PokemonProvider = ({ children }: {children: React.ReactNode}) => {
+export const PokemonProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const client = new ApolloClient({
     uri: "https://graphql-pokeapi.graphcdn.app",
     cache: new InMemoryCache(),
@@ -38,6 +39,7 @@ export const PokemonProvider = ({ children }: {children: React.ReactNode}) => {
                 results {
                   name
                   image
+                  id
                 }
               }
             }
@@ -46,9 +48,7 @@ export const PokemonProvider = ({ children }: {children: React.ReactNode}) => {
 
         if (data && data.pokemons && data.pokemons.results) {
           setPokemonData(data.pokemons.results);
-          console.log(data.pokemons.results[0])
         }
-
       } catch (error) {
         console.error("Error fetching Pokemon data:", error);
       } finally {
@@ -60,7 +60,7 @@ export const PokemonProvider = ({ children }: {children: React.ReactNode}) => {
   }, []);
 
   const getPokemonById = (id: number) =>
-    isLoading ? null : pokemonData.find((pokemon) => true);
+    isLoading ? null : pokemonData.find((pokemon) => pokemon.id === id);
 
   const getAllPokemon = () => (isLoading ? null : pokemonData);
 
