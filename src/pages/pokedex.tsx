@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import LoadingBanner from "@/components/LoadingBanner";
-import PokedexPreview from "@/components/PokedexPreview";
+import PokemonPreviewCard from "@/components/PokemonPreviewCard";
 import { usePokemonContext } from "@/context/PokemonContext";
 import styled from "styled-components";
 
@@ -25,7 +25,7 @@ const Pokedex = () => {
           </div>
           <div className="list">
             {allPokemon.map((pokemon, index) => (
-              <PokedexPreview pokemon={pokemon} key={index} />
+              <PokemonPreviewCard pokemon={pokemon} key={index} />
             ))}
           </div>
         </div>
