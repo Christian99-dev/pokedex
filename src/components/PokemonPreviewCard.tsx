@@ -1,14 +1,19 @@
 import { Pokemon } from "@/context/PokemonContext";
 import styled from "styled-components";
 import { responsiveCSS } from "@/theme/responsive";
-type PokedexPreviewProps = {
-  pokemon: Pokemon;
-};
 
-const PokedexPreview = ({ pokemon }: PokedexPreviewProps) => {
+const PokedexPreview = ({
+  pokemon,
+  active,
+  onClick,
+}: {
+  pokemon: Pokemon;
+  active: boolean;
+  onClick: () => void;
+}) => {
   const { image, name, id } = pokemon;
   return (
-    <PokedexCardWrapper>
+    <PokedexCardWrapper className={active ? "active" : ""} onClick={onClick}>
       <img className="pokemon-img" src={image} alt={name} />
       <h1>{name}</h1>
       <h2>{id}</h2>
@@ -25,6 +30,8 @@ const PokedexCardWrapper = styled.div`
   border-radius: 10px;
   padding-right: var(--space-lg);
   gap: var(--space-lg);
+  transition: all 0.02s ease-out;
+  cursor: pointer;
 
   h1 {
     font-size: var(--fs-4);
@@ -37,5 +44,11 @@ const PokedexCardWrapper = styled.div`
   }
   img {
     ${responsiveCSS("height", 100, 90, 80, 70, 60, 50)}
+  }
+
+  &:hover, &.active {
+    transition: all 0.08s ease-in;
+    background-color: var(--purple);
+    color: var(--pink);
   }
 `;

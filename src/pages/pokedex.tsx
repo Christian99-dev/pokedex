@@ -3,14 +3,14 @@ import LoadingBanner from "@/components/LoadingBanner";
 import PokemonDisplay from "@/components/PokemonDisplay";
 import PokemonPreviewCard from "@/components/PokemonPreviewCard";
 import { usePokemonContext } from "@/context/PokemonContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Pokedex = () => {
   const { getAllPokemon, isLoading, getIdBoundaries } = usePokemonContext();
   const allPokemon = getAllPokemon();
   const {first, last} = getIdBoundaries();
-  const [activePokemonID, setActivePokemonID] = useState(2);
+  const [activePokemonID, setActivePokemonID] = useState(0);
 
   const nextPokemon = () => {
     if (activePokemonID < last) {
@@ -27,6 +27,12 @@ const Pokedex = () => {
       setActivePokemonID(last);
     }
   };
+
+  useEffect(() => {
+    if(!isLoading) {
+      setActivePokemonID(allPokemon[0].id)
+    }
+  }, [isLoading])
 
   if (isLoading)
     return (
@@ -45,7 +51,7 @@ const Pokedex = () => {
           </div>
           <div className="list">
             {allPokemon.map((pokemon, index) => (
-              <PokemonPreviewCard pokemon={pokemon} key={index} />
+              <PokemonPreviewCard pokemon={pokemon} key={index} active={activePokemonID === pokemon.id} onClick={() => setActivePokemonID(pokemon.id)} />
             ))}
           </div>
         </div>
