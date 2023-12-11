@@ -9,8 +9,10 @@ import styled from "styled-components";
 const Pokedex = () => {
   const { getAllPokemon, isLoading, getIdBoundaries } = usePokemonContext();
   const allPokemon = getAllPokemon();
-  const {first, last} = getIdBoundaries();
+  const { first, last } = getIdBoundaries();
   const [activePokemonID, setActivePokemonID] = useState(0);
+  const [nameFilter, setNameFilter] = useState("");
+  const [numberFilter, setNumberFilter] = useState("");
 
   const nextPokemon = () => {
     if (activePokemonID < last) {
@@ -19,7 +21,7 @@ const Pokedex = () => {
       setActivePokemonID(first);
     }
   };
-  
+
   const prevPokemon = () => {
     if (activePokemonID > first) {
       setActivePokemonID((prevID) => prevID - 1);
@@ -28,11 +30,24 @@ const Pokedex = () => {
     }
   };
 
+  const filteredPokemon = allPokemon.filter((pokemon) => {
+    const nameMatch = pokemon.name
+      .toLowerCase()
+      .includes(nameFilter.toLowerCase());
+    const numberMatch = String(pokemon.id).includes(numberFilter);
+    return nameMatch && numberMatch;
+  });
+
+  const resetFilter = () => {
+    setNameFilter("");
+    setNumberFilter("");
+  };
+
   useEffect(() => {
-    if(!isLoading) {
-      setActivePokemonID(allPokemon[0].id)
+    if (!isLoading) {
+      setActivePokemonID(allPokemon[0].id);
     }
-  }, [isLoading])
+  }, [isLoading]);
 
   if (isLoading)
     return (
@@ -46,20 +61,39 @@ const Pokedex = () => {
       <PageWrapper>
         <div className="preview">
           <div className="search">
-            <input placeholder="test" />
-            <input placeholder="test" />
+            <input
+              placeholder="Name"
+              value={nameFilter}
+              onChange={(e) => setNameFilter(e.target.value)}
+            />
+            <input
+              placeholder="Nummer"
+              value={numberFilter}
+              onChange={(e) => setNumberFilter(e.target.value)}
+            />
           </div>
           <div className="list">
-            {allPokemon.map((pokemon, index) => (
-              <PokemonPreviewCard pokemon={pokemon} key={index} active={activePokemonID === pokemon.id} onClick={() => setActivePokemonID(pokemon.id)} />
+            {filteredPokemon.map((pokemon, index) => (
+              <PokemonPreviewCard
+                pokemon={pokemon}
+                key={index}
+                active={activePokemonID === pokemon.id}
+                onClick={() => setActivePokemonID(pokemon.id)}
+              />
             ))}
           </div>
         </div>
         <div className="details">
           <PokemonDisplay
             pokemonID={activePokemonID}
-            nextButton={() => nextPokemon()}
-            prevButton={() => prevPokemon()}
+            nextButton={() => {
+              nextPokemon();
+              resetFilter();
+            }}
+            prevButton={() => {
+              prevPokemon();
+              resetFilter();
+            }}
           />
         </div>
       </PageWrapper>
