@@ -1,5 +1,4 @@
 // pages/fight.tsx
-import Image from 'next/image'; 
 import React , { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import styled from "styled-components";
@@ -7,9 +6,6 @@ import { device } from "@/theme/breakpoints";
 import LoadingBanner from "@/components/LoadingBanner";
 import {Pokemon, usePokemonContext } from "@/context/PokemonContext";
 import TypeButton from '@/components/TypeButton';
-import down_arrow from "@/icons_img/down_arrow.png"
-import vsIcon from "@/icons_img/vs_icon..png"; 
-import { responsiveCSS } from "@/theme/responsive";
 import PokemonMenu from '@/components/PokemonMenu'; 
 
 const Fight = () => {
@@ -86,7 +82,7 @@ const Fight = () => {
             <h2> {selectedPokemon1?.name} </h2>
             <p>Number: 0{selectedPokemon1?.id} </p>    
             <DownArrowIcon
-              src={down_arrow.src}
+              src="/static/down_arrow.png"
               alt="Down Arrow Icon"
               onClick={handlePokemonMenuToggle1}
             />
@@ -95,7 +91,7 @@ const Fight = () => {
           />
           </div> 
           <div className='img-wrap'> 
-            <Image className="vs-icon" src={vsIcon} alt="VS Icon" />
+            <img className="vs-icon" src="/static/vs_icon.png" alt="VS Icon" />
           </div> 
           <div className="pokemon-box">
             <AnimatedPokemonImage src={selectedPokemon2?.image} alt={selectedPokemon2?.name}/>
@@ -106,7 +102,7 @@ const Fight = () => {
               </div>
               <h2> {selectedPokemon2?.name} </h2>
               <p>Number: 0{selectedPokemon2?.id} </p>
-              <DownArrowIcon src={down_arrow.src} alt="Down Arrow Icon" onClick={handlePokemonMenuToggle2}/> 
+              <DownArrowIcon src="/static/down_arrow.png" alt="Down Arrow Icon" onClick={handlePokemonMenuToggle2}/> 
               <PokemonMenu
                 show={showPokemonMenu2}menuItems={pokemonMenuItems} handlePokemonMenuClick={handlePokemonMenuClick2}
               />
@@ -226,6 +222,4 @@ const AnimatedPokemonImage= styled.img`
       }
     }
 `;  
-export default Fight; 
-
-/**https://beta.pokeapi.co/graphql/console/ */
+export default Fight;
