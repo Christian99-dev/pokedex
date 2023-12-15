@@ -98,11 +98,9 @@ const Fight = () => {
               handlePokemonMenuClick={handlePokemonMenuClick1}
             />
           </div>
-          {/* <div className="img-wrap"> */}
-          {/* <img className="vs-icon" src="/static/vs_icon.png" alt="VS Icon" /> */}
+
           <Icon iconname="vs_icon.png" className="vs-icon" />
 
-          {/* </div> */}
           <div className="pokemon-box">
             <AnimatedPokemonImage
               src={selectedPokemon2?.image}

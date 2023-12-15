@@ -60,7 +60,6 @@ export const PokemonProvider = ({
                 }
                 `,
         });
-        console.log(data);
         if (data && data.pokemon_v2_pokemon) {
             const parsedPokemons = data.pokemon_v2_pokemon.map((pokemon: any) => {
               const sprites = JSON.parse(pokemon.pokemon_v2_pokemonsprites[0].sprites);

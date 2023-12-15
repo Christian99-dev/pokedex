@@ -12,7 +12,7 @@ export default function Home(){
   const [currentPokemonIndex, setCurrentPokemonIndex] = useState(25);
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setCurrentPokemonIndex((prevIndex) => Math.floor(Math.random() * allPokemons.length));
+      setCurrentPokemonIndex(Math.floor(Math.random() * allPokemons.length));
     }, 15000);
     return () => clearInterval(intervalId);
   });
