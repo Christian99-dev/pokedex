@@ -1,20 +1,24 @@
 // pages/fight.tsx
-import React , { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import styled from "styled-components";
 import { device } from "@/theme/breakpoints";
 import LoadingBanner from "@/components/LoadingBanner";
-import {Pokemon, usePokemonContext } from "@/context/PokemonContext";
-import TypeButton from '@/components/TypeButton';
-import PokemonMenu from '@/components/PokemonMenu'; 
+import { Pokemon, usePokemonContext } from "@/context/PokemonContext";
+import TypeButton from "@/components/TypeButton";
+import PokemonMenu from "@/components/PokemonMenu";
+import Icon from "@/components/Icon";
 
 const Fight = () => {
-  const {isLoading, getPokemonById, getAllPokemon} = usePokemonContext();
+  const { isLoading, getPokemonById, getAllPokemon } = usePokemonContext();
   const [showPokemonMenu1, setShowPokemonMenu1] = useState(false);
   const [showPokemonMenu2, setShowPokemonMenu2] = useState(false);
-  const [selectedPokemon1, setSelectedPokemon1] = useState<Pokemon | null>(getPokemonById(1) || null);
-  const [selectedPokemon2, setSelectedPokemon2] = useState<Pokemon | null>(getPokemonById(2) || null);
-
+  const [selectedPokemon1, setSelectedPokemon1] = useState<Pokemon | null>(
+    getPokemonById(1) || null
+  );
+  const [selectedPokemon2, setSelectedPokemon2] = useState<Pokemon | null>(
+    getPokemonById(2) || null
+  );
 
   const handlePokemonSwitch1 = (pokemonId: string) => {
     const newSelectedPokemon = getPokemonById(parseInt(pokemonId));
@@ -53,12 +57,12 @@ const Fight = () => {
 
   const pokemonMenuItems = getAllPokemon();
 
-  useEffect (() => {
-    if(!isLoading) {
-      setSelectedPokemon1(getPokemonById(1) ||null);
-      setSelectedPokemon2(getPokemonById(2)||null)
+  useEffect(() => {
+    if (!isLoading) {
+      setSelectedPokemon1(getPokemonById(1) || null);
+      setSelectedPokemon2(getPokemonById(2) || null);
     }
-  }, [isLoading]); 
+  }, [isLoading]);
 
   if (isLoading || !getPokemonById) {
     return (
@@ -73,54 +77,62 @@ const Fight = () => {
         <h1> Fight </h1>
         <div className="pokemon-container">
           <div className="pokemon-box">
-            <AnimatedPokemonImage src={selectedPokemon1?.image} alt={selectedPokemon1?.name}/>
+            <AnimatedPokemonImage
+              src={selectedPokemon1?.image}
+              alt={selectedPokemon1?.name}
+            />
             <div className="types-container">
               {selectedPokemon1?.types.map((type) => (
                 <TypeButton key={type.type.name} typeName={type.type.name} />
               ))}
             </div>
             <h2> {selectedPokemon1?.name} </h2>
-            <p>Number: 0{selectedPokemon1?.id} </p>    
-            <DownArrowIcon
-              src="/static/down_arrow.png"
-              alt="Down Arrow Icon"
+            <p>Number: 0{selectedPokemon1?.id} </p>
+            <Icon
+              iconname="arrow_down.svg"
               onClick={handlePokemonMenuToggle1}
             />
-          <PokemonMenu
-            show={showPokemonMenu1} menuItems={pokemonMenuItems} handlePokemonMenuClick={handlePokemonMenuClick1}
-          />
-          </div> 
-          <div className='img-wrap'> 
-            <img className="vs-icon" src="/static/vs_icon.png" alt="VS Icon" />
-          </div> 
+            <PokemonMenu
+              show={showPokemonMenu1}
+              menuItems={pokemonMenuItems}
+              handlePokemonMenuClick={handlePokemonMenuClick1}
+            />
+          </div>
+          {/* <div className="img-wrap"> */}
+          {/* <img className="vs-icon" src="/static/vs_icon.png" alt="VS Icon" /> */}
+          <Icon iconname="vs_icon.png" className="vs-icon" />
+
+          {/* </div> */}
           <div className="pokemon-box">
-            <AnimatedPokemonImage src={selectedPokemon2?.image} alt={selectedPokemon2?.name}/>
-              <div className="types-container">
-                {selectedPokemon2?.types.map((type) => (
-                  <TypeButton key={type.type.name} typeName={type.type.name} />
-                ))}
-              </div>
-              <h2> {selectedPokemon2?.name} </h2>
-              <p>Number: 0{selectedPokemon2?.id} </p>
-              <DownArrowIcon src="/static/down_arrow.png" alt="Down Arrow Icon" onClick={handlePokemonMenuToggle2}/> 
-              <PokemonMenu
-                show={showPokemonMenu2}menuItems={pokemonMenuItems} handlePokemonMenuClick={handlePokemonMenuClick2}
-              />
-          </div>    
+            <AnimatedPokemonImage
+              src={selectedPokemon2?.image}
+              alt={selectedPokemon2?.name}
+            />
+            <div className="types-container">
+              {selectedPokemon2?.types.map((type) => (
+                <TypeButton key={type.type.name} typeName={type.type.name} />
+              ))}
+            </div>
+            <h2> {selectedPokemon2?.name} </h2>
+            <p>Number: 0{selectedPokemon2?.id} </p>
+
+            <Icon
+              iconname="arrow_down.svg"
+              onClick={handlePokemonMenuToggle2}
+            />
+
+            <PokemonMenu
+              show={showPokemonMenu2}
+              menuItems={pokemonMenuItems}
+              handlePokemonMenuClick={handlePokemonMenuClick2}
+            />
+          </div>
         </div>
       </FightWrapper>
     </Layout>
   );
 };
-const DownArrowIcon = styled.img`
-  padding-top: 0px; 
-  max-block-size: 40px; 
-  cursor: pointer;
 
-  &:hover {
-    box-shadow: 0 0 2px 1px rgba(255, 255, 255, 0.5);
-  }
-`;
 const FightWrapper = styled.div`
   display: flex;
   text-align: center;
@@ -133,93 +145,96 @@ const FightWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+
+    .vs-icon {
+      max-block-size: 100px;
+      transition: all 0.1s ease-out;
+      animation: bounce 4s infinite, rotate 2s linear 0s 1;
+      &:hover {
+        transition: all 0.3s ease-in;
+        scale: 1.09;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3),
+          0 10px 20px rgba(255, 0, 230, 0.2);
+      }
+    }
   }
+
   h1 {
     font-size: 50px;
     color: var(--dark-pink);
     letter-spacing: 2px;
     margin-bottom: var(--space-xxl);
   }
+
   h2 {
     color: var(--dark-pink);
     font-size: var(--fs-2);
     margin: 0;
   }
-  p{
+
+  p {
     font-size: var(--fs-5);
     color: #d3ade579;
     margin-bottom: -10px;
   }
+
   img {
-    height: 300px; 
+    height: 300px;
     margin: var(--space-md);
     gap: var(--space-xxl);
     margin-bottom: var(--space-xxs);
   }
-  .img-wrap {
-    float:left; 
-    margin-right: 5px; 
-
-  }
 
   @media ${device.tablet} {
-      flex-direction: column; 
+    flex-direction: column;
 
-      .pokemon-container{
-        flex-direction: column;
-      }
+    .pokemon-container {
+      flex-direction: column;
     }
-
-  .vs-icon {
-  width: 100px; 
-  height: 100px; 
-  cursor: pointer; 
-  transition: all 0.1s ease-out;
-  animation: bounce 4s infinite, rotate 2s linear 0s 1;
-
-  &:hover{
-    transition: all 0.3s ease-in;
-    scale: 1.09;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 10px 20px rgba(255, 0, 230, 0.2);
   }
-}
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
+
+  @keyframes bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
       transform: translateY(0);
     }
+
     40% {
-      transform: translateY(-20px) rotate(10deg); 
+      transform: translateY(-20px) rotate(10deg);
     }
 
     60% {
-      transform: translateY(-10px) rotate(-10deg) ; 
+      transform: translateY(-10px) rotate(-10deg);
     }
   }
   @keyframes rotate {
     0% {
       transform: rotate(0deg);
     }
+
     100% {
       transform: rotate(360deg); /* Rotate the vs-icon 360 degrees */
     }
   }
-
 `;
 
-const AnimatedPokemonImage= styled.img`
-    margin-bottom: var(--space-md); 
-    animation: fadeIn 2s ease-in-out; 
+const AnimatedPokemonImage = styled.img`
+  margin-bottom: var(--space-md);
+  animation: fadeIn 2s ease-in-out;
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0; 
-        transform: translateY(-200px) translateX(-20px) rotate(90deg);
-      }
-      to {
-        opacity: 1; 
-        transform:translateY(0); 
-        
-      }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-200px) translateX(-20px) rotate(90deg);
     }
-`;  
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
 export default Fight;
