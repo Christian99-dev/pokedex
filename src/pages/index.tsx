@@ -3,24 +3,21 @@ import Layout from "@/components/Layout";
 import { device } from "@/theme/breakpoints";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { PokemonProvider, usePokemonContext } from "@/context/PokemonContext";
+import {usePokemonContext } from "@/context/PokemonContext";
 import LoadingBanner from "@/components/LoadingBanner";
 
-export default function Home({ data }: { data: any }) {
+export default function Home(){
   const { isLoading, getAllPokemon } = usePokemonContext();
   const allPokemons = getAllPokemon();
-  // const [currentPokemonIndex, setCurrentPokemonIndex] = useState(0);
-  //   useEffect(() => {
-  //     const intervalId = setInterval(() => {
-  //       setCurrentPokemonIndex((prevIndex) => Math.floor(Math.random() * data.length));
-  //     }, 15000);
+  const [currentPokemonIndex, setCurrentPokemonIndex] = useState(25);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentPokemonIndex((prevIndex) => Math.floor(Math.random() * allPokemons.length));
+    }, 15000);
+    return () => clearInterval(intervalId);
+  });
 
-  //     return () => clearInterval(intervalId);
-  //   }, [data.length]);
-
-  //   const { sprites: { front_default } } = data[currentPokemonIndex];
-
-  if (isLoading)
+  if (isLoading || !allPokemons)
     return (
       <Layout>
         <LoadingBanner />
@@ -31,7 +28,7 @@ export default function Home({ data }: { data: any }) {
     <Layout>
       <PageWrapper>
         <h1> MyPokeDex</h1>
-        <AnimatedPokemonImage src={allPokemons[0].image} alt="pokemon" />
+        <AnimatedPokemonImage src={allPokemons?.[currentPokemonIndex].image} alt="pokemon" />
         <div className="buttons">
           <Button text="Pokedex" route="/pokedex" />
           <Button text="Fight" route="/fight" />
