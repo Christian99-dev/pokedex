@@ -24,9 +24,9 @@ const PokemonDisplay = ({
         alt={activePokemon?.name}
       />
       <div className="bottom">
-        <Icon iconname="arrow_down.svg" onClick={prevButton} />
+        <Icon iconname="arrow_left.svg" onClick={prevButton} />
         <div className="name">{activePokemon?.name}</div>
-        <Icon iconname="arrow_down.svg" onClick={nextButton} />
+        <Icon iconname="arrow_right.svg" onClick={nextButton} />
       </div>
     </PokemonDisplayWrapper>
   );

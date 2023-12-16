@@ -8,6 +8,7 @@ import { Pokemon, usePokemonContext } from "@/context/PokemonContext";
 import TypeButton from "@/components/TypeButton";
 import PokemonMenu from "@/components/PokemonMenu";
 import Icon from "@/components/Icon";
+import BattleResult from "@/components/BattleResult";
 
 const Fight = () => {
   const { isLoading, getPokemonById, getAllPokemon } = usePokemonContext();
@@ -19,6 +20,7 @@ const Fight = () => {
   const [selectedPokemon2, setSelectedPokemon2] = useState<Pokemon | null>(
     getPokemonById(2) || null
   );
+  const [modalIsOpen, setModalIsOpen] = useState(false); 
 
   const handlePokemonSwitch1 = (pokemonId: string) => {
     const newSelectedPokemon = getPokemonById(parseInt(pokemonId));
@@ -56,6 +58,14 @@ const Fight = () => {
   };
 
   const pokemonMenuItems = getAllPokemon();
+  
+  const handleVSIconClick = () => {
+    /*setBattleOccurred(true); */
+    setModalIsOpen(true);
+  }; 
+  const handleCloseModal = () => {
+    setModalIsOpen(false);
+  };
 
   useEffect(() => {
     if (!isLoading) {
@@ -99,7 +109,7 @@ const Fight = () => {
             />
           </div>
 
-          <Icon iconname="vs_icon.png" className="vs-icon" />
+          <Icon iconname="vs_icon.png" className="vs-icon" onClick={handleVSIconClick}/>
 
           <div className="pokemon-box">
             <AnimatedPokemonImage
@@ -126,6 +136,14 @@ const Fight = () => {
             />
           </div>
         </div>
+        <BattleResult
+          selectedPokemon1={selectedPokemon1}
+          selectedPokemon2={selectedPokemon2}
+          modalIsOpen={modalIsOpen}
+          onOpenModal={handleVSIconClick}
+          onCloseModal={handleCloseModal}
+        />
+                   
       </FightWrapper>
     </Layout>
   );
