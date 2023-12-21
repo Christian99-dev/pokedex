@@ -28,6 +28,7 @@ const BattleResultModal: React.FC<BattleResultModalProps> = ({
             width: "50%", 
             height: "50%", 
             margin: "auto", 
+            backgroundColor: "var(--pink)",
           },
       }}
       >
@@ -79,20 +80,18 @@ const DrawInfo = styled.div `
     height: 300px; 
 `; 
 const PokImage = styled.img `
-    width: 200px; 
-    height: 200px;   
+    width: 400px; 
+    height: 400px;   
 `; 
 const ModalContent = styled.div`
-  background-color: pink;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 50%; 
 `;
 
 const WinnerImage = styled.img`
-  width: 150px;
-  height: 150px;
+  width: 400px;
+  height: 400px;
   border-radius: 50%;
   margin-right: 20px;
 `;

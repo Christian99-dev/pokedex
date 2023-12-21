@@ -140,7 +140,6 @@ const Fight = () => {
           selectedPokemon1={selectedPokemon1}
           selectedPokemon2={selectedPokemon2}
           modalIsOpen={modalIsOpen}
-          onOpenModal={handleVSIconClick}
           onCloseModal={handleCloseModal}
         />
                    

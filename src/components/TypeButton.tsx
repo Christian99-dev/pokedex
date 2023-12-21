@@ -6,6 +6,7 @@ type TypeButtonProps = {
   typeName: string;
 };
 
+const darkColors = ['#585858', '#7C538C', 'linear-gradient(90deg, #FF5959 50%, #003366 50%)', '#EB4971'];
 
 const StyledButton = styled.button<{ backgroundcolor: string }>`
   width: 100px;
@@ -13,7 +14,7 @@ const StyledButton = styled.button<{ backgroundcolor: string }>`
   margin: 5px;
   border: none;
   border-radius: 5px;
-  color: #120058;
+  color: ${({ backgroundcolor }) => (darkColors.includes(backgroundcolor) ? '#FFFFFF' : '#120058')};
   font-size: 14px;
   font-weight: bold;
   background: ${({ backgroundcolor }) => backgroundcolor};
