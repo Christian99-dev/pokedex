@@ -21,7 +21,8 @@ const Fight = () => {
     getPokemonById(2) || null
   );
   const [modalIsOpen, setModalIsOpen] = useState(false); 
-
+  const [arrowIcon1, setArrowIcon1] = useState("arrow_down.svg");
+  const [arrowIcon2, setArrowIcon2] = useState("arrow_down.svg");  
   const handlePokemonSwitch1 = (pokemonId: string) => {
     const newSelectedPokemon = getPokemonById(parseInt(pokemonId));
     if (newSelectedPokemon) {
@@ -66,6 +67,14 @@ const Fight = () => {
   const handleCloseModal = () => {
     setModalIsOpen(false);
   };
+  const handleArrowIconClick1 = () => {
+    setArrowIcon1((prevIcon) => (prevIcon === "arrow_down.svg" ? "arrow_up.svg" : "arrow_down.svg"));
+    handlePokemonMenuToggle1();
+  };
+  const handleArrowIconClick2 = () => {
+    setArrowIcon2((prevIcon) => (prevIcon === "arrow_down.svg" ? "arrow_up.svg" : "arrow_down.svg"));
+    handlePokemonMenuToggle2();
+  };
 
   useEffect(() => {
     if (!isLoading) {
@@ -99,8 +108,8 @@ const Fight = () => {
             <h2> {selectedPokemon1?.name} </h2>
             <p>Number: 0{selectedPokemon1?.id} </p>
             <Icon
-              iconname="arrow_down.svg"
-              onClick={handlePokemonMenuToggle1}
+              iconname={arrowIcon1}
+              onClick={handleArrowIconClick1}
             />
             <PokemonMenu
               show={showPokemonMenu1}
@@ -125,8 +134,8 @@ const Fight = () => {
             <p>Number: 0{selectedPokemon2?.id} </p>
 
             <Icon
-              iconname="arrow_down.svg"
-              onClick={handlePokemonMenuToggle2}
+              iconname={arrowIcon2}
+              onClick={handleArrowIconClick2}
             />
 
             <PokemonMenu
