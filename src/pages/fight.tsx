@@ -1,14 +1,12 @@
-// pages/fight.tsx
 import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import styled from "styled-components";
 import { device } from "@/theme/breakpoints";
 import LoadingBanner from "@/components/LoadingBanner";
 import { Pokemon, usePokemonContext } from "@/context/PokemonContext";
-import TypeButton from "@/components/TypeButton";
-import PokemonMenu from "@/components/PokemonMenu";
 import Icon from "@/components/Icon";
 import BattleResult from "@/components/BattleResult";
+import PokemonBox from "@/components/PokemonBox";
 
 const Fight = () => {
   const { isLoading, getPokemonById, getAllPokemon } = usePokemonContext();
@@ -39,21 +37,20 @@ const Fight = () => {
       console.error("Error, Pokemon not found yet");
     }
   };
-
   const handlePokemonMenuToggle1 = () => {
     setShowPokemonMenu1((prev) => !prev);
   };
-
   const handlePokemonMenuToggle2 = () => {
     setShowPokemonMenu2((prev) => !prev);
   };
 
   const handlePokemonMenuClick1 = (pokemonId: number) => {
+    setArrowIcon1("arrow_down.svg");
     handlePokemonSwitch1(String(pokemonId));
     setShowPokemonMenu1(false);
   };
-
   const handlePokemonMenuClick2 = (pokemonId: number) => {
+    setArrowIcon2("arrow_down.svg"); 
     handlePokemonSwitch2(String(pokemonId));
     setShowPokemonMenu2(false);
   };
@@ -61,7 +58,6 @@ const Fight = () => {
   const pokemonMenuItems = getAllPokemon();
   
   const handleVSIconClick = () => {
-    /*setBattleOccurred(true); */
     setModalIsOpen(true);
   }; 
   const handleCloseModal = () => {
@@ -95,55 +91,25 @@ const Fight = () => {
       <FightWrapper>
         <h1> Fight </h1>
         <div className="pokemon-container">
-          <div className="pokemon-box">
-            <AnimatedPokemonImage
-              src={selectedPokemon1?.image}
-              alt={selectedPokemon1?.name}
-            />
-            <div className="types-container">
-              {selectedPokemon1?.types.map((type) => (
-                <TypeButton key={type.type.name} typeName={type.type.name} />
-              ))}
-            </div>
-            <h2> {selectedPokemon1?.name} </h2>
-            <p>Number: 0{selectedPokemon1?.id} </p>
-            <Icon
-              iconname={arrowIcon1}
-              onClick={handleArrowIconClick1}
-            />
-            <PokemonMenu
-              show={showPokemonMenu1}
-              menuItems={pokemonMenuItems}
-              handlePokemonMenuClick={handlePokemonMenuClick1}
-            />
-          </div>
-
+          <PokemonBox
+            selectedPokemon={selectedPokemon1}
+            arrowIcon={arrowIcon1}
+            showMenu={showPokemonMenu1}
+            handleMenuToggle={handlePokemonMenuToggle1}
+            handleMenuClick={handlePokemonMenuClick1}
+            handleArrowIconClick={handleArrowIconClick1} 
+            pokemonMenuItems={pokemonMenuItems}        
+          />
           <Icon iconname="vs_icon.png" className="vs-icon" onClick={handleVSIconClick}/>
-
-          <div className="pokemon-box">
-            <AnimatedPokemonImage
-              src={selectedPokemon2?.image}
-              alt={selectedPokemon2?.name}
-            />
-            <div className="types-container">
-              {selectedPokemon2?.types.map((type) => (
-                <TypeButton key={type.type.name} typeName={type.type.name} />
-              ))}
-            </div>
-            <h2> {selectedPokemon2?.name} </h2>
-            <p>Number: 0{selectedPokemon2?.id} </p>
-
-            <Icon
-              iconname={arrowIcon2}
-              onClick={handleArrowIconClick2}
-            />
-
-            <PokemonMenu
-              show={showPokemonMenu2}
-              menuItems={pokemonMenuItems}
-              handlePokemonMenuClick={handlePokemonMenuClick2}
-            />
-          </div>
+          <PokemonBox
+            selectedPokemon={selectedPokemon2}
+            arrowIcon={arrowIcon2}
+            showMenu={showPokemonMenu2}
+            handleMenuToggle={handlePokemonMenuToggle2}
+            handleMenuClick={handlePokemonMenuClick2}
+            handleArrowIconClick={handleArrowIconClick2}
+            pokemonMenuItems={pokemonMenuItems}
+          />
         </div>
         <BattleResult
           selectedPokemon1={selectedPokemon1}
@@ -156,7 +122,6 @@ const Fight = () => {
     </Layout>
   );
 };
-
 const FightWrapper = styled.div`
   display: flex;
   text-align: center;
@@ -195,20 +160,6 @@ const FightWrapper = styled.div`
     font-size: var(--fs-2);
     margin: 0;
   }
-
-  p {
-    font-size: var(--fs-5);
-    color: #d3ade579;
-    margin-bottom: -10px;
-  }
-
-  img {
-    height: 300px;
-    margin: var(--space-md);
-    gap: var(--space-xxl);
-    margin-bottom: var(--space-xxs);
-  }
-
   @media ${device.tablet} {
     flex-direction: column;
 
@@ -216,20 +167,14 @@ const FightWrapper = styled.div`
       flex-direction: column;
     }
   }
-
   @keyframes bounce {
-    0%,
-    20%,
-    50%,
-    80%,
+    0%, 20%, 50%, 80%,
     100% {
       transform: translateY(0);
     }
-
     40% {
       transform: translateY(-20px) rotate(10deg);
     }
-
     60% {
       transform: translateY(-10px) rotate(-10deg);
     }
@@ -241,23 +186,6 @@ const FightWrapper = styled.div`
 
     100% {
       transform: rotate(360deg); /* Rotate the vs-icon 360 degrees */
-    }
-  }
-`;
-
-const AnimatedPokemonImage = styled.img`
-  margin-bottom: var(--space-md);
-  animation: fadeIn 2s ease-in-out;
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-200px) translateX(-20px) rotate(90deg);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
     }
   }
 `;
