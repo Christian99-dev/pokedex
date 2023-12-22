@@ -5,7 +5,7 @@ export type Pokemon = {
   id: number;
   image: string;
   name: string;
-  types: Array<{type:{name:string}} >; 
+  types: Array<{ type: { name: string } }>;
 };
 
 type ContextValue = {
@@ -13,8 +13,7 @@ type ContextValue = {
   getAllPokemon: () => Pokemon[] | [];
   isLoading: boolean;
   getIdBoundaries: () => { first: number; last: number };
-
-
+  allTypes: String[];
 };
 
 const PokemonContext = createContext<ContextValue>({
@@ -22,7 +21,7 @@ const PokemonContext = createContext<ContextValue>({
   getAllPokemon: () => [],
   isLoading: true,
   getIdBoundaries: () => ({ first: 0, last: 0 }),
-
+  allTypes: [],
 });
 
 export const usePokemonContext = () => useContext(PokemonContext);
@@ -37,46 +36,57 @@ export const PokemonProvider = ({
     cache: new InMemoryCache(),
   });
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [allTypes, setAllTypes] = useState<String[]>([]);
 
   useEffect(() => {
     const fetchPokemons = async () => {
       try {
         const { data } = await client.query({
-            query: gql`
-                query MyQuery {
-                    pokemon_v2_pokemon (limit: 1009){
-                        id
-                        name
-                        pokemon_v2_pokemontypes {
-                            pokemon_v2_type {
-                                name
-                            }
-                        }
-                        pokemon_v2_pokemonsprites {
-                            sprites
-                        }
-                    }
+          query: gql`
+            query MyQuery {
+              pokemon_v2_pokemon(limit: 1009) {
+                id
+                name
+                pokemon_v2_pokemontypes {
+                  pokemon_v2_type {
+                    name
+                  }
                 }
-                `,
+                pokemon_v2_pokemonsprites {
+                  sprites
+                }
+              }
+            }
+          `,
         });
+        let allTypesTemp : String[] = [];
         if (data && data.pokemon_v2_pokemon) {
-            const parsedPokemons = data.pokemon_v2_pokemon.map((pokemon: any) => {
-              const sprites = JSON.parse(pokemon.pokemon_v2_pokemonsprites[0].sprites);
-              const frontDefaultImage = sprites.front_default;
-    
-              return {
-                id: pokemon.id,
-                name: pokemon.name.toUpperCase(),
-                types: pokemon.pokemon_v2_pokemontypes.map((type: any) => ({
-                  type: {
-                    name: type.pokemon_v2_type.name,
-                  },
-                })),
-                image: frontDefaultImage,
-              };
-            });
+          const parsedPokemons = data.pokemon_v2_pokemon.map((pokemon: any) => {
+            
+            const sprites = JSON.parse(
+              pokemon.pokemon_v2_pokemonsprites[0].sprites
+            );
+
+            const frontDefaultImage = sprites.front_default;
+            
+            pokemon.pokemon_v2_pokemontypes.map((type: any) =>
+              allTypesTemp.push(type.pokemon_v2_type.name)
+            );
+            
+            return {
+              id: pokemon.id,
+              name: pokemon.name.toUpperCase(),
+              types: pokemon.pokemon_v2_pokemontypes.map((type: any) => ({
+                type: {
+                  name: type.pokemon_v2_type.name,
+                },
+              })),
+              image: frontDefaultImage,
+            };
+          });
           setPokemonData(parsedPokemons);
+          setAllTypes(Array.from(new Set(allTypesTemp)));
         }
       } catch (error) {
         console.error("Error fetching Pokemon data:", error);
@@ -88,7 +98,7 @@ export const PokemonProvider = ({
     fetchPokemons();
   }, []);
 
-  const getPokemonById = (id: number) => 
+  const getPokemonById = (id: number) =>
     isLoading ? null : pokemonData.find((pokemon) => pokemon.id === id);
 
   const getAllPokemon = () => (isLoading ? [] : pokemonData);
@@ -99,20 +109,20 @@ export const PokemonProvider = ({
     return { first, last };
   };
 
-
   return (
     <PokemonContext.Provider
-      value={{ getPokemonById, getAllPokemon, isLoading, getIdBoundaries}}
+      value={{
+        getPokemonById,
+        getAllPokemon,
+        isLoading,
+        getIdBoundaries,
+        allTypes,
+      }}
     >
       {children}
     </PokemonContext.Provider>
   );
 };
-
-
-
-
-
 
 /**const selectedPokemon= pokemonData.find((pokemon) => pokemon.id === id);
     if(!isLoading && selectedPokemon) {

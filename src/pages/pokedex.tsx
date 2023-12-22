@@ -1,28 +1,33 @@
+import Icon from "@/components/Icon";
 import Input from "@/components/Input";
 import Layout from "@/components/Layout";
 import LoadingBanner from "@/components/LoadingBanner";
 import PokemonDisplay from "@/components/PokemonDisplay";
 import PokemonPreviewCard from "@/components/PokemonPreviewCard";
+import TypeButton from "@/components/TypeButton";
 import { usePokemonContext } from "@/context/PokemonContext";
 import { responsiveCSS } from "@/theme/responsive";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Pokedex = () => {
-  const { getAllPokemon, isLoading, getIdBoundaries } = usePokemonContext();
+  const { getAllPokemon, isLoading, getIdBoundaries, allTypes } =
+    usePokemonContext();
   const allPokemon = getAllPokemon();
   const { first, last } = getIdBoundaries();
   const [activePokemonID, setActivePokemonID] = useState(0);
   const [nameFilter, setNameFilter] = useState("");
   const [numberFilter, setNumberFilter] = useState("");
-  const [typesFilter, setTypesFilter] = useState([]);
+  const [typesFilter, setTypesFilter] = useState<String[]>([]);
+  const [filterOpen, setFilterOpen] = useState<Boolean>(false);
 
   const filteredPokemon = allPokemon.filter((pokemon) => {
     const nameMatch = pokemon.name
       .toLowerCase()
       .includes(nameFilter.toLowerCase());
     const numberMatch = String(pokemon.id).includes(numberFilter);
-    const typeMatch = true
+    const types = pokemon.types.map((type) => type.type.name);
+    const typeMatch = typesFilter.length === 0 || types.some((type) => typesFilter.includes(type));
     return nameMatch && numberMatch && typeMatch;
   });
 
@@ -46,6 +51,18 @@ const Pokedex = () => {
     setNameFilter("");
     setNumberFilter("");
     setTypesFilter([]);
+  };
+
+  const addType = (type: String) => {
+    setTypesFilter([...typesFilter, type]);
+  };
+
+  const delType = (type: String) => {
+    setTypesFilter(typesFilter.filter((currentType) => currentType != type));
+  };
+
+  const toggleFilter = () => {
+    setFilterOpen(!filterOpen);
   };
 
   useEffect(() => {
@@ -74,8 +91,47 @@ const Pokedex = () => {
               placeholder="Nummer"
               onChange={(e) => setNumberFilter(e.target.value)}
             />
-            <div className="typesFilter">
-              <h2>Typen</h2>
+            <div className="types-filter">
+              <div className="controls">
+                <h2>Typen</h2>
+                <Icon
+                  iconname="add-circle.svg"
+                  onClick={() => toggleFilter()}
+                />
+              </div>
+              <div className="types-container">
+                <div className="types-selected">
+                  {typesFilter.map((type: String, index: number) => {
+                    return (
+                      <TypeButton
+                        typeName={type.toString()}
+                        key={index}
+                        onClick={() => delType(type)}
+                      />
+                    );
+                  })}
+                </div>
+                <div
+                  className={"types-selection " + (filterOpen ? "open" : "")}
+                >
+                  {allTypes
+                    .filter((type: String) => {
+                      return typesFilter.indexOf(type) === -1;
+                    })
+                    .map((type: String, index: number) => {
+                      return (
+                        <TypeButton
+                          typeName={type.toString()}
+                          key={index}
+                          onClick={() => {
+                            toggleFilter();
+                            addType(type);
+                          }}
+                        />
+                      );
+                    })}
+                </div>
+              </div>
             </div>
           </div>
           <div className="list">
@@ -128,6 +184,42 @@ const PageWrapper = styled.div`
       flex-direction: column;
       gap: var(--space-sm);
       padding: var(--space-lg) var(--space-sm);
+
+      .types-filter {
+        .controls {
+          display: flex;
+          align-items: center;
+          gap: var(--space-sm);
+
+          h2 {
+            font-weight: 300;
+            font-size: var(--fs-3);
+            color: var(--pink);
+          }
+        }
+
+        .types-container {
+          position: relative;
+          button {
+            cursor: pointer;
+          }
+          .types-selected {
+          }
+
+          .types-selection {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            background-color: var(--pink);
+            border-radius: 10px;
+            height: 0%;
+            overflow: hidden;
+            &.open {
+              height: min-content;
+            }
+          }
+        }
+      }
     }
 
     .list {
