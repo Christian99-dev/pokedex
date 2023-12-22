@@ -4,6 +4,8 @@ import styled, { keyframes } from "styled-components";
 import { Pokemon } from "@/context/PokemonContext";
 import TypeButton from "@/components/TypeButton";
 import Icon from "@/components/Icon";
+import { responsiveCSS } from "@/theme/responsive";
+
 interface BattleResultModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -90,6 +92,7 @@ const DrawInfo = styled.div`
   align-items: center;
   gap: 20px;
   height: 300px;
+
   .draw-message {
        h2 {
         color: var(--dark-pink);
@@ -99,8 +102,8 @@ const DrawInfo = styled.div`
     }
 `;
 const PokImage = styled.img `
-    width: 200px; 
-    height: 200px;   
+  ${responsiveCSS("height", 300, 280, 260, 240, 210, 200)}
+
 `; 
 const ModalContent = styled.div`
   display: flex;
@@ -108,6 +111,12 @@ const ModalContent = styled.div`
   align-items: center;
   justify-content: center;
   height: 90%;
+  h1 {
+    font-size: 50px;
+    color: var(--dark-pink);
+    letter-spacing: 2px;
+    margin-bottom: var(--space-xxl);
+  }
 `;
 const WinnerInfo = styled.div`
   text-align: center;
@@ -145,8 +154,9 @@ const rotateAndScaleAnimation = keyframes`
 `;
 
 const StyledWinnerImage = styled.img`
-  width: 380px;
-  height: 380px;
+  ${responsiveCSS("height", 400, 380, 320, 280, 250, 220)}
+  //width: 380px;
+  //height: 380px;
   border-radius: 50%;
   margin-bottom: 10px;
   animation: ${rotateAndScaleAnimation} 3s linear 1;
@@ -155,6 +165,11 @@ const StyledWinnerImage = styled.img`
 
 const PokInfo = styled.div`
   text-align: center;
+  h2 {
+    color: var(--dark-pink);
+    letter-spacing: 2px;
+    margin-bottom: var(--space-xxl);
+  }
 `;
 
 export default BattleResultModal;
