@@ -1,8 +1,10 @@
+import Input from "@/components/Input";
 import Layout from "@/components/Layout";
 import LoadingBanner from "@/components/LoadingBanner";
 import PokemonDisplay from "@/components/PokemonDisplay";
 import PokemonPreviewCard from "@/components/PokemonPreviewCard";
 import { usePokemonContext } from "@/context/PokemonContext";
+import { responsiveCSS } from "@/theme/responsive";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -13,6 +15,16 @@ const Pokedex = () => {
   const [activePokemonID, setActivePokemonID] = useState(0);
   const [nameFilter, setNameFilter] = useState("");
   const [numberFilter, setNumberFilter] = useState("");
+  const [typesFilter, setTypesFilter] = useState([]);
+
+  const filteredPokemon = allPokemon.filter((pokemon) => {
+    const nameMatch = pokemon.name
+      .toLowerCase()
+      .includes(nameFilter.toLowerCase());
+    const numberMatch = String(pokemon.id).includes(numberFilter);
+    const typeMatch = true
+    return nameMatch && numberMatch && typeMatch;
+  });
 
   const nextPokemon = () => {
     if (activePokemonID < last) {
@@ -30,17 +42,10 @@ const Pokedex = () => {
     }
   };
 
-  const filteredPokemon = allPokemon.filter((pokemon) => {
-    const nameMatch = pokemon.name
-      .toLowerCase()
-      .includes(nameFilter.toLowerCase());
-    const numberMatch = String(pokemon.id).includes(numberFilter);
-    return nameMatch && numberMatch;
-  });
-
   const resetFilter = () => {
     setNameFilter("");
     setNumberFilter("");
+    setTypesFilter([]);
   };
 
   useEffect(() => {
@@ -61,16 +66,17 @@ const Pokedex = () => {
       <PageWrapper>
         <div className="preview">
           <div className="search">
-            <input
+            <Input
               placeholder="Name"
-              value={nameFilter}
               onChange={(e) => setNameFilter(e.target.value)}
             />
-            <input
+            <Input
               placeholder="Nummer"
-              value={numberFilter}
               onChange={(e) => setNumberFilter(e.target.value)}
             />
+            <div className="typesFilter">
+              <h2>Typen</h2>
+            </div>
           </div>
           <div className="list">
             {filteredPokemon.map((pokemon, index) => (
@@ -115,9 +121,13 @@ const PageWrapper = styled.div`
   .preview {
     display: flex;
     flex-direction: column;
+    ${responsiveCSS("width", 1000, 800, 700, 400, 300, 300)}
 
     .search {
-      padding: var(--space-xxl);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      padding: var(--space-lg) var(--space-sm);
     }
 
     .list {

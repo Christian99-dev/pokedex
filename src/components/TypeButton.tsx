@@ -1,4 +1,3 @@
-// TypeButton.tsx
 import React from 'react';
 import styled from "styled-components";
 
@@ -20,11 +19,8 @@ const StyledButton = styled.button<{ backgroundcolor: string }>`
   background: ${({ backgroundcolor }) => backgroundcolor};
 `;
 
-
-
 const TypeButton: React.FC<TypeButtonProps> = ({ typeName }) => {
   const getButtonColor = (type: string) => {
-    // Map type names to the colors
     const colorMap: { [key: string]: string } = {
       bug: 'linear-gradient(90deg, #8CB330 50%, #BD9457 50%)',
       ice: '#AEE3F5',

@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Link from "next/link";
 import { responsiveCSS } from "@/theme/responsive";
 
-
 const Button = ({ text, route }: { text: string; route: string }) => {
   return (
     <LinkWrapper href={route} passHref>

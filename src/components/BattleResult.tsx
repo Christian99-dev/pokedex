@@ -1,6 +1,6 @@
 import React from "react";
 import { Pokemon } from "@/context/PokemonContext";
-import typeEffectiveness from "./TypeEffectiveness";
+import typeEffectiveness from "../types/TypeEffectiveness";
 import BattleResultModal from "./BattleResultModal"; 
 
 
