@@ -1,5 +1,4 @@
-import React , {useState} from "react";
-import styled from "styled-components";
+import React from "react";
 import { Pokemon } from "@/context/PokemonContext";
 import typeEffectiveness from "./TypeEffectiveness";
 import BattleResultModal from "./BattleResultModal"; 
