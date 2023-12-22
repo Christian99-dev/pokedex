@@ -6,12 +6,16 @@ interface PokemonMenuProps {
   show: boolean;
   menuItems: Pokemon[];
   handlePokemonMenuClick: (pokemonId: number) => void;
+  activeColumn: number|null, 
 }
-
-const PokemonMenu: React.FC<PokemonMenuProps> = ({ show, menuItems, handlePokemonMenuClick }) => (
-  <StyledPokemonMenu show={show}>
+const PokemonMenu: React.FC<PokemonMenuProps> = ({ show, menuItems, handlePokemonMenuClick, activeColumn }) => (
+  
+  <StyledPokemonMenu show={show ? 'true' : undefined}>
     {menuItems.map((pokemon) => (
-      <MenuItem key={pokemon.id} onClick={() => handlePokemonMenuClick(pokemon.id)}>
+      <MenuItem key={pokemon.id} onClick={() => handlePokemonMenuClick(pokemon.id)}
+      active={activeColumn === pokemon.id ? 'true' : undefined}
+      
+      >
         <div className="column">
           <PokemonId>0{pokemon.id}</PokemonId>
         </div>
@@ -23,7 +27,7 @@ const PokemonMenu: React.FC<PokemonMenuProps> = ({ show, menuItems, handlePokemo
   </StyledPokemonMenu>
 );
 
-const StyledPokemonMenu = styled.div<{ show: boolean }>`
+const StyledPokemonMenu = styled.div<{ show: string|undefined }>`
   position: absolute;
   background-color: #f8f8f8;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -36,7 +40,7 @@ const StyledPokemonMenu = styled.div<{ show: boolean }>`
   display: ${(props) => (props.show ? 'block' : 'none')};
 `;
 
-const MenuItem = styled.div`
+const MenuItem = styled.div<{active: string |undefined}>`
   display: flex; 
   justify-content: space-between;
   background-color:var(--pink);  
@@ -45,6 +49,10 @@ const MenuItem = styled.div`
   &:hover {
     background-color: var(--dark-pink); 
   }
+  ${(props) => props.active ==='true' && `
+    background-color: var(--dark-pink);
+  `}
+
 `;
 
 const PokemonId = styled.div`

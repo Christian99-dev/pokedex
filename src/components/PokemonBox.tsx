@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import { Pokemon } from "@/context/PokemonContext";
 import TypeButton from "@/components/TypeButton";
@@ -24,6 +24,13 @@ const PokemonBox: React.FC<PokemonBoxProps> = ({
   handleArrowIconClick,
   pokemonMenuItems,
 }) => {
+    const [activeColumn, setActiveColumn] = useState<number | null>(null);
+
+    const handlePokemonMenuClick = (pokemonId: number) => {
+        setActiveColumn(pokemonId);
+        handleMenuClick(pokemonId);
+    };
+
   return (
     <PokemonBoxWrapper>
       <AnimatedPokemonImage
@@ -41,7 +48,8 @@ const PokemonBox: React.FC<PokemonBoxProps> = ({
       <PokemonMenu
         show={showMenu}
         menuItems={pokemonMenuItems}
-        handlePokemonMenuClick={handleMenuClick}
+        handlePokemonMenuClick={handlePokemonMenuClick}
+        activeColumn= {activeColumn}
       />
     </PokemonBoxWrapper>
   );

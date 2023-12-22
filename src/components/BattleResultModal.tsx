@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import styled, { keyframes } from "styled-components";
 import { Pokemon } from "@/context/PokemonContext";
 import TypeButton from "@/components/TypeButton";
 import Icon from "@/components/Icon";
-
 interface BattleResultModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -20,9 +19,18 @@ const BattleResultModal: React.FC<BattleResultModalProps> = ({
   selectedPokemon1,
   selectedPokemon2,
 }) => {
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    useEffect(() => {
+      setModalIsOpen(isOpen);
+    }, [isOpen]);
+    const handleClose = () => {
+        setModalIsOpen(false);
+        onClose();
+      };
   return (
     <Modal
-      isOpen={isOpen}onRequestClose={onClose}contentLabel="Battle Result Modal"
+      isOpen={modalIsOpen}onRequestClose={handleClose}contentLabel="Battle Result Modal"
       style = {{
         content: {
             width: "50%", 
@@ -33,7 +41,7 @@ const BattleResultModal: React.FC<BattleResultModalProps> = ({
           },
       }}
       >
-        <Icon iconname="close.svg" className="close-icon" onClick={onClose}/>
+        <Icon iconname="close.svg" className="close-icon" onClick={handleClose}/>
         {winner && (
         <ModalContent>
             <h1> THE WINNER </h1>
