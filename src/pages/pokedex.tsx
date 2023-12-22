@@ -27,7 +27,9 @@ const Pokedex = () => {
       .includes(nameFilter.toLowerCase());
     const numberMatch = String(pokemon.id).includes(numberFilter);
     const types = pokemon.types.map((type) => type.type.name);
-    const typeMatch = typesFilter.length === 0 || types.some((type) => typesFilter.includes(type));
+    const typeMatch =
+      typesFilter.length === 0 ||
+      types.some((type) => typesFilter.includes(type));
     return nameMatch && numberMatch && typeMatch;
   });
 
@@ -210,11 +212,13 @@ const PageWrapper = styled.div`
             position: absolute;
             top: 0;
             width: 100%;
-            background-color: var(--pink);
+            background-color: var(--dark-pink);
+            border: none;
             border-radius: 10px;
             height: 0%;
             overflow: hidden;
             &.open {
+              border: 2px solid white;
               height: min-content;
             }
           }

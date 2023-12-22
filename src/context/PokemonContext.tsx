@@ -63,13 +63,14 @@ export const PokemonProvider = ({
         let allTypesTemp : String[] = [];
         if (data && data.pokemon_v2_pokemon) {
           const parsedPokemons = data.pokemon_v2_pokemon.map((pokemon: any) => {
+            console.log(pokemon)
             
             const sprites = JSON.parse(
               pokemon.pokemon_v2_pokemonsprites[0].sprites
             );
 
             const frontDefaultImage = sprites.front_default;
-            
+            // TODO: types richtig parsen, damit es am ende nur noch ein array von strings ist
             pokemon.pokemon_v2_pokemontypes.map((type: any) =>
               allTypesTemp.push(type.pokemon_v2_type.name)
             );
