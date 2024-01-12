@@ -1,12 +1,12 @@
 import React from "react";
-import { useRouter } from "next/router"; 
+import { useRouter } from "next/router";
 import styled from "styled-components";
 
 const Header = () => {
-  const router = useRouter(); 
+  const router = useRouter();
 
   const navigateTo = (route: string) => {
-    router.push(route); 
+    router.push(route);
   };
 
   return (
@@ -17,26 +17,29 @@ const Header = () => {
         <NavLink onClick={() => navigateTo("/pokedex")}>Pokedex</NavLink>
         <NavLink onClick={() => navigateTo("/addPokemon")}>+Add</NavLink>
       </Nav>
+      <div className="space"></div>
     </HeaderWrapper>
   );
 };
 
 const HeaderWrapper = styled.header`
-  background-color: var(--dark-pink);
-  padding: 10px;
-  position: fixed;
-  width: 100%;
-
-
+  .space {
+    height: 50px;
+    width: 100%;
+  }
 `;
 
 const Nav = styled.nav`
+  height: 50px;
+  background-color: var(--dark-pink);
+  width: 100%;
+  position: fixed;
   display: flex;
   justify-content: space-around;
-
 `;
 
 const NavLink = styled.a`
+  margin: auto 0;
   color: white;
   font-size: var(--fs-4);
   text-decoration: none;

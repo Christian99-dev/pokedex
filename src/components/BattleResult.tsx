@@ -26,11 +26,11 @@ const BattleResult: React.FC<BattleResultProps> = ({selectedPokemon1,selectedPok
             };
         
             return (
-                totalEffectiveness(pokemon1.types[0].type.name, pokemon2.types[0].type.name) +
-                (pokemon1.types.length === 2 ? totalEffectiveness(pokemon1.types[1].type.name, pokemon2.types[0].type.name) : 0) +
-                (pokemon2.types.length === 2 ? totalEffectiveness(pokemon1.types[0].type.name, pokemon2.types[1].type.name) : 0) +
+                totalEffectiveness(pokemon1.types[0], pokemon2.types[0]) +
+                (pokemon1.types.length === 2 ? totalEffectiveness(pokemon1.types[1], pokemon2.types[0]) : 0) +
+                (pokemon2.types.length === 2 ? totalEffectiveness(pokemon1.types[0], pokemon2.types[1]) : 0) +
                 (pokemon1.types.length === 2 && pokemon2.types.length === 2
-                    ? totalEffectiveness(pokemon1.types[1].type.name, pokemon2.types[1].type.name)
+                    ? totalEffectiveness(pokemon1.types[1], pokemon2.types[1])
                     : 0)
             );
         };

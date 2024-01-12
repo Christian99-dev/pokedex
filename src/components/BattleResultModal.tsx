@@ -64,7 +64,7 @@ const BattleResultModal: React.FC<BattleResultModalProps> = ({
                     <h2> {selectedPokemon1?.name} </h2>
                     <div className="types-container">
                         {selectedPokemon1?.types.map((type) => (
-                            <TypeButton key={type.type.name} typeName={type.type.name} />
+                            <TypeButton key={type} typeName={type} />
                         ))}
                     </div>
                 </PokInfo>
@@ -76,7 +76,7 @@ const BattleResultModal: React.FC<BattleResultModalProps> = ({
                     <h2>{selectedPokemon2?.name} </h2>
                     <div className="types-container">
                         {selectedPokemon2?.types.map((type) => (
-                            <TypeButton key={type.type.name} typeName={type.type.name} />
+                            <TypeButton key={type} typeName={type} />
                         ))}
                     </div> 
                 </PokInfo>       

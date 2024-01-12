@@ -18,7 +18,6 @@ const LoadingBannerWrapper = styled.div`
   align-items: center;
   justify-content: center;
   width: 100vw;
-  height: 100vh;
   background-color: var(--dark);
 
   h1 {

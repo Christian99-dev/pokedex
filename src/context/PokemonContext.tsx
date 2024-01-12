@@ -5,7 +5,8 @@ export type Pokemon = {
   id: number;
   image: string;
   name: string;
-  types: Array<{ type: { name: string } }>;
+  types: Array<string>;
+  description: string;
 };
 
 type ContextValue = {
@@ -13,7 +14,7 @@ type ContextValue = {
   getAllPokemon: () => Pokemon[] | [];
   isLoading: boolean;
   getIdBoundaries: () => { first: number; last: number };
-  allTypes: String[];
+  allTypes: string[];
 };
 
 const PokemonContext = createContext<ContextValue>({
@@ -37,7 +38,7 @@ export const PokemonProvider = ({
   });
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [allTypes, setAllTypes] = useState<String[]>([]);
+  const [allTypes, setAllTypes] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchPokemons = async () => {
@@ -60,34 +61,26 @@ export const PokemonProvider = ({
             }
           `,
         });
-        let allTypesTemp : String[] = [];
+        let allTypesWithDuplicate: string[] = [];
         if (data && data.pokemon_v2_pokemon) {
           const parsedPokemons = data.pokemon_v2_pokemon.map((pokemon: any) => {
-            console.log(pokemon)
-            
-            const sprites = JSON.parse(
-              pokemon.pokemon_v2_pokemonsprites[0].sprites
+            let allTypes = pokemon.pokemon_v2_pokemontypes.map(
+              (type: any) => type.pokemon_v2_type.name
             );
 
-            const frontDefaultImage = sprites.front_default;
-            // TODO: types richtig parsen, damit es am ende nur noch ein array von strings ist
-            pokemon.pokemon_v2_pokemontypes.map((type: any) =>
-              allTypesTemp.push(type.pokemon_v2_type.name)
-            );
-            
+            allTypesWithDuplicate.push(...allTypes);
+
             return {
               id: pokemon.id,
               name: pokemon.name.toUpperCase(),
-              types: pokemon.pokemon_v2_pokemontypes.map((type: any) => ({
-                type: {
-                  name: type.pokemon_v2_type.name,
-                },
-              })),
-              image: frontDefaultImage,
+              types: allTypes,
+              image: pokemon.pokemon_v2_pokemonsprites[0].sprites.front_default,
+              description:
+                "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum",
             };
           });
           setPokemonData(parsedPokemons);
-          setAllTypes(Array.from(new Set(allTypesTemp)));
+          setAllTypes(Array.from(new Set(allTypesWithDuplicate)));
         }
       } catch (error) {
         console.error("Error fetching Pokemon data:", error);

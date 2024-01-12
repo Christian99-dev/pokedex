@@ -39,7 +39,7 @@ const PokemonBox: React.FC<PokemonBoxProps> = ({
       />
       <div className="types-container">
         {selectedPokemon?.types.map((type) => (
-          <TypeButton key={type.type.name} typeName={type.type.name} />
+          <TypeButton key={type} typeName={type} />
         ))}
       </div>
       <h2> {selectedPokemon?.name} </h2>

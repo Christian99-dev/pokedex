@@ -35,10 +35,11 @@ const PokemonDisplay = ({
         alt={activePokemon?.name}
       />
       <div className="types">
-        {activePokemon?.types.map((value: any) => (
-          <TypeButton typeName={value.type.name} />
+        {activePokemon?.types.map((value: string, index: number) => (
+          <TypeButton typeName={value} key={index} />
         ))}
       </div>
+      <div className="description">{activePokemon?.description}</div>
       <div className="bottom">
         <Icon iconname="arrow_left.svg" onClick={prevButton} />
         <div className="name">{activePokemon?.name}</div>
@@ -59,6 +60,12 @@ const PokemonDisplayWrapper = styled.div`
   justify-content: center;
   flex-direction: column;
   gap: var(--space-md);
+
+  .description{
+    color: white;
+    font-size: var(--fs-5);
+    font-weight: 300;
+  }
 
   .number {
     z-index: 0;

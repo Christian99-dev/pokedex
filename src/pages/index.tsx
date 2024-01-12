@@ -10,6 +10,7 @@ export default function Home(){
   const { isLoading, getAllPokemon } = usePokemonContext();
   const allPokemons = getAllPokemon();
   const [currentPokemonIndex, setCurrentPokemonIndex] = useState(25);
+  
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentPokemonIndex(Math.floor(Math.random() * allPokemons.length));
@@ -42,7 +43,6 @@ export default function Home(){
 const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
   justify-content: center;
   align-items: center;
 

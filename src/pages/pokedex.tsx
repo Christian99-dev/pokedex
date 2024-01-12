@@ -18,7 +18,7 @@ const Pokedex = () => {
   const [activePokemonID, setActivePokemonID] = useState(0);
   const [nameFilter, setNameFilter] = useState("");
   const [numberFilter, setNumberFilter] = useState("");
-  const [typesFilter, setTypesFilter] = useState<String[]>([]);
+  const [typesFilter, setTypesFilter] = useState<string[]>([]);
   const [filterOpen, setFilterOpen] = useState<Boolean>(false);
 
   const filteredPokemon = allPokemon.filter((pokemon) => {
@@ -26,10 +26,11 @@ const Pokedex = () => {
       .toLowerCase()
       .includes(nameFilter.toLowerCase());
     const numberMatch = String(pokemon.id).includes(numberFilter);
-    const types = pokemon.types.map((type) => type.type.name);
+
     const typeMatch =
       typesFilter.length === 0 ||
-      types.some((type) => typesFilter.includes(type));
+      pokemon.types.some((type) => typesFilter.includes(type));
+
     return nameMatch && numberMatch && typeMatch;
   });
 
@@ -55,11 +56,11 @@ const Pokedex = () => {
     setTypesFilter([]);
   };
 
-  const addType = (type: String) => {
+  const addType = (type: string) => {
     setTypesFilter([...typesFilter, type]);
   };
 
-  const delType = (type: String) => {
+  const delType = (type: string) => {
     setTypesFilter(typesFilter.filter((currentType) => currentType != type));
   };
 
@@ -101,29 +102,32 @@ const Pokedex = () => {
                   onClick={() => toggleFilter()}
                 />
               </div>
+              
               <div className="types-container">
+
                 <div className="types-selected">
-                  {typesFilter.map((type: String, index: number) => {
+                  {typesFilter.map((type: string, index: number) => {
                     return (
                       <TypeButton
-                        typeName={type.toString()}
+                        typeName={type}
                         key={index}
                         onClick={() => delType(type)}
                       />
                     );
                   })}
                 </div>
+                
                 <div
                   className={"types-selection " + (filterOpen ? "open" : "")}
                 >
                   {allTypes
-                    .filter((type: String) => {
+                    .filter((type: string) => {
                       return typesFilter.indexOf(type) === -1;
                     })
-                    .map((type: String, index: number) => {
+                    .map((type: string, index: number) => {
                       return (
                         <TypeButton
-                          typeName={type.toString()}
+                          typeName={type}
                           key={index}
                           onClick={() => {
                             toggleFilter();
@@ -133,6 +137,7 @@ const Pokedex = () => {
                       );
                     })}
                 </div>
+
               </div>
             </div>
           </div>
@@ -169,7 +174,7 @@ export default Pokedex;
 
 const PageWrapper = styled.div`
   display: flex;
-  height: 100vh;
+  height: 100%;
 
   .details {
     width: 100%;
