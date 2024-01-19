@@ -32,10 +32,7 @@ const Pokedex = () => {
     return nameMatch && numberMatch && typeMatch;
   });
 
-  const onTypeUpdate = (types: string[]) => {
-    setTypeFilter(types);
-    console.log(types)
-  };
+  const onTypeUpdate = (types: string[]) => setTypeFilter(types);
 
   const nextPokemon = () => {
     if (activePokemonID < last) {
@@ -56,7 +53,7 @@ const Pokedex = () => {
   const resetFilter = () => {
     setNameFilter("");
     setNumberFilter("");
-    setTypesFilter([]);
+    setTypeFilter([]);
   };
 
   useEffect(() => {

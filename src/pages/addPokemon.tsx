@@ -1,10 +1,16 @@
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Layout from "@/components/Layout";
-import React from "react";
+import TypeSelection from "@/components/TypeSelection";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const addPokemon = () => {
+  const [types, setTypes] = useState<string[]>([]);
+  const [name, setName] = useState<string>();
+  const [description, setDescription] = useState<string>();
+  const [img, setImg] = useState<string>("")
+  const onTypesUpdate = (types: string[]) => setTypes(types);
   return (
     <Layout>
       <AddPokemonWrapper>
@@ -14,8 +20,9 @@ const addPokemon = () => {
             <img src="https://images.pexels.com/photos/4132776/pexels-photo-4132776.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"></img>
           </div>
           <div className="right">
-            <Input placeholder="Name" onChange={() => {}} />
-            <Input placeholder="Description" onChange={() => {}} />
+            <Input placeholder="Name" onChange={(e) => {setName(e.target.value)}} />
+            <Input placeholder="Description" onChange={(e) => {setDescription(e.target.value)}} />
+            <TypeSelection onUpdate={onTypesUpdate} />
           </div>
         </div>
         <Button text="Hinzufügen" route="" />
@@ -46,9 +53,10 @@ const AddPokemonWrapper = styled.div`
     display: flex;
     justify-content: center;
     margin-bottom: var(--space-xxl);
-    
+    width: 50%;
+
     input {
-        width: 100%;
+      width: 100%;
     }
 
     .left,
@@ -56,10 +64,10 @@ const AddPokemonWrapper = styled.div`
       flex: 1;
     }
 
-    .right{
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-sm);
+    .right {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
     }
 
     .left {
