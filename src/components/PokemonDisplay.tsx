@@ -65,6 +65,7 @@ const PokemonDisplayWrapper = styled.div`
     color: white;
     font-size: var(--fs-5);
     font-weight: 300;
+    min-height: 75px;
   }
 
   .number {
@@ -81,10 +82,11 @@ const PokemonDisplayWrapper = styled.div`
   .pokemon-img {
     z-index: 1;
     ${responsiveCSS("width", 450, 400, 350, 300, 250, 200)}
+    ${responsiveCSS("height", 450, 400, 350, 300, 250, 200)}
+    
     margin: 0 auto;
   }
   .bottom {
-    /* background-color: red; */
     display: flex;
     align-items: center;
     justify-content: space-between;

@@ -1,5 +1,5 @@
 import { usePokemonContext } from "@/context/PokemonContext";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Icon from "./Icon";
 import TypeButton from "./TypeButton";
 import styled from "styled-components";
@@ -12,7 +12,6 @@ const TypeSelection = ({ onUpdate }: { onUpdate: any }) => {
   const addType = (type: string) => {
     setTypes((oldVal: string[]) => {
       const newVal: string[] = [...oldVal, type];
-      onUpdate(newVal);
       return newVal;
     });
   };
@@ -22,7 +21,6 @@ const TypeSelection = ({ onUpdate }: { onUpdate: any }) => {
       const newVal: string[] = oldVal.filter(
         (currentType) => currentType != type
       );
-      onUpdate(newVal);
       return newVal;
     });
   };
@@ -30,6 +28,10 @@ const TypeSelection = ({ onUpdate }: { onUpdate: any }) => {
   const toggleFilter = () => {
     setOpen(!open);
   };
+  
+  useEffect(() => {
+    onUpdate(types)
+  }, [types])
 
   return (
     <TypeSelectionWrapper>

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { gql, ApolloClient, InMemoryCache } from "@apollo/client";
+import { getAllPokemonsFromSession } from "@/utils/customPokemonsSessions";
 
 export type Pokemon = {
   id: number;
@@ -62,8 +63,14 @@ export const PokemonProvider = ({
           `,
         });
         let allTypesWithDuplicate: string[] = [];
+
+
         if (data && data.pokemon_v2_pokemon) {
-          const parsedPokemons = data.pokemon_v2_pokemon.map((pokemon: any) => {
+          // Adding session pokemons
+          const sessionPokemons: Pokemon[] = getAllPokemonsFromSession();
+
+          // Parsing pokemons from graphql
+          const parsedPokemons: Pokemon[] = data.pokemon_v2_pokemon.map((pokemon: any) => {
             let allTypes = pokemon.pokemon_v2_pokemontypes.map(
               (type: any) => type.pokemon_v2_type.name
             );
@@ -76,10 +83,11 @@ export const PokemonProvider = ({
               types: allTypes,
               image: pokemon.pokemon_v2_pokemonsprites[0].sprites.front_default,
               description:
-                "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum",
+                "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidu",
             };
           });
-          setPokemonData(parsedPokemons);
+
+          setPokemonData([...sessionPokemons, ...parsedPokemons]);
           setAllTypes(Array.from(new Set(allTypesWithDuplicate)));
         }
       } catch (error) {

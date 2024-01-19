@@ -17,6 +17,8 @@ const Pokedex = () => {
   const [activePokemonID, setActivePokemonID] = useState(0);
   const [nameFilter, setNameFilter] = useState("");
   const [numberFilter, setNumberFilter] = useState("");
+  
+  //...
   const [typeFilter, setTypeFilter] = useState<string[]>([]);
 
   const filteredPokemon = allPokemon.filter((pokemon) => {

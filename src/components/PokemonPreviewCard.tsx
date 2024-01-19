@@ -44,6 +44,9 @@ const PokedexCardWrapper = styled.div`
   }
   img {
     ${responsiveCSS("height", 100, 90, 80, 70, 60, 50)}
+    ${responsiveCSS("width", 100, 90, 80, 70, 60, 50)}
+    object-fit: cover;
+    border-radius: 10px;
   }
 
   &:hover, &.active {
