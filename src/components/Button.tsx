@@ -3,11 +3,11 @@ import styled from "styled-components";
 import Link from "next/link";
 import { responsiveCSS } from "@/theme/responsive";
 
-const Button = ({ text, route, onClick }: { text: string; route: string, onClick?: () => {} }) => {
+const Button = ({ text, route, onClick }: { text: string; route: string, onClick?: () => any }) => {
   return (
-    <LinkWrapper href={route} passHref>
+    <LinkWrapper href={route} passHref onClick={onClick}>
       <div className="fill"></div>
-      <button onClick={onClick}>{text}</button>
+      <button >{text}</button>
     </LinkWrapper>
   );
 };
