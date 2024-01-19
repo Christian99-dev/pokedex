@@ -26,6 +26,7 @@ const Input = ({
 };
 
 const InputField = styled.input`
+  box-sizing: border-box;
   padding: var(--space-sm);
   font-size: var(--fs-5);
   background-color: transparent;

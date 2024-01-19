@@ -28,7 +28,7 @@ export default function Home(){
   return (
     <Layout>
       <PageWrapper>
-        <h1> MyPokeDex</h1>
+        <h1>MyPokeDex</h1>
         <AnimatedPokemonImage src={allPokemons?.[currentPokemonIndex].image} alt="pokemon" />
         <div className="buttons">
           <Button text="Pokedex" route="/pokedex" />
