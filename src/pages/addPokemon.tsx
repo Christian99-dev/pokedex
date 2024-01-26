@@ -12,8 +12,6 @@ const addPokemon = () => {
   const [description, setDescription] = useState<string>("");
   const [img, setImg] = useState<string>("https://images.pexels.com/photos/4132776/pexels-photo-4132776.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
 
-  const onTypesUpdate = (types: string[]) => setTypes(types);
-
   const addCustomPokemon = () => {
     addPokemonToSession({
       id: 999,
@@ -45,7 +43,7 @@ const addPokemon = () => {
                 setDescription(e.target.value);
               }}
             />
-            <TypeSelection onUpdate={onTypesUpdate} />
+            <TypeSelection state={types} setState={setTypes} />
           </div>
         </div>
         <Button text="Hinzufügen" route="" onClick={() => addCustomPokemon()} />

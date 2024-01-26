@@ -1,23 +1,22 @@
 import { usePokemonContext } from "@/context/PokemonContext";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Icon from "./Icon";
 import TypeButton from "./TypeButton";
 import styled from "styled-components";
 
-const TypeSelection = ({ onUpdate }: { onUpdate: any }) => {
+const TypeSelection = ({ state, setState }: { state: string[], setState: React.Dispatch<React.SetStateAction<string[]>> }) => {
   const { allTypes } = usePokemonContext();
   const [open, setOpen] = useState<Boolean>(false);
-  const [types, setTypes] = useState<string[]>([]);
 
   const addType = (type: string) => {
-    setTypes((oldVal: string[]) => {
+    setState((oldVal: string[]) => {
       const newVal: string[] = [...oldVal, type];
       return newVal;
     });
   };
 
   const delType = (type: string) => {
-    setTypes((oldVal: string[]) => {
+    setState((oldVal: string[]) => {
       const newVal: string[] = oldVal.filter(
         (currentType) => currentType != type
       );
@@ -28,11 +27,6 @@ const TypeSelection = ({ onUpdate }: { onUpdate: any }) => {
   const toggleFilter = () => {
     setOpen(!open);
   };
-  
-  useEffect(() => {
-    onUpdate(types)
-  }, [types])
-
   return (
     <TypeSelectionWrapper>
       <div className="controls">
@@ -42,7 +36,7 @@ const TypeSelection = ({ onUpdate }: { onUpdate: any }) => {
 
       <div className="types-container">
         <div className="types-selected">
-          {types.map((type: string, index: number) => {
+          {state.map((type: string, index: number) => {
             return (
               <TypeButton
                 typeName={type}
@@ -56,7 +50,7 @@ const TypeSelection = ({ onUpdate }: { onUpdate: any }) => {
         <div className={"types-selection " + (open ? "open" : "")}>
           {allTypes
             .filter((type: string) => {
-              return types.indexOf(type) === -1;
+              return state.indexOf(type) === -1;
             })
             .map((type: string, index: number) => {
               return (

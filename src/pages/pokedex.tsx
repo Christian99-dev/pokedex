@@ -17,8 +17,6 @@ const Pokedex = () => {
   const [activePokemonID, setActivePokemonID] = useState(0);
   const [nameFilter, setNameFilter] = useState("");
   const [numberFilter, setNumberFilter] = useState("");
-  
-  //...
   const [typeFilter, setTypeFilter] = useState<string[]>([]);
 
   const filteredPokemon = allPokemon.filter((pokemon) => {
@@ -33,8 +31,6 @@ const Pokedex = () => {
 
     return nameMatch && numberMatch && typeMatch;
   });
-
-  const onTypeUpdate = (types: string[]) => setTypeFilter(types);
 
   const nextPokemon = () => {
     if (activePokemonID < last) {
@@ -84,7 +80,7 @@ const Pokedex = () => {
               placeholder="Nummer"
               onChange={(e) => setNumberFilter(e.target.value)}
             />
-            <TypeSelection onUpdate={onTypeUpdate} />
+            <TypeSelection state={typeFilter} setState={setTypeFilter} />
           </div>
           <div className="list">
             {filteredPokemon.map((pokemon, index) => (
