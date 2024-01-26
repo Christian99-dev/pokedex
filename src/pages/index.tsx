@@ -9,7 +9,7 @@ import LoadingBanner from "@/components/LoadingBanner";
 export default function Home(){
   const { isLoading, getAllPokemon } = usePokemonContext();
   const allPokemons = getAllPokemon();
-  const [currentPokemonIndex, setCurrentPokemonIndex] = useState(25);
+  const [currentPokemonIndex, setCurrentPokemonIndex] = useState(24);
   
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -45,6 +45,7 @@ const PageWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 100%;
 
   h1 {
     font-size: 50px;

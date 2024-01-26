@@ -1,32 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-type TypeButtonProps = {
+const TypeButton = ({
+  typeName,
+  onClick,
+}: {
   typeName: string;
   onClick?: () => void;
-};
-
-const darkColors = [
-  "#585858",
-  "#7C538C",
-  "linear-gradient(90deg, #FF5959 50%, #003366 50%)",
-  "#EB4971",
-];
-
-const StyledButton = styled.button<{ backgroundcolor: string }>`
-  width: 100px;
-  height: 20px;
-  margin: 5px;
-  border: none;
-  border-radius: 5px;
-  color: ${({ backgroundcolor }) =>
-    darkColors.includes(backgroundcolor) ? "#FFFFFF" : "#120058"};
-  font-size: 14px;
-  font-weight: bold;
-  background: ${({ backgroundcolor }) => backgroundcolor};
-`;
-
-const TypeButton: React.FC<TypeButtonProps> = ({ typeName, onClick }) => {
+}) => {
   const getButtonColor = (type: string) => {
     // Map type names to the colors
     const colorMap: { [key: string]: string } = {
@@ -52,12 +33,32 @@ const TypeButton: React.FC<TypeButtonProps> = ({ typeName, onClick }) => {
 
     return colorMap[type] || "";
   };
-  const backgroundcolor = getButtonColor(typeName);
   return (
-    <StyledButton backgroundcolor={backgroundcolor} onClick={onClick}>
+    <StyledButton backgroundcolor={getButtonColor(typeName)} onClick={onClick}>
       {typeName}
     </StyledButton>
   );
 };
+
+const darkColors = [
+  "#585858",
+  "#7C538C",
+  "linear-gradient(90deg, #FF5959 50%, #003366 50%)",
+  "#EB4971",
+];
+
+const StyledButton = styled.div<{ backgroundcolor: string }>`
+  cursor: pointer;
+  background: ${({ backgroundcolor }) => backgroundcolor};
+  border-radius: 5px;
+  font-size: var(--fs-6);
+  color: ${({ backgroundcolor }) =>
+    darkColors.includes(backgroundcolor) ? "#FFFFFF" : "#120058"};
+  font-weight: bold;
+  width: min-content;
+  padding: 0 var(--space-lg);
+  display: inline-block;
+  box-sizing: border-box;
+`;
 
 export default TypeButton;

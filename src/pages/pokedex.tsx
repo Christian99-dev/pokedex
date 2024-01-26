@@ -1,4 +1,3 @@
-import Icon from "@/components/Icon";
 import Input from "@/components/Input";
 import Layout from "@/components/Layout";
 import LoadingBanner from "@/components/LoadingBanner";
@@ -82,15 +81,17 @@ const Pokedex = () => {
             />
             <TypeSelection state={typeFilter} setState={setTypeFilter} />
           </div>
-          <div className="list">
-            {filteredPokemon.map((pokemon, index) => (
-              <PokemonPreviewCard
-                pokemon={pokemon}
-                key={index}
-                active={activePokemonID === pokemon.id}
-                onClick={() => setActivePokemonID(pokemon.id)}
-              />
-            ))}
+          <div className="list-wrapper">
+            <div className="list">
+              {filteredPokemon.map((pokemon, index) => (
+                <PokemonPreviewCard
+                  pokemon={pokemon}
+                  key={index}
+                  active={activePokemonID === pokemon.id}
+                  onClick={() => setActivePokemonID(pokemon.id)}
+                />
+              ))}
+            </div>
           </div>
         </div>
         <div className="details">
@@ -115,51 +116,61 @@ export default Pokedex;
 
 const PageWrapper = styled.div`
   display: flex;
-  height: 100%;
+  flex: 1;
 
   .details {
-    width: 100%;
-    margin: auto var(--space-xxxl);
+    flex: 1;
   }
 
   .preview {
+    padding: var(--space-sm);
+    padding-bottom: 0;
     display: flex;
     flex-direction: column;
-    ${responsiveCSS("width", 1000, 800, 700, 400, 300, 300)}
+    ${responsiveCSS("width", 600, 400, 400, 400, 300, 300)}
 
     .search {
       display: flex;
       flex-direction: column;
       gap: var(--space-sm);
-      padding: var(--space-lg) var(--space-sm);
+      padding-bottom: var(--space-sm);
     }
 
-    .list {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-sm);
-      padding: 0 var(--space-sm);
-      overflow-y: scroll;
+    .list-wrapper {
+      height: 100%;
+      position: relative;
 
-      /* custom scrollbar */
-      /* width */
-      &::-webkit-scrollbar {
-        width: 5px;
-      }
+      .list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+        position: absolute;
+        overflow-y: scroll;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
 
-      /* Track */
-      &::-webkit-scrollbar-track {
-        background: var(--dark-pink);
-      }
+        /* custom scrollbar */
+        /* width */
+        &::-webkit-scrollbar {
+          width: 5px;
+        }
+        
+        /* Track */
+        &::-webkit-scrollbar-track {
+          background: var(--dark-pink);
+        }
 
-      /* Handle */
-      &::-webkit-scrollbar-thumb {
-        background: var(--purple);
-      }
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+          background: var(--purple);
+        }
 
-      /* Handle on hover */
-      &::-webkit-scrollbar-thumb:hover {
-        background: #555;
+        /* Handle on hover */
+        &::-webkit-scrollbar-thumb:hover {
+          background: #555;
+        }
       }
     }
   }

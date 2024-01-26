@@ -23,9 +23,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
 export default Layout;
 
 const LayoutWrapper = styled.div`
-  background-color: var(--dark);
-
-  .viewheight-wrapper{
+  .viewheight-wrapper {
+    display: flex;
+    flex-direction: column;
     height: 100vh;
+    background-color: var(--dark);
   }
 `;

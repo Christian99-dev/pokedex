@@ -10,31 +10,22 @@ const Header = () => {
   };
 
   return (
-    <HeaderWrapper>
+    <header>
       <Nav>
         <NavLink onClick={() => navigateTo("/")}>Home</NavLink>
         <NavLink onClick={() => navigateTo("/fight")}>Fight</NavLink>
         <NavLink onClick={() => navigateTo("/pokedex")}>Pokedex</NavLink>
         <NavLink onClick={() => navigateTo("/addPokemon")}>+Add</NavLink>
       </Nav>
-      <div className="space"></div>
-    </HeaderWrapper>
+    </header>
   );
 };
 
-const HeaderWrapper = styled.header`
-  .space {
-    height: 50px;
-    width: 100%;
-  }
-`;
-
 const Nav = styled.nav`
-  height: 50px;
   background-color: var(--dark-pink);
   width: 100%;
-  position: fixed;
   display: flex;
+  padding: var(--space-xs) 0;
   justify-content: space-around;
 `;
 

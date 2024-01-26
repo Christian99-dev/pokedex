@@ -53,17 +53,19 @@ const TypeSelection = ({
 
       <div className="types-container">
         {/* Alle ausgewählten */}
-        <div className="types-selected">
-          {state.map((type: string, index: number) => {
-            return (
-              <TypeButton
-                typeName={type}
-                key={index}
-                onClick={() => delType(type)}
-              />
-            );
-          })}
-        </div>
+        {state.length > 0 && (
+          <div className="types-selected">
+            {state.map((type: string, index: number) => {
+              return (
+                <TypeButton
+                  typeName={type}
+                  key={index}
+                  onClick={() => delType(type)}
+                />
+              );
+            })}
+          </div>
+        )}
 
         {/* Auswahl */}
         <div className={"types-selection " + (open ? "open" : "")}>
@@ -112,10 +114,17 @@ const TypeSelectionWrapper = styled.div`
 
   .types-container {
     position: relative;
+
     button {
       cursor: pointer;
     }
+
     .types-selected {
+      padding-top: var(--space-xs);
+      display: flex;
+      gap: var(--space-xs);
+      width: 100%;
+      flex-wrap: wrap;
     }
 
     .types-selection {
@@ -127,6 +136,11 @@ const TypeSelectionWrapper = styled.div`
       border-radius: 10px;
       height: 0%;
       overflow: hidden;
+      z-index: 10;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+
       &.open {
         border: 2px solid white;
         height: min-content;

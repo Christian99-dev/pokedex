@@ -28,12 +28,15 @@ const PokemonDisplay = ({
   }
   return (
     <PokemonDisplayWrapper>
-      <div className="number">{formatNumber(activePokemon?.id)}</div>
-      <img
-        className="pokemon-img"
-        src={activePokemon?.image}
-        alt={activePokemon?.name}
-      />
+      <div className="img-wrapper">
+        <div className="number">{formatNumber(activePokemon?.id)}</div>
+        <img
+          className="pokemon-img"
+          src={activePokemon?.image}
+          alt={activePokemon?.name}
+        />
+      </div>
+
       <div className="types">
         {activePokemon?.types.map((value: string, index: number) => (
           <TypeButton typeName={value} key={index} />
@@ -61,31 +64,41 @@ const PokemonDisplayWrapper = styled.div`
   flex-direction: column;
   gap: var(--space-md);
 
-  .description{
+  .description {
     color: white;
     font-size: var(--fs-5);
     font-weight: 300;
     min-height: 75px;
   }
 
-  .number {
-    z-index: 0;
-    position: absolute;
-    font-size: 150px;
-    color: white;
-    color: var(--pink);
-    opacity: 0.2;
-    left: calc(var(--space-xxxl));
-    top: calc(-1 * var(--space-xl));
+  .types {
+    display: flex;
+    gap: var(--space-sm);
   }
 
-  .pokemon-img {
-    z-index: 1;
-    ${responsiveCSS("width", 450, 400, 350, 300, 250, 200)}
-    ${responsiveCSS("height", 450, 400, 350, 300, 250, 200)}
+  .img-wrapper {
+    position: relative;
+
+    .number {
+      z-index: 0;
+      position: absolute;
+      font-size: 150px;
+      color: white;
+      color: var(--pink);
+      opacity: 0.2;
+      left: calc(var(--space-xxxl));
+      top: calc(-1 * var(--space-xl));
+    }
     
-    margin: 0 auto;
+    .pokemon-img {
+      z-index: 1;
+      ${responsiveCSS("width", 450, 400, 350, 300, 250, 200)}
+      ${responsiveCSS("height", 450, 400, 350, 300, 250, 200)}
+      
+      margin: 0 auto;
+    }
   }
+
   .bottom {
     display: flex;
     align-items: center;
