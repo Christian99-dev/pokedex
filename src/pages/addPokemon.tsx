@@ -43,7 +43,7 @@ const addPokemon = () => {
                 setDescription(e.target.value);
               }}
             />
-            <TypeSelection state={types} setState={setTypes} />
+            <TypeSelection state={types} setState={setTypes} active={types.length < 2} />
           </div>
         </div>
         <Button text="Hinzufügen" route="" onClick={() => addCustomPokemon()} />

@@ -3,7 +3,7 @@ import styled from "styled-components";
 const Icon = ({
   iconname,
   onClick,
-  className
+  className,
 }: {
   iconname: string;
   onClick?: () => void;
@@ -11,7 +11,7 @@ const Icon = ({
 }) => {
   return (
     <IconWrapper
-    className={className}
+      className={className}
       src={`/static/${iconname}`}
       alt={`${iconname}`}
       onClick={onClick}
@@ -22,7 +22,7 @@ const Icon = ({
 const IconWrapper = styled.img`
   max-block-size: 28px;
   cursor: pointer;
-/* 
+  /* 
   &:hover{
     box-shadow: 0px 0px 5px 0.27px rgba(255, 255, 255, 0.5);
   } */

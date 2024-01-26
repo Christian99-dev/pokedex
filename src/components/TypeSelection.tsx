@@ -4,7 +4,15 @@ import Icon from "./Icon";
 import TypeButton from "./TypeButton";
 import styled from "styled-components";
 
-const TypeSelection = ({ state, setState }: { state: string[], setState: React.Dispatch<React.SetStateAction<string[]>> }) => {
+const TypeSelection = ({
+  state,
+  setState,
+  active = true,
+}: {
+  state: string[];
+  setState: React.Dispatch<React.SetStateAction<string[]>>;
+  active?: boolean;
+}) => {
   const { allTypes } = usePokemonContext();
   const [open, setOpen] = useState<Boolean>(false);
 
@@ -29,12 +37,22 @@ const TypeSelection = ({ state, setState }: { state: string[], setState: React.D
   };
   return (
     <TypeSelectionWrapper>
+      {/* Button */}
       <div className="controls">
         <h2>Typen</h2>
-        <Icon iconname="add-circle.svg" onClick={() => toggleFilter()} />
+        {active ? (
+          <Icon
+            iconname="add-circle.svg"
+            className="add-icon"
+            onClick={() => toggleFilter()}
+          />
+        ) : (
+          <Icon iconname="add-circle.svg" className="add-icon closed" />
+        )}
       </div>
 
       <div className="types-container">
+        {/* Alle ausgewählten */}
         <div className="types-selected">
           {state.map((type: string, index: number) => {
             return (
@@ -47,6 +65,7 @@ const TypeSelection = ({ state, setState }: { state: string[], setState: React.D
           })}
         </div>
 
+        {/* Auswahl */}
         <div className={"types-selection " + (open ? "open" : "")}>
           {allTypes
             .filter((type: string) => {
@@ -82,6 +101,12 @@ const TypeSelectionWrapper = styled.div`
       font-weight: 300;
       font-size: var(--fs-3);
       color: var(--pink);
+    }
+
+    .add-icon {
+      &.closed {
+        opacity: 0.5;
+      }
     }
   }
 
