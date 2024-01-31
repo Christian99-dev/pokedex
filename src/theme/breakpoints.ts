@@ -3,7 +3,7 @@ export const size = {
   tablet_sm: 768,
   tablet: 1000,
   laptop: 1400,
-  desktop: 1921,
+  desktop: 2500,
 };
 
 export const device = {
