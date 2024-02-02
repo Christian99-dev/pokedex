@@ -40,6 +40,18 @@ export const PokemonProvider = ({
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [allTypes, setAllTypes] = useState<string[]>([]);
+  
+  const getPokemonById = (id: number) =>
+    isLoading ? null : pokemonData.find((pokemon) => pokemon.id === id);
+
+  const getAllPokemon = () => (isLoading ? [] : pokemonData);
+
+  const getIdBoundaries = () => {
+    const first = isLoading ? 0 : pokemonData[0].id || 0;
+    const last = isLoading ? 0 : pokemonData[pokemonData.length - 1].id || 0;
+    return { first, last };
+  };
+  
 
   useEffect(() => {
     const fetchPokemons = async () => {
@@ -100,16 +112,6 @@ export const PokemonProvider = ({
     fetchPokemons();
   }, []);
 
-  const getPokemonById = (id: number) =>
-    isLoading ? null : pokemonData.find((pokemon) => pokemon.id === id);
-
-  const getAllPokemon = () => (isLoading ? [] : pokemonData);
-
-  const getIdBoundaries = () => {
-    const first = isLoading ? 0 : pokemonData[0].id || 0;
-    const last = isLoading ? 0 : pokemonData[pokemonData.length - 1].id || 0;
-    return { first, last };
-  };
 
   return (
     <PokemonContext.Provider
@@ -126,30 +128,3 @@ export const PokemonProvider = ({
   );
 };
 
-/**const selectedPokemon= pokemonData.find((pokemon) => pokemon.id === id);
-    if(!isLoading && selectedPokemon) {
-        return selectedPokemon; 
-    }
-    console.error("Error, Pokemon not found")
-} */
-/**query MyQuery {
-  pokemon_v2_pokemon {
-    id
-    name
-    pokemon_v2_pokemonsprites {
-      sprites
-    }
-    
-  }
-  pokemon_v2_characteristicdescription {
-    description
-    id
-  }
-  pokemon_v2_pokedexdescription(where: {pokemon_v2_language: {pokemonV2LanguagenamesByLocalLanguageId: {}}}) {
-    id
-    description
-    pokedex_id
-    language_id
-  }
-}
- */

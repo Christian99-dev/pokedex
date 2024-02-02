@@ -6,58 +6,70 @@ import PokemonPreviewCard from "@/components/PokemonPreviewCard";
 import TypeSelection from "@/components/TypeSelection";
 import { usePokemonContext } from "@/context/PokemonContext";
 import { responsiveCSS } from "@/theme/responsive";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import styled from "styled-components";
 
 const Pokedex = () => {
-  const { getAllPokemon, isLoading, getIdBoundaries } = usePokemonContext();
+  const { getAllPokemon, isLoading } = usePokemonContext();
   const allPokemon = getAllPokemon();
-  const { first, last } = getIdBoundaries();
+
   const [activePokemonID, setActivePokemonID] = useState(0);
   const [nameFilter, setNameFilter] = useState("");
   const [numberFilter, setNumberFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState<string[]>([]);
 
-  const filteredPokemon = allPokemon.filter((pokemon) => {
-    const nameMatch = pokemon.name
-      .toLowerCase()
-      .includes(nameFilter.toLowerCase());
-    const numberMatch = String(pokemon.id).includes(numberFilter);
+  const filteredPokemon = useMemo(() => {
 
-    const typeMatch =
-      typeFilter.length === 0 ||
-      pokemon.types.some((type) => typeFilter.includes(type));
+    // Noch keine pokemon da
+    if(allPokemon.length === 0) return []
 
-    return nameMatch && numberMatch && typeMatch;
-  });
+    // Filter anwenden
+    const filtered = allPokemon.filter((pokemon) => {
+      const nameMatch = pokemon.name
+        .toLowerCase()
+        .includes(nameFilter.toLowerCase());
+      const numberMatch = String(pokemon.id).includes(numberFilter);
 
-  const nextPokemon = () => {
-    if (activePokemonID < last) {
-      setActivePokemonID((prevID) => prevID + 1);
-    } else {
-      setActivePokemonID(first);
+      const typeMatch =
+        typeFilter.length === 0 ||
+        pokemon.types.some((type) => typeFilter.includes(type));
+
+      return nameMatch && numberMatch && typeMatch;
+    });
+
+    if (filtered.length !== 0) setActivePokemonID(filtered[0].id);
+    if (filtered.length === 0) setActivePokemonID(1);
+
+    // filtering pokemon
+    return filtered;
+  }, [nameFilter, numberFilter, typeFilter, allPokemon]);
+
+  const shiftPokemon = (dir: -1 | 1) => {
+    const currentPokemon = filteredPokemon.find(
+      (pokemon) => pokemon.id === activePokemonID
+    );
+    if (!currentPokemon) return;
+
+    // Finding current pokemon array Index
+    const arrayIdFromNextPokemon =
+      filteredPokemon.indexOf(currentPokemon) + 1 * dir;
+
+    // Next index is out of bounds
+    if (arrayIdFromNextPokemon === -1) {
+      setActivePokemonID(filteredPokemon[filteredPokemon.length - 1].id);
+      return;
     }
-  };
 
-  const prevPokemon = () => {
-    if (activePokemonID > first) {
-      setActivePokemonID((prevID) => prevID - 1);
-    } else {
-      setActivePokemonID(last);
+    if (arrayIdFromNextPokemon > filteredPokemon.length - 1) {
+      setActivePokemonID(filteredPokemon[0].id);
+      return;
     }
-  };
 
-  const resetFilter = () => {
-    setNameFilter("");
-    setNumberFilter("");
-    setTypeFilter([]);
+    // finding the pokemonId from the next pokemon in the list and setting it as current
+    const nextID =
+      filteredPokemon[filteredPokemon.indexOf(currentPokemon) + 1 * dir].id;
+    setActivePokemonID(nextID);
   };
-
-  useEffect(() => {
-    if (!isLoading) {
-      setActivePokemonID(allPokemon[0].id);
-    }
-  }, [isLoading]);
 
   if (isLoading)
     return (
@@ -97,14 +109,8 @@ const Pokedex = () => {
         <div className="details">
           <PokemonDisplay
             pokemonID={activePokemonID}
-            nextButton={() => {
-              nextPokemon();
-              resetFilter();
-            }}
-            prevButton={() => {
-              prevPokemon();
-              resetFilter();
-            }}
+            nextButton={() => shiftPokemon(1)}
+            prevButton={() => shiftPokemon(-1)}
           />
         </div>
       </PageWrapper>
@@ -156,7 +162,7 @@ const PageWrapper = styled.div`
         &::-webkit-scrollbar {
           width: 5px;
         }
-        
+
         /* Track */
         &::-webkit-scrollbar-track {
           background: var(--dark-pink);
