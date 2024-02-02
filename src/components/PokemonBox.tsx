@@ -68,6 +68,12 @@ const PokemonBoxWrapper = styled.div`
     color: #d3ade579;
     margin-bottom: -10px;
   }
+
+  .types-container {
+    display: flex;
+    gap: var(--space-xs);
+    justify-content: center;
+  }
 `;
 
 const AnimatedPokemonImage = styled.img`
