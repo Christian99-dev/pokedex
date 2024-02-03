@@ -15,7 +15,7 @@ type ContextValue = {
   getAllPokemon: () => Pokemon[] | [];
   getAllSessionPokemon: () => Pokemon[] | [];
   isLoading: boolean;
-  getIdBoundaries: () => { first: number; last: number };
+  getNextFreeId: () => number;
   allTypes: string[];
 };
 
@@ -24,7 +24,7 @@ const PokemonContext = createContext<ContextValue>({
   getAllPokemon: () => [],
   getAllSessionPokemon: () => [],
   isLoading: true,
-  getIdBoundaries: () => ({ first: 0, last: 0 }),
+  getNextFreeId: () => 0,
   allTypes: [],
 });
 
@@ -65,10 +65,8 @@ export const PokemonProvider = ({
     return getAllPokemonsFromSession();
   };
 
-  const getIdBoundaries = () => {
-    const first = isLoading ? 0 : allPokemon[0].id || 0;
-    const last = isLoading ? 0 : allPokemon[allPokemon.length - 1].id || 0;
-    return { first, last };
+  const getNextFreeId = () => {
+    return allPokemon.length + getAllSessionPokemon().length + 1
   };
 
   useEffect(() => {
@@ -134,7 +132,7 @@ export const PokemonProvider = ({
         getAllPokemon,
         getAllSessionPokemon,
         isLoading,
-        getIdBoundaries,
+        getNextFreeId,
         allTypes,
       }}
     >

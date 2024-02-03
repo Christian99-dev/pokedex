@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 const addPokemon = () => {
-  const { getIdBoundaries } = usePokemonContext();
+  const { getNextFreeId } = usePokemonContext();
   const [types, setTypes] = useState<string[]>([]);
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -17,9 +17,8 @@ const addPokemon = () => {
   );
 
   const addCustomPokemon = () => {
-    const { last } = getIdBoundaries();
     addPokemonToSession({
-      id: last + 1,
+      id: getNextFreeId(),
       name: name,
       types: types,
       image: img,
