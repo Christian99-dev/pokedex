@@ -2,19 +2,24 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Layout from "@/components/Layout";
 import TypeSelection from "@/components/TypeSelection";
+import { usePokemonContext } from "@/context/PokemonContext";
 import { addPokemonToSession } from "@/utils/customPokemonsSessions";
 import React, { useState } from "react";
 import styled from "styled-components";
 
 const addPokemon = () => {
+  const { getIdBoundaries } = usePokemonContext();
   const [types, setTypes] = useState<string[]>([]);
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [img, setImg] = useState<string>("https://images.pexels.com/photos/4132776/pexels-photo-4132776.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+  const [img, setImg] = useState<string>(
+    "https://images.pexels.com/photos/4132776/pexels-photo-4132776.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+  );
 
   const addCustomPokemon = () => {
+    const { last } = getIdBoundaries();
     addPokemonToSession({
-      id: 999,
+      id: last + 1,
       name: name,
       types: types,
       image: img,
@@ -43,7 +48,11 @@ const addPokemon = () => {
                 setDescription(e.target.value);
               }}
             />
-            <TypeSelection state={types} setState={setTypes} active={types.length < 2} />
+            <TypeSelection
+              state={types}
+              setState={setTypes}
+              active={types.length < 2}
+            />
           </div>
         </div>
         <Button text="Hinzufügen" route="" onClick={() => addCustomPokemon()} />

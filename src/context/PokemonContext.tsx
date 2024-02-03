@@ -13,6 +13,7 @@ export type Pokemon = {
 type ContextValue = {
   getPokemonById: (id: number) => Pokemon | null | undefined;
   getAllPokemon: () => Pokemon[] | [];
+  getAllSessionPokemon: () => Pokemon[] | [];
   isLoading: boolean;
   getIdBoundaries: () => { first: number; last: number };
   allTypes: string[];
@@ -21,6 +22,7 @@ type ContextValue = {
 const PokemonContext = createContext<ContextValue>({
   getPokemonById: () => null,
   getAllPokemon: () => [],
+  getAllSessionPokemon: () => [],
   isLoading: true,
   getIdBoundaries: () => ({ first: 0, last: 0 }),
   allTypes: [],
@@ -37,18 +39,35 @@ export const PokemonProvider = ({
     uri: "https://beta.pokeapi.co/graphql/v1beta",
     cache: new InMemoryCache(),
   });
-  const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
+
+  const [allPokemon, setAllPokemon] = useState<Pokemon[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [allTypes, setAllTypes] = useState<string[]>([]);
 
-  const getPokemonById = (id: number) =>
-    isLoading ? null : pokemonData.find((pokemon) => pokemon.id === id);
+  // Sesssion pokemons behandle ich seperat und speichere sie nicht zwischen, aus folgenen gründen unten (siehe kommentare an den kritischen stellen)
 
-  const getAllPokemon = () => (isLoading ? [] : pokemonData);
+  const getPokemonById = (id: number) =>
+    isLoading ? null : [...allPokemon, ...getAllSessionPokemon()].find((pokemon) => pokemon.id === id);
+
+  const getAllPokemon = () => {
+    if (isLoading) {
+      return [];
+    }
+
+    return allPokemon;
+
+    // warum nicht ? return [...getAllPokemonsFromSession(),...pokemonData];
+    // useMemo würde dies immer als eine neues object sehen, und somit immer feuern
+  };
+
+  // Eigentlich unnätig, ich möchte aber das man alles was mit pokemons zutun hat, aus dem context nimmt
+  const getAllSessionPokemon = () => {
+    return getAllPokemonsFromSession();
+  };
 
   const getIdBoundaries = () => {
-    const first = isLoading ? 0 : pokemonData[0].id || 0;
-    const last = isLoading ? 0 : pokemonData[pokemonData.length - 1].id || 0;
+    const first = isLoading ? 0 : allPokemon[0].id || 0;
+    const last = isLoading ? 0 : allPokemon[allPokemon.length - 1].id || 0;
     return { first, last };
   };
 
@@ -72,11 +91,8 @@ export const PokemonProvider = ({
           }
         `,
       })
-      .then(({data}) => {
+      .then(({ data }) => {
         let allTypesWithDuplicate: string[] = [];
-
-        // Adding session pokemons
-        const sessionPokemons: Pokemon[] = getAllPokemonsFromSession();
 
         // Parsing pokemons from graphql
         const parsedPokemons: Pokemon[] = data.pokemon_v2_pokemon.map(
@@ -98,7 +114,9 @@ export const PokemonProvider = ({
           }
         );
 
-        setPokemonData([...sessionPokemons, ...parsedPokemons]);
+        // Warum nicht  setPokemonData([...parsedPokemons, ...getPokemonsFromSession()]);
+        // Wenn sich die session pokemons ändern, müsste ich die seite reloaden, damit dieser useEffect ausgeführt wird und ich die neueste version habe
+        setAllPokemon(parsedPokemons);
         setAllTypes(Array.from(new Set(allTypesWithDuplicate)));
       })
       .catch((error) => {
@@ -114,6 +132,7 @@ export const PokemonProvider = ({
       value={{
         getPokemonById,
         getAllPokemon,
+        getAllSessionPokemon,
         isLoading,
         getIdBoundaries,
         allTypes,

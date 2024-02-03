@@ -10,8 +10,8 @@ import { useMemo, useState } from "react";
 import styled from "styled-components";
 
 const Pokedex = () => {
-  const { getAllPokemon, isLoading } = usePokemonContext();
-  const allPokemon = getAllPokemon();
+  const { getAllPokemon, isLoading, getAllSessionPokemon } = usePokemonContext();
+  const allPokemon = getAllPokemon()
 
   const [activePokemonID, setActivePokemonID] = useState(0);
   const [nameFilter, setNameFilter] = useState("");
@@ -21,10 +21,10 @@ const Pokedex = () => {
   const filteredPokemon = useMemo(() => {
 
     // Noch keine pokemon da
-    if(allPokemon.length === 0) return []
+    if (allPokemon.length === 0) return [];
 
     // Filter anwenden
-    const filtered = allPokemon.filter((pokemon) => {
+    const filtered = [...getAllSessionPokemon(),...allPokemon].filter((pokemon) => {
       const nameMatch = pokemon.name
         .toLowerCase()
         .includes(nameFilter.toLowerCase());
@@ -37,12 +37,13 @@ const Pokedex = () => {
       return nameMatch && numberMatch && typeMatch;
     });
 
+  
     if (filtered.length !== 0) setActivePokemonID(filtered[0].id);
     if (filtered.length === 0) setActivePokemonID(1);
 
-    // filtering pokemon
     return filtered;
-  }, [nameFilter, numberFilter, typeFilter, allPokemon]);
+    
+  }, [nameFilter, numberFilter, typeFilter, allPokemon]); // allPokemon ist immer anders wegen  return [...getAllPokemonsFromSession(),...pokemonData];
 
   const shiftPokemon = (dir: -1 | 1) => {
     const currentPokemon = filteredPokemon.find(
