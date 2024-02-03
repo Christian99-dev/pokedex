@@ -17,6 +17,7 @@ type ContextValue = {
   isLoading: boolean;
   getNextFreeId: () => number;
   allTypes: string[];
+  getRandomPokemonImage: () => string;
 };
 
 const PokemonContext = createContext<ContextValue>({
@@ -26,6 +27,7 @@ const PokemonContext = createContext<ContextValue>({
   isLoading: true,
   getNextFreeId: () => 0,
   allTypes: [],
+  getRandomPokemonImage: () => "",
 });
 
 export const usePokemonContext = () => useContext(PokemonContext);
@@ -39,7 +41,7 @@ export const PokemonProvider = ({
     uri: "https://beta.pokeapi.co/graphql/v1beta",
     cache: new InMemoryCache(),
   });
-
+  const pokemonCount = 493;
   const [allPokemon, setAllPokemon] = useState<Pokemon[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [allTypes, setAllTypes] = useState<string[]>([]);
@@ -47,7 +49,11 @@ export const PokemonProvider = ({
   // Sesssion pokemons behandle ich seperat und speichere sie nicht zwischen, aus folgenen gründen unten (siehe kommentare an den kritischen stellen)
 
   const getPokemonById = (id: number) =>
-    isLoading ? null : [...allPokemon, ...getAllSessionPokemon()].find((pokemon) => pokemon.id === id);
+    isLoading
+      ? null
+      : [...allPokemon, ...getAllSessionPokemon()].find(
+          (pokemon) => pokemon.id === id
+        );
 
   const getAllPokemon = () => {
     if (isLoading) {
@@ -66,7 +72,13 @@ export const PokemonProvider = ({
   };
 
   const getNextFreeId = () => {
-    return allPokemon.length + getAllSessionPokemon().length + 1
+    return pokemonCount + getAllSessionPokemon().length + 1;
+  };
+
+  const getRandomPokemonImage = () => {
+    if (isLoading) return "";
+
+    return allPokemon[Math.floor(Math.random() * pokemonCount - 1)].image;
   };
 
   useEffect(() => {
@@ -74,7 +86,7 @@ export const PokemonProvider = ({
       .query({
         query: gql`
           query MyQuery {
-            pokemon_v2_pokemon(limit: 493) {
+            pokemon_v2_pokemon(limit: ${pokemonCount}) {
               id
               name
               pokemon_v2_pokemontypes {
@@ -107,7 +119,7 @@ export const PokemonProvider = ({
               types: allTypes,
               image: pokemon.pokemon_v2_pokemonsprites[0].sprites.front_default,
               description:
-                "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidu",
+                "",
             };
           }
         );
@@ -134,6 +146,7 @@ export const PokemonProvider = ({
         isLoading,
         getNextFreeId,
         allTypes,
+        getRandomPokemonImage,
       }}
     >
       {children}

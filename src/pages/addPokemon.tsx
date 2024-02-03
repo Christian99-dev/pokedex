@@ -4,27 +4,33 @@ import Layout from "@/components/Layout";
 import TypeSelection from "@/components/TypeSelection";
 import { usePokemonContext } from "@/context/PokemonContext";
 import { addPokemonToSession } from "@/utils/customPokemonsSessions";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { BounceLoader } from "react-spinners";
 import styled from "styled-components";
 
 const addPokemon = () => {
-  const { getNextFreeId } = usePokemonContext();
+  const { getNextFreeId, getRandomPokemonImage, isLoading } =
+    usePokemonContext();
   const [types, setTypes] = useState<string[]>([]);
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [img, setImg] = useState<string>(
-    "https://images.pexels.com/photos/4132776/pexels-photo-4132776.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-  );
+  const [img, setImg] = useState<string>("");
 
   const addCustomPokemon = () => {
     addPokemonToSession({
       id: getNextFreeId(),
-      name: name,
+      name: name.toUpperCase(),
       types: types,
       image: img,
       description: description,
     });
   };
+
+  useEffect(() => {
+    if (!isLoading) {
+      setImg(getRandomPokemonImage());
+    }
+  }, [isLoading]);
 
   return (
     <Layout>
@@ -32,7 +38,7 @@ const addPokemon = () => {
         <h1>Pokemon Hinzufügen</h1>
         <div className="add-section">
           <div className="left">
-            <img src={img}></img>
+            {img !== "" ? <img src={img}></img> : <BounceLoader />}
           </div>
           <div className="right">
             <Input
@@ -100,10 +106,19 @@ const AddPokemonWrapper = styled.div`
     }
 
     .left {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       img {
-        height: 200px;
-        width: 100%;
+        height: 100%;
+        aspect-ratio: 1 / 1;
         object-fit: cover;
+      }
+
+      span {
+        > * {
+          background-color: var(--dark-pink) !important;
+        }
       }
     }
   }
