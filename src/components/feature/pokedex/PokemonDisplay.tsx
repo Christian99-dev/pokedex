@@ -125,9 +125,11 @@ const PokemonDisplayWrapper = styled.div`
     color: white;
     font-size: var(--fs-5);
     font-weight: 300;
-    height: 75px;
+    height: 100px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    text-align: center;
 
     .selection {
       margin: auto 0;
