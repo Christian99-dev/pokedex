@@ -8,6 +8,11 @@ export type Pokemon = {
   name: string;
   types: Array<string>;
   description: string | null;
+  moves: { name: string; type: string };
+  weight: number;
+  base_experience: number;
+  height: number;
+  capture_rate: number;
 };
 
 type ContextValue = {
@@ -97,6 +102,24 @@ export const PokemonProvider = ({
               pokemon_v2_pokemonsprites {
                 sprites
               }
+              pokemon_v2_pokemonmoves(limit: 4) {
+                pokemon_v2_move {
+                  name
+                  pokemon_v2_type {
+                    name
+                  }
+                }
+              }
+              pokemon_v2_pokemonstats(limit: 1) {
+                pokemon_v2_pokemon {
+                  base_experience
+                  height
+                  pokemon_v2_pokemonspecy {
+                    capture_rate
+                  }
+                }
+              }
+              weight
             }
           }
         `,
@@ -107,21 +130,43 @@ export const PokemonProvider = ({
         // Parsing pokemons from graphql
         const parsedPokemons: Pokemon[] = data.pokemon_v2_pokemon.map(
           (pokemon: any) => {
-            let allTypes = pokemon.pokemon_v2_pokemontypes.map(
-              (type: any) => type.pokemon_v2_type.name
-            );
+            const moves = pokemon.pokemon_v2_pokemonmoves
+              .map((rawMove: any) => {
+                return {
+                  name: rawMove.pokemon_v2_move.name,
+                  type: rawMove.pokemon_v2_move.pokemon_v2_type.name,
+                };
+              });
 
-            allTypesWithDuplicate.push(...allTypes);
+            const types = pokemon.pokemon_v2_pokemontypes.map(
+              (rawType: any) => rawType.pokemon_v2_type.name
+            );
+            const image =
+              pokemon.pokemon_v2_pokemonsprites[0].sprites.front_default;
+            const name = pokemon.name.toUpperCase();
+            const description = null;
+            const id = pokemon.id;
+            const weight = pokemon.weight;
+            const base_experience = pokemon.pokemon_v2_pokemonstats[0].pokemon_v2_pokemon.base_experience
+            const height = pokemon.pokemon_v2_pokemonstats[0].pokemon_v2_pokemon.height
+            const capture_rate = pokemon.pokemon_v2_pokemonstats[0].pokemon_v2_pokemon.pokemon_v2_pokemonspecy.capture_rate
 
             return {
-              id: pokemon.id,
-              name: pokemon.name.toUpperCase(),
-              types: allTypes,
-              image: pokemon.pokemon_v2_pokemonsprites[0].sprites.front_default,
-              description: null,
+              id: id,
+              name: name,
+              types: types,
+              image: image,
+              description: description,
+              moves: moves,
+              weight: weight,
+              base_experience: base_experience,
+              height: height,
+              capture_rate: capture_rate
             };
           }
         );
+
+        console.log("out ", parsedPokemons)
 
         // Warum nicht  setPokemonData([...parsedPokemons, ...getPokemonsFromSession()]);
         // Wenn sich die session pokemons ändern, müsste ich die seite reloaden, damit dieser useEffect ausgeführt wird und ich die neueste version habe
