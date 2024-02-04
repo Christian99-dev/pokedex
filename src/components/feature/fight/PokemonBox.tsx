@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import { Pokemon } from "@/context/PokemonContext";
-import TypeButton from "@/components/TypeButton";
-import Icon from "@/components/Icon";
-import PokemonMenu from "@/components/PokemonMenu";
+import TypeButton from "@/components/shared/TypeButton";
+import Icon from "@/components/shared/Icon";
+import PokemonMenu from "@/components/feature/fight/PokemonMenu";
 
 interface PokemonBoxProps {
   selectedPokemon: Pokemon | null;

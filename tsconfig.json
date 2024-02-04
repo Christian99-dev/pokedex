@@ -17,6 +17,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/Layout.tsx", "src/pages/api/generate-pokemon-description.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/shared/Layout.tsx", "src/pages/api/generate-pokemon-description.js"],
   "exclude": ["node_modules"]
 }

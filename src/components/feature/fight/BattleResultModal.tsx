@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import styled, { keyframes } from "styled-components";
 import { Pokemon } from "@/context/PokemonContext";
-import TypeButton from "@/components/TypeButton";
-import Icon from "@/components/Icon";
+import TypeButton from "@/components/shared/TypeButton";
+import Icon from "@/components/shared/Icon";
 import { responsiveCSS } from "@/theme/responsive";
 
 interface BattleResultModalProps {

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { gql, ApolloClient, InMemoryCache } from "@apollo/client";
-import { getAllPokemonsFromSession } from "@/utils/customPokemonsSessions";
+import { getAllPokemonsFromSession } from "@/utils/sessionTools";
 
 export type Pokemon = {
   id: number;

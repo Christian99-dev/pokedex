@@ -1,10 +1,10 @@
-import Button from "@/components/Button";
-import Layout from "@/components/Layout";
+import Button from "@/components/shared/Button";
+import Layout from "@/components/shared/Layout";
 import { device } from "@/theme/breakpoints";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import {usePokemonContext } from "@/context/PokemonContext";
-import LoadingBanner from "@/components/LoadingBanner";
+import LoadingBanner from "@/components/shared/LoadingBanner";
 
 export default function Home(){
   const { isLoading, getAllPokemon } = usePokemonContext();

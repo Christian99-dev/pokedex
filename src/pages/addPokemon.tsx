@@ -1,9 +1,9 @@
-import Button from "@/components/Button";
-import Input from "@/components/Input";
-import Layout from "@/components/Layout";
-import TypeSelection from "@/components/TypeSelection";
+import Button from "@/components/shared/Button";
+import Input from "@/components/shared/Input";
+import Layout from "@/components/shared/Layout";
+import TypeSelection from "@/components/shared/TypeSelection";
 import { usePokemonContext } from "@/context/PokemonContext";
-import { addPokemonToSession } from "@/utils/customPokemonsSessions";
+import { addPokemonToSession } from "@/utils/sessionTools";
 import React, { useEffect, useState } from "react";
 import { BounceLoader } from "react-spinners";
 import styled from "styled-components";

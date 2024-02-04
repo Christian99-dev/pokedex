@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import Layout from "@/components/Layout";
+import Layout from "@/components/shared/Layout";
 import styled from "styled-components";
 import { device } from "@/theme/breakpoints";
-import LoadingBanner from "@/components/LoadingBanner";
+import LoadingBanner from "@/components/shared/LoadingBanner";
 import { Pokemon, usePokemonContext } from "@/context/PokemonContext";
-import Icon from "@/components/Icon";
-import BattleResult from "@/components/BattleResult";
-import PokemonBox from "@/components/PokemonBox";
+import Icon from "@/components/shared/Icon";
+import BattleResult from "@/components/feature/fight/BattleResult";
+import PokemonBox from "@/components/feature/fight/PokemonBox";
 
 const Fight = () => {
   const { isLoading, getPokemonById, getAllPokemon } = usePokemonContext();

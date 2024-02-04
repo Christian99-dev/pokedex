@@ -1,9 +1,9 @@
-import Input from "@/components/Input";
-import Layout from "@/components/Layout";
-import LoadingBanner from "@/components/LoadingBanner";
-import PokemonDisplay from "@/components/PokemonDisplay";
-import PokemonPreviewCard from "@/components/PokemonPreviewCard";
-import TypeSelection from "@/components/TypeSelection";
+import Input from "@/components/shared/Input";
+import Layout from "@/components/shared/Layout";
+import LoadingBanner from "@/components/shared/LoadingBanner";
+import PokemonDisplay from "@/components/feature/pokedex/PokemonDisplay";
+import PokemonPreviewCard from "@/components/feature/pokedex/PokemonPreviewCard";
+import TypeSelection from "@/components/shared/TypeSelection";
 import { usePokemonContext } from "@/context/PokemonContext";
 import { responsiveCSS } from "@/theme/responsive";
 import { useMemo, useState } from "react";

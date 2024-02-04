@@ -2,9 +2,9 @@ import { Pokemon } from "@/context/PokemonContext";
 import { responsiveCSS } from "@/theme/responsive";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Icon from "./Icon";
-import TypeButton from "./TypeButton";
-import Button from "./Button";
+import Icon from "../../shared/Icon";
+import TypeButton from "../../shared/TypeButton";
+import Button from "../../shared/Button";
 import { BounceLoader } from "react-spinners";
 import type { SuccessResponse, ErrorResponse } from "@/pages/api/generate-pokemon-description";
 
