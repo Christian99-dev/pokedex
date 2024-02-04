@@ -35,6 +35,7 @@ const TypeSelection = ({
   const toggleFilter = () => {
     setOpen(!open);
   };
+  
   return (
     <TypeSelectionWrapper>
       {/* Button */}

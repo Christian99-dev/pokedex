@@ -29,4 +29,4 @@ export default css`
   }
 `;
 
-export const darkColorTypes = ["fighting", "ghost", "dragon", "dark"]
+export const darkColorTypes = ["fighting", "ghost", "dragon", "dark", "poison"]
