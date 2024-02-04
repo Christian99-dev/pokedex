@@ -22,7 +22,15 @@ const addPokemon = () => {
       name: name.toUpperCase(),
       types: types,
       image: img,
-      description: description,
+      description: description === "" ? null : description,
+      height: 0,
+      weight: 0,
+      base_experience: 0,
+      capture_rate: 0,
+      moves: [{
+        type:"normal",
+        name:"tackle"
+      }]
     });
   };
 
@@ -60,7 +68,7 @@ const addPokemon = () => {
             />
           </div>
         </div>
-        <Button text="Hinzufügen" route="" onClick={() => addCustomPokemon()} />
+        <Button text="Hinzufügen" route="" onClick={() => addCustomPokemon()} size="medium" />
       </AddPokemonWrapper>
     </Layout>
   );

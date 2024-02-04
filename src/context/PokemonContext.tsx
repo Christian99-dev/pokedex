@@ -8,7 +8,7 @@ export type Pokemon = {
   name: string;
   types: Array<string>;
   description: string | null;
-  moves: { name: string; type: string };
+  moves: { name: string; type: string }[];
   weight: number;
   base_experience: number;
   height: number;
