@@ -7,7 +7,7 @@ export type Pokemon = {
   image: string;
   name: string;
   types: Array<string>;
-  description: string;
+  description: string | null;
 };
 
 type ContextValue = {
@@ -118,8 +118,7 @@ export const PokemonProvider = ({
               name: pokemon.name.toUpperCase(),
               types: allTypes,
               image: pokemon.pokemon_v2_pokemonsprites[0].sprites.front_default,
-              description:
-                "",
+              description: null,
             };
           }
         );

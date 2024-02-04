@@ -31,9 +31,9 @@ export default function Home(){
         <h1>MyPokeDex</h1>
         <AnimatedPokemonImage src={allPokemons?.[currentPokemonIndex].image} alt="pokemon" />
         <div className="buttons">
-          <Button text="Pokedex" route="/pokedex" />
-          <Button text="Fight" route="/fight" />
-          <Button text="Custom" route="/addPokemon" />
+          <Button text="Pokedex" route="/pokedex" size="medium"/>
+          <Button text="Fight" route="/fight" size="medium"/>
+          <Button text="Custom" route="/addPokemon" size="medium"/>
         </div>
       </PageWrapper>
     </Layout>

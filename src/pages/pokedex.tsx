@@ -10,10 +10,10 @@ import { useMemo, useState } from "react";
 import styled from "styled-components";
 
 const Pokedex = () => {
-  const { getAllPokemon, isLoading, getAllSessionPokemon } = usePokemonContext();
+  const { getAllPokemon, isLoading, getAllSessionPokemon, getPokemonById } = usePokemonContext();
   const allPokemon = getAllPokemon()
 
-  const [activePokemonID, setActivePokemonID] = useState(0);
+  const [activePokemon, setActivePokemon] = useState(getPokemonById(0));
   const [nameFilter, setNameFilter] = useState("");
   const [numberFilter, setNumberFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState<string[]>([]);
@@ -38,38 +38,33 @@ const Pokedex = () => {
     });
 
   
-    if (filtered.length !== 0) setActivePokemonID(filtered[0].id);
-    if (filtered.length === 0) setActivePokemonID(1);
+    if (filtered.length !== 0) setActivePokemon(filtered[0]);
+    if (filtered.length === 0) setActivePokemon(getPokemonById(1));
 
     return filtered;
     
-  }, [nameFilter, numberFilter, typeFilter, allPokemon]); // allPokemon ist immer anders wegen  return [...getAllPokemonsFromSession(),...pokemonData];
+  }, [nameFilter, numberFilter, typeFilter, allPokemon]); 
+
 
   const shiftPokemon = (dir: -1 | 1) => {
-    const currentPokemon = filteredPokemon.find(
-      (pokemon) => pokemon.id === activePokemonID
-    );
-    if (!currentPokemon) return;
-
+    
+    if(!activePokemon) return;
     // Finding current pokemon array Index
     const arrayIdFromNextPokemon =
-      filteredPokemon.indexOf(currentPokemon) + 1 * dir;
+      filteredPokemon.indexOf(activePokemon) + 1 * dir;
 
     // Next index is out of bounds
     if (arrayIdFromNextPokemon === -1) {
-      setActivePokemonID(filteredPokemon[filteredPokemon.length - 1].id);
+      setActivePokemon(filteredPokemon[filteredPokemon.length - 1]);
       return;
     }
 
     if (arrayIdFromNextPokemon > filteredPokemon.length - 1) {
-      setActivePokemonID(filteredPokemon[0].id);
+      setActivePokemon(filteredPokemon[0]);
       return;
     }
-
-    // finding the pokemonId from the next pokemon in the list and setting it as current
-    const nextID =
-      filteredPokemon[filteredPokemon.indexOf(currentPokemon) + 1 * dir].id;
-    setActivePokemonID(nextID);
+    
+    setActivePokemon(filteredPokemon[filteredPokemon.indexOf(activePokemon) + 1 * dir]);
   };
 
   if (isLoading)
@@ -100,8 +95,8 @@ const Pokedex = () => {
                 <PokemonPreviewCard
                   pokemon={pokemon}
                   key={index}
-                  active={activePokemonID === pokemon.id}
-                  onClick={() => setActivePokemonID(pokemon.id)}
+                  active={activePokemon === pokemon}
+                  onClick={() => setActivePokemon(pokemon)}
                 />
               ))}
             </div>
@@ -109,7 +104,7 @@ const Pokedex = () => {
         </div>
         <div className="details">
           <PokemonDisplay
-            pokemonID={activePokemonID}
+            pokemon={activePokemon}
             nextButton={() => shiftPokemon(1)}
             prevButton={() => shiftPokemon(-1)}
           />
