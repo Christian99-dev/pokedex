@@ -1,12 +1,12 @@
-import { Pokemon, usePokemonContext } from "@/context/PokemonContext";
+import { Pokemon } from "@/context/PokemonContext";
 import { responsiveCSS } from "@/theme/responsive";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Icon from "./Icon";
 import TypeButton from "./TypeButton";
-import { DescriptionRequestBody } from "@/pages/api/generate-pokemon-description";
 import Button from "./Button";
 import { BounceLoader } from "react-spinners";
+import type { SuccessResponse, ErrorResponse } from "@/pages/api/generate-pokemon-description";
 
 const PokemonDisplay = ({
   pokemon,
@@ -26,53 +26,28 @@ const PokemonDisplay = ({
   const [infoText, setInfoText] = useState("Generate Description");
   const [showLoader, setShowLoader] = useState(false);
 
-  const onAiClick = () => {
+  const generateDescription = (ai: boolean) => {
+    if(!pokemon) return
     setShowLoader(true);
     setShowDescriptionSelection(false);
 
     fetch("/api/generate-pokemon-description", {
       method: "POST",
-      body: JSON.stringify({
+      body : JSON.stringify({
         pokemon: pokemon,
-        ai: true,
+        ai: ai,
       }),
     })
       .then((res) => {
         if (res.ok) return res.json();
         throw new Error("Server Error");
       })
-      .then((pokemonDescription) => {
-        setCurrentDescription(pokemonDescription);
+      .then((response: SuccessResponse) => {
+        setCurrentDescription(response.description);
         setShowLoader(false);
       })
-      .catch(() => {
+      .catch((error: ErrorResponse) => {
         setInfoText("Try again Later...")
-        setShowDescriptionSelection(true);
-        setShowLoader(false);
-      });
-  };
-
-  const onRandomClick = () => {
-    setShowLoader(true);
-    setShowDescriptionSelection(false);
-
-    fetch("/api/generate-pokemon-description", {
-      method: "POST",
-      body: JSON.stringify({
-        pokemon: pokemon,
-        ai: false,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) return res.json();
-        throw new Error("Server Error");
-      })
-      .then((pokemonDescription) => {
-        setCurrentDescription(pokemonDescription);
-        setShowLoader(false);
-      })
-      .catch(() => {
-        setInfoText("Something went wrong...")
         setShowDescriptionSelection(true);
         setShowLoader(false);
       });
@@ -85,36 +60,6 @@ const PokemonDisplay = ({
     setCurrentDescription(pokemon.description);
     setShowDescriptionSelection(pokemon.description === null);
     setInfoText("Generate Description");
-  }, [pokemon]);
-
-  useEffect(() => {
-    if (!pokemon) return;
-    setCurrentDescription("generating description...");
-    if (pokemon.description !== "") {
-      setCurrentDescription(pokemon.description);
-    } else {
-      setCurrentDescription("generating description...");
-      const requestBody: DescriptionRequestBody = {
-        pokemon: pokemon,
-        ai: true,
-      };
-      fetch("/api/generate-pokemon-description", {
-        method: "POST",
-        body: JSON.stringify(requestBody),
-      })
-        .then((res) => {
-          if (res.ok) return res.json();
-          throw new Error("");
-        })
-        .then((pokemonDescription) => {
-          console.log(pokemon);
-          setCurrentDescription(pokemonDescription);
-        })
-        .catch(() => {
-          console.log("error im frontend");
-          setCurrentDescription("error");
-        });
-    }
   }, [pokemon]);
 
   return (
@@ -137,13 +82,13 @@ const PokemonDisplay = ({
                 text="AI"
                 route=""
                 size="small"
-                onClick={() => onAiClick()}
+                onClick={() => generateDescription(true)}
               />
               <Button
                 text="Random"
                 route=""
                 size="small"
-                onClick={() => onRandomClick()}
+                onClick={() => generateDescription(false)}
               />
             </div>
           </div>

@@ -20,28 +20,44 @@ export default async function handler(
         prompt: `Human: ${prompt}\\nAI:`,
         temperature: 0.7,
         max_tokens: 256,
-        stop: ["Human:", "AI:", "\n", " \ ", "\nHuman", "\nHuman "],
+        stop: ["Human:", "AI:", "\n", "  ", "\nHuman", "\nHuman "],
       }),
     };
 
     fetch("https://api.pawan.krd/v1/completions", requestOptions)
       .then((res) => res.json())
       .then((ai) => {
-        res.status(200).json(ai.choices[0].text);
+        const response: SuccessResponse = {
+          description: ai.choices[0].text,
+          id: pokemon.id,
+        };
+
+        res.status(200).json(response);
       })
       .catch((error) => {
-        console.error("Error with pawanAI:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        const response: ErrorResponse = {
+          error: error,
+          id: pokemon.id,
+        };
+
+        res.status(500).json(response);
       });
   } else {
     fetch("http://localhost:3000/data/pokemonDescriptions.json")
       .then((res) => res.json())
       .then((all: string[]) => {
-        res.status(200).json(all[Math.floor(Math.random() * all.length)]);
+        const response: SuccessResponse = {
+          description: all[Math.floor(Math.random() * all.length)],
+          id: pokemon.id,
+        };
+        res.status(200).json(response);
       })
       .catch((error) => {
-        console.error("Error fetching or parsing JSON:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        const response: ErrorResponse = {
+          error: error,
+          id: pokemon.id,
+        };
+        res.status(500).json(response);
       });
   }
 }
@@ -49,4 +65,14 @@ export default async function handler(
 export type DescriptionRequestBody = {
   pokemon: Pokemon;
   ai: boolean;
+};
+
+export type SuccessResponse = {
+  description: string;
+  id: number;
+};
+
+export type ErrorResponse = {
+  error: any;
+  id: number;
 };
