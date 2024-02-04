@@ -151,6 +151,8 @@ export const PokemonProvider = ({
             const height = pokemon.pokemon_v2_pokemonstats[0].pokemon_v2_pokemon.height
             const capture_rate = pokemon.pokemon_v2_pokemonstats[0].pokemon_v2_pokemon.pokemon_v2_pokemonspecy.capture_rate
 
+            allTypesWithDuplicate.push(...types)
+
             return {
               id: id,
               name: name,

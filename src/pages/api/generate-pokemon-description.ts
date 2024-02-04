@@ -8,7 +8,7 @@ export default async function handler(
   const { ai, pokemon }: DescriptionRequestBody = JSON.parse(req.body);
 
   if (ai) {
-    const prompt = `Generiere eine kurze, klare Beschreibung für das Pokémon mit dem Namen ${pokemon.name}. Die Beschreibung sollte maximal 12 Wörter beinhalten. Sie darf maximal 1 - 2 Sätze lang sein. Die Länge der beschreibung darf unter keinen umständen 12 Wörter überschreiten. Deine Antwort sollte sich wie ein Pokedex-Eintrag lesen, ohne Attacken oder Statistiken zu enthalten. Antworte auf Deutsch und liefere ausschließlich die Beschreibung ohne zusätzliche Anmerkungen.`;
+    const prompt = `Generiere eine kurze, klare Beschreibung für das Pokémon mit dem Namen ${pokemon.name}. Die Beschreibung sollte maximal 12 Wörter beinhalten. Sie darf maximal 1 - 2 Sätze lang sein. Die Länge der beschreibung darf unter keinen umständen 12 Wörter überschreiten. Deine Antwort sollte sich wie ein Pokedex-Eintrag lesen, ohne Attacken oder Statistiken zu enthalten. Antworte auf Deutsch und liefere ausschließlich die Beschreibung ohne zusätzliche Anmerkungen. Die Beschreibung sollte keine Zahlen oder Informationen wie Gewicht oder Höhe beinhalten. Schreibe nicht am ende der beschreibung sowas wie die aufzählung der Wörter deiner antwort, wie zum beispiel "(Maximal 12 Wörter)"`;
     const requestOptions = {
       method: "POST",
       headers: {
