@@ -8,10 +8,12 @@ const TypeSelection = ({
   state,
   setState,
   active = true,
+  className,
 }: {
   state: string[];
   setState: React.Dispatch<React.SetStateAction<string[]>>;
   active?: boolean;
+  className?: string;
 }) => {
   const { allTypes } = usePokemonContext();
   const [open, setOpen] = useState<Boolean>(false);
@@ -35,24 +37,13 @@ const TypeSelection = ({
   const toggleFilter = () => {
     setOpen(!open);
   };
-  
+
   return (
-    <TypeSelectionWrapper>
+    <TypeSelectionWrapper className={className}>
       {/* Button */}
       <div className="controls">
         <h2>Typen</h2>
-        {active ? (
-          <Icon
-            iconname="add-circle.svg"
-            className="add-icon"
-            onClick={() => toggleFilter()}
-          />
-        ) : (
-          <Icon iconname="add-circle.svg" className="add-icon closed" />
-        )}
-      </div>
 
-      <div className="types-container">
         {/* Alle ausgewählten */}
         {state.length > 0 && (
           <div className="types-selected">
@@ -67,7 +58,18 @@ const TypeSelection = ({
             })}
           </div>
         )}
+        {active ? (
+          <Icon
+            iconname="add-circle.svg"
+            className="add-icon"
+            onClick={() => toggleFilter()}
+          />
+        ) : (
+          <Icon iconname="add-circle.svg" className="add-icon closed" />
+        )}
+      </div>
 
+      <div className="types-container">
         {/* Auswahl */}
         <div className={"types-selection " + (open ? "open" : "")}>
           {allTypes
@@ -111,6 +113,12 @@ const TypeSelectionWrapper = styled.div`
         opacity: 0.5;
       }
     }
+
+    .types-selected {
+      display: flex;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+    }
   }
 
   .types-container {
@@ -118,14 +126,6 @@ const TypeSelectionWrapper = styled.div`
 
     button {
       cursor: pointer;
-    }
-
-    .types-selected {
-      padding-top: var(--space-xs);
-      display: flex;
-      gap: var(--space-xs);
-      width: 100%;
-      flex-wrap: wrap;
     }
 
     .types-selection {

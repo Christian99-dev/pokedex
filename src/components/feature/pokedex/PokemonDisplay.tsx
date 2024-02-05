@@ -76,15 +76,21 @@ const PokemonDisplay = ({
 
       <div className="infos">
         <div className="left">
-          <Stat name="Höhe" value={pokemon?.height.toString() || ""} />
-          <Stat name="Gewicht" value={pokemon?.weight.toString() || ""} />
+          <Stat name="Höhe" value={pokemon?.height.toString() || ""} border />
+          <Stat
+            name="Gewicht"
+            value={pokemon?.weight.toString() || ""}
+            border
+          />
           <Stat
             name="Basiserfahrung"
             value={pokemon?.base_experience.toString() || ""}
+            border
           />
           <Stat
             name="Fangrate"
             value={pokemon?.capture_rate.toString() || ""}
+            border
           />
         </div>
         <div className="middle">
@@ -122,8 +128,8 @@ const PokemonDisplay = ({
           </div>
         </div>
         <div className="right">
-          {pokemon?.moves?.map((move) => (
-            <Attack name={move.name} type={move.type} />
+          {pokemon?.moves?.map((move, key) => (
+            <Attack name={move.name} type={move.type} key={key} />
           ))}
         </div>
       </div>

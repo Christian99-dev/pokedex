@@ -1,9 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 
-const Stat = ({ name, value }: { name: string; value: string }) => {
+const Stat = ({
+  name,
+  value,
+  border,
+}: {
+  name: string;
+  value: string | number;
+  border?: boolean;
+}) => {
   return (
-    <StatWrapper>
+    <StatWrapper className={border ? "border" : ""}>
       <div className="name">{name}</div>
       <div className="value">{value}</div>
     </StatWrapper>
@@ -17,9 +25,14 @@ const StatWrapper = styled.div`
   width: 100%;
   gap: var(--space-md);
   align-items: center;
-  justify-content: left;
+  justify-content: space-between;
+
+  &.border {
+    border-top: 1px white solid;
+  }
 
   .name {
+    color: white;
     font-weight: 500;
   }
 

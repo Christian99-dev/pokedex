@@ -8,47 +8,78 @@ import { usePokemonContext } from "@/context/PokemonContext";
 import { responsiveCSS } from "@/theme/responsive";
 import { useMemo, useState } from "react";
 import styled from "styled-components";
+import ValueSlider from "@/components/shared/Slider";
+import pokemonMaxStats from "@/utils/pokemonMaxStats";
 
 const Pokedex = () => {
-  const { getAllPokemon, isLoading, getAllSessionPokemon, getPokemonById } = usePokemonContext();
-  const allPokemon = getAllPokemon()
+  const { getAllPokemon, isLoading, getAllSessionPokemon, getPokemonById } =
+    usePokemonContext();
+  const allPokemon = getAllPokemon();
 
   const [activePokemon, setActivePokemon] = useState(getPokemonById(0));
-  const [nameFilter, setNameFilter] = useState("");
-  const [numberFilter, setNumberFilter] = useState("");
-  const [typeFilter, setTypeFilter] = useState<string[]>([]);
+
+  const [typesFilter, setTypesFilter] = useState<string[]>([]);
+  const [filter, setFilter] = useState<{
+    name: string;
+    weight: number;
+    base_experience: number;
+    height: number;
+    capture_rate: number;
+  }>({
+    name: "",
+    weight: 0,
+    base_experience: 0,
+    height: 0,
+    capture_rate: 0,
+  });
+
+  const filterValue = (key: string, value: string | number) =>
+    setFilter({ ...filter, [key]: value });
 
   const filteredPokemon = useMemo(() => {
-
     // Noch keine pokemon da
     if (allPokemon.length === 0) return [];
 
     // Filter anwenden
-    const filtered = [...getAllSessionPokemon(),...allPokemon].filter((pokemon) => {
-      const nameMatch = pokemon.name
-        .toLowerCase()
-        .includes(nameFilter.toLowerCase());
-      const numberMatch = String(pokemon.id).includes(numberFilter);
+    const filtered = [...getAllSessionPokemon(), ...allPokemon].filter(
+      (pokemon) => {
+        const nameMatch = pokemon.name
+          .toLowerCase()
+          .includes(filter.name.toLowerCase());
 
-      const typeMatch =
-        typeFilter.length === 0 ||
-        pokemon.types.some((type) => typeFilter.includes(type));
+        let typeMatch = true
 
-      return nameMatch && numberMatch && typeMatch;
-    });
+        if(typesFilter.length === 1) {
+          typeMatch = pokemon.types.includes(typesFilter[0]);
+        } else if(typesFilter.length > 1) {
+          typeMatch = typesFilter.every((type) => pokemon.types.includes(type));
+        }
+        
+        const heightMatch = pokemon.height >= filter.height;
+        const weightMatch = pokemon.weight >= filter.weight;
+        const base_experienceMatch =
+          pokemon.base_experience >= filter.base_experience;
+        const capture_rateMatch = pokemon.capture_rate >= filter.capture_rate;
 
-  
+        return (
+          nameMatch &&
+          typeMatch &&
+          heightMatch &&
+          weightMatch &&
+          base_experienceMatch &&
+          capture_rateMatch
+        );
+      }
+    );
+
     if (filtered.length !== 0) setActivePokemon(filtered[0]);
     if (filtered.length === 0) setActivePokemon(getPokemonById(1));
 
     return filtered;
-    
-  }, [nameFilter, numberFilter, typeFilter, allPokemon]); 
-
+  }, [filter, typesFilter, allPokemon]);
 
   const shiftPokemon = (dir: -1 | 1) => {
-    
-    if(!activePokemon) return;
+    if (!activePokemon) return;
     // Finding current pokemon array Index
     const arrayIdFromNextPokemon =
       filteredPokemon.indexOf(activePokemon) + 1 * dir;
@@ -63,8 +94,10 @@ const Pokedex = () => {
       setActivePokemon(filteredPokemon[0]);
       return;
     }
-    
-    setActivePokemon(filteredPokemon[filteredPokemon.indexOf(activePokemon) + 1 * dir]);
+
+    setActivePokemon(
+      filteredPokemon[filteredPokemon.indexOf(activePokemon) + 1 * dir]
+    );
   };
 
   if (isLoading)
@@ -80,14 +113,47 @@ const Pokedex = () => {
         <div className="preview">
           <div className="search">
             <Input
+              value={filter.name}
               placeholder="Name"
-              onChange={(e) => setNameFilter(e.target.value)}
+              onChange={(e) => filterValue("name", e.target.value)}
+              className="name"
             />
-            <Input
-              placeholder="Nummer"
-              onChange={(e) => setNumberFilter(e.target.value)}
+            <ValueSlider
+              value={filter.height}
+              placeholder="Höhe"
+              onChange={(e) => filterValue("height", e)}
+              max={pokemonMaxStats.height}
+              className="height"
             />
-            <TypeSelection state={typeFilter} setState={setTypeFilter} />
+            <ValueSlider
+              value={filter.weight}
+              placeholder="Gewicht"
+              onChange={(e) => filterValue("weight", e)}
+              max={pokemonMaxStats.weight}
+              className="weight"
+            />
+            <ValueSlider
+              value={filter.base_experience}
+              placeholder="Basiserfahrung"
+              onChange={(e) => filterValue("base_experience", e)}
+              max={pokemonMaxStats.base_experience}
+              className="base-experience"
+            />
+
+            <ValueSlider
+              value={filter.capture_rate}
+              placeholder="Fangrate"
+              onChange={(e) => filterValue("capture_rate", e)}
+              max={pokemonMaxStats.capture_rate}
+              className="capture-rate"
+            />
+
+            <TypeSelection
+              className="types"
+              state={typesFilter}
+              setState={setTypesFilter}
+              active={typesFilter.length < 2}
+            />
           </div>
           <div className="list-wrapper">
             <div className="list">
@@ -134,10 +200,34 @@ const PageWrapper = styled.div`
     ${responsiveCSS("width", 600, 400, 400, 400, 300, 300)}
 
     .search {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-areas:
+        "name name"
+        "height weight"
+        "base-experience capture-rate"
+        "types types";
+      grid-auto-columns: 1fr;
       gap: var(--space-sm);
       padding-bottom: var(--space-sm);
+
+      .name {
+        grid-area: name;
+      }
+      .height {
+        grid-area: height;
+      }
+      .weight {
+        grid-area: weight;
+      }
+      .base-experience {
+        grid-area: base-experience;
+      }
+      .capture-rate {
+        grid-area: capture-rate;
+      }
+      .types {
+        grid-area: types;
+      }
     }
 
     .list-wrapper {

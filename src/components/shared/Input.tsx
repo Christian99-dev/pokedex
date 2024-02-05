@@ -10,7 +10,7 @@ const Input = ({
 }: {
   placeholder: string;
   className?: string;
-  value?: string;
+  value?: string | number;
   name?: string;
   onChange: (e: any) => void;
 }) => {
