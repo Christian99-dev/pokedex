@@ -122,10 +122,12 @@ const PageWrapper = styled.div`
 
   .details {
     flex: 1;
+    margin: 0 var(--space-xxxl);
   }
 
   .preview {
     padding: var(--space-sm);
+    padding-right: 0;
     padding-bottom: 0;
     display: flex;
     flex-direction: column;
