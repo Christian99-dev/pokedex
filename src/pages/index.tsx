@@ -16,7 +16,7 @@ export default function Home(){
       setCurrentPokemonIndex(Math.floor(Math.random() * allPokemons.length));
     }, 15000);
     return () => clearInterval(intervalId);
-  });
+  }, []);
 
   if (isLoading || !allPokemons)
     return (

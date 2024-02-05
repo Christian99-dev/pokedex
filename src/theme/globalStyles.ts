@@ -14,6 +14,11 @@ const GlobalStyle = createGlobalStyle`
         padding: 0;
         font-family: 'Poppins';
     }
+
+    textarea {
+        font-family: 'Poppins';
+
+    }
     
     h1,h2,h3,h4,h5,h6,p {
         margin: 0;

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { gql, ApolloClient, InMemoryCache } from "@apollo/client";
 import { getAllPokemonsFromSession } from "@/utils/sessionTools";
+import { getRandomInt } from "@/utils/tools";
 
 export type Pokemon = {
   id: number;
@@ -24,7 +25,7 @@ type ContextValue = {
   isLoading: boolean;
   getNextFreeId: () => number;
   allTypes: string[];
-  getRandomPokemonImage: () => string;
+  getRandomPokemonImage: () => Promise<string>; 
 };
 
 const PokemonContext = createContext<ContextValue>({
@@ -34,7 +35,7 @@ const PokemonContext = createContext<ContextValue>({
   isLoading: true,
   getNextFreeId: () => 0,
   allTypes: [],
-  getRandomPokemonImage: () => "",
+  getRandomPokemonImage: () => Promise.resolve(""), 
 });
 
 export const usePokemonContext = () => useContext(PokemonContext);
@@ -49,6 +50,7 @@ export const PokemonProvider = ({
     cache: new InMemoryCache(),
   });
   const pokemonCount = 493;
+  const nextRandomPokemons = 100;
   const [allPokemon, setAllPokemon] = useState<Pokemon[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [allTypes, setAllTypes] = useState<string[]>([]);
@@ -73,7 +75,6 @@ export const PokemonProvider = ({
     // useMemo würde dies immer als eine neues object sehen, und somit immer feuern
   };
 
-  // Eigentlich unnätig, ich möchte aber das man alles was mit pokemons zutun hat, aus dem context nimmt
   const getAllSessionPokemon = () => {
     return getAllPokemonsFromSession();
   };
@@ -82,10 +83,20 @@ export const PokemonProvider = ({
     return pokemonCount + getAllSessionPokemon().length + 1;
   };
 
-  const getRandomPokemonImage = () => {
-    if (isLoading) return "";
+  const getRandomPokemonImage = async () => {
+    try {
+      const randomID = getRandomInt(pokemonCount + 1, pokemonCount + nextRandomPokemons)
+      console.log(randomID)
+      // Fetch Pokémon-Daten
+      const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomID}`);
+      const pokemonData = await pokemonResponse.json();
+      // Rückgabe des Bild-URLs
+      return pokemonData.sprites.front_default;
+    } catch (error) {
+      console.error('Fehler beim Abrufen des zufälligen Pokémon-Bilds:', error);
+      return null;
+    }
 
-    return allPokemon[Math.floor(Math.random() * pokemonCount - 1)].image;
   };
 
   useEffect(() => {

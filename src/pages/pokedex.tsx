@@ -155,6 +155,7 @@ const Pokedex = () => {
       <PageWrapper>
         <div className="preview">
           <div className="search">
+            
             <ValueSlider
               value={filter.height}
               placeholder="Höhe"
@@ -162,6 +163,7 @@ const Pokedex = () => {
               max={pokemonMaxStats.height}
               className="height"
             />
+            
             <ValueSlider
               value={filter.weight}
               placeholder="Gewicht"
@@ -169,6 +171,7 @@ const Pokedex = () => {
               max={pokemonMaxStats.weight}
               className="weight"
             />
+            
             <ValueSlider
               value={filter.base_experience}
               placeholder="Basiserfahrung"
