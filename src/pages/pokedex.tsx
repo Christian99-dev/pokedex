@@ -47,14 +47,14 @@ const Pokedex = () => {
           .toLowerCase()
           .includes(filter.name.toLowerCase());
 
-        let typeMatch = true
+        let typeMatch = true;
 
-        if(typesFilter.length === 1) {
+        if (typesFilter.length === 1) {
           typeMatch = pokemon.types.includes(typesFilter[0]);
-        } else if(typesFilter.length > 1) {
+        } else if (typesFilter.length > 1) {
           typeMatch = typesFilter.every((type) => pokemon.types.includes(type));
         }
-        
+
         const heightMatch = pokemon.height >= filter.height;
         const weightMatch = pokemon.weight >= filter.weight;
         const base_experienceMatch =
@@ -112,12 +112,6 @@ const Pokedex = () => {
       <PageWrapper>
         <div className="preview">
           <div className="search">
-            <Input
-              value={filter.name}
-              placeholder="Name"
-              onChange={(e) => filterValue("name", e.target.value)}
-              className="name"
-            />
             <ValueSlider
               value={filter.height}
               placeholder="Höhe"
@@ -153,6 +147,13 @@ const Pokedex = () => {
               state={typesFilter}
               setState={setTypesFilter}
               active={typesFilter.length < 2}
+            />
+
+            <Input
+              value={filter.name}
+              placeholder="Name"
+              onChange={(e) => filterValue("name", e.target.value)}
+              className="name"
             />
           </div>
           <div className="list-wrapper">
@@ -202,10 +203,11 @@ const PageWrapper = styled.div`
     .search {
       display: grid;
       grid-template-areas:
-        "name name"
+
         "height weight"
         "base-experience capture-rate"
-        "types types";
+        "types types"
+        "name name";
       grid-auto-columns: 1fr;
       gap: var(--space-sm);
       padding-bottom: var(--space-sm);
