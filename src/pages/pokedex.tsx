@@ -6,18 +6,22 @@ import PokemonPreviewCard from "@/components/feature/pokedex/PokemonPreviewCard"
 import TypeSelection from "@/components/shared/TypeSelection";
 import { usePokemonContext } from "@/context/PokemonContext";
 import { responsiveCSS } from "@/theme/responsive";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import ValueSlider from "@/components/shared/Slider";
 import pokemonMaxStats from "@/utils/pokemonMaxStats";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useIntersection } from "@mantine/hooks";
 
 const Pokedex = () => {
   const { getAllPokemon, isLoading, getAllSessionPokemon, getPokemonById } =
     usePokemonContext();
   const allPokemon = getAllPokemon();
+  const infiniteScrollCount = 10;
 
+  // State
+  const [queryKey, setQueryKey] = useState("key"); // State, um das Query zurückzusetzen
   const [activePokemon, setActivePokemon] = useState(getPokemonById(0));
-
   const [typesFilter, setTypesFilter] = useState<string[]>([]);
   const [filter, setFilter] = useState<{
     name: string;
@@ -33,9 +37,7 @@ const Pokedex = () => {
     capture_rate: 0,
   });
 
-  const filterValue = (key: string, value: string | number) =>
-    setFilter({ ...filter, [key]: value });
-
+  // Memo
   const filteredPokemon = useMemo(() => {
     // Noch keine pokemon da
     if (allPokemon.length === 0) return [];
@@ -75,9 +77,37 @@ const Pokedex = () => {
     if (filtered.length !== 0) setActivePokemon(filtered[0]);
     if (filtered.length === 0) setActivePokemon(getPokemonById(1));
 
-    return filtered;
-  }, [filter, typesFilter, allPokemon]);
+    // Reset useInfiniteQuery every time this is triggered
+    setQueryKey(queryKey + "a");
 
+    return filtered;
+  }, [filter, typesFilter, allPokemon]); // all pokemon rein, da wegen fetchen anfangs leer
+
+  // useInfiniteQuery
+  const { data: filteredPokemonPages, fetchNextPage } = useInfiniteQuery({
+    queryKey: [queryKey],
+    queryFn: ({ pageParam }: { pageParam: any }) => {
+      return getNextPokemonPage(pageParam);
+    },
+    initialPageParam: 1,
+    getNextPageParam: (_, allPages) => {
+      return allPages.length + 1;
+    },
+    getPreviousPageParam: (_, allPages) => {
+      return allPages.length + 1;
+    },
+  });
+
+  // Ref
+  const lastPokemonPreviewRef = useRef<HTMLElement>(null);
+  const { ref, entry } = useIntersection({
+    root: lastPokemonPreviewRef.current,
+    threshold: 1,
+  });
+
+  if (entry?.isIntersecting) fetchNextPage();
+
+  // Helper
   const shiftPokemon = (dir: -1 | 1) => {
     if (!activePokemon) return;
     // Finding current pokemon array Index
@@ -100,13 +130,26 @@ const Pokedex = () => {
     );
   };
 
+  const getNextPokemonPage = (pageCount: any) => {
+    return filteredPokemon.slice(
+      (pageCount - 1) * infiniteScrollCount,
+      pageCount * infiniteScrollCount
+    );
+  };
+
+  const filterValue = (key: string, value: string | number) =>
+    setFilter({ ...filter, [key]: value });
+
+  const filteredPokemonPagesFlattend = filteredPokemonPages?.pages.flatMap(
+    (page) => page
+  );
+
   if (isLoading)
     return (
       <Layout>
         <LoadingBanner />
       </Layout>
     );
-
   return (
     <Layout>
       <PageWrapper>
@@ -158,14 +201,21 @@ const Pokedex = () => {
           </div>
           <div className="list-wrapper">
             <div className="list">
-              {filteredPokemon.map((pokemon, index) => (
-                <PokemonPreviewCard
-                  pokemon={pokemon}
-                  key={index}
-                  active={activePokemon === pokemon}
-                  onClick={() => setActivePokemon(pokemon)}
-                />
-              ))}
+              {filteredPokemonPagesFlattend?.map((pokemon, index) => {
+                return (
+                  <>
+                    <PokemonPreviewCard
+                      pokemon={pokemon}
+                      key={index}
+                      active={activePokemon === pokemon}
+                      onClick={() => setActivePokemon(pokemon)}
+                    />
+                    {index === filteredPokemonPagesFlattend.length - 1 && (
+                      <div ref={ref} />
+                    )}
+                  </>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -203,7 +253,6 @@ const PageWrapper = styled.div`
     .search {
       display: grid;
       grid-template-areas:
-
         "height weight"
         "base-experience capture-rate"
         "types types"
