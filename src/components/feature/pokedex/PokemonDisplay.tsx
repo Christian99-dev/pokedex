@@ -250,10 +250,10 @@ const PokemonDisplayWrapper = styled.div`
     }
 
     .pokemon-img {
+      position: relative;
       z-index: 1;
       ${responsiveCSS("width", 450, 400, 350, 300, 250, 200)}
       ${responsiveCSS("height", 450, 400, 350, 300, 250, 200)}
-      
       margin: 0 auto;
     }
   }
