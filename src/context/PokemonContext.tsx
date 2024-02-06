@@ -86,7 +86,6 @@ export const PokemonProvider = ({
   const getRandomPokemonImage = async () => {
     try {
       const randomID = getRandomInt(pokemonCount + 1, pokemonCount + nextRandomPokemons)
-      console.log(randomID)
       // Fetch Pokémon-Daten
       const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomID}`);
       const pokemonData = await pokemonResponse.json();
