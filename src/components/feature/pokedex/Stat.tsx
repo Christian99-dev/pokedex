@@ -10,10 +10,18 @@ const Stat = ({
   value: string | number;
   border?: boolean;
 }) => {
+  let prettyValue : string | number = value
+  if(name === "Höhe") {
+    prettyValue = `${(Number(value) / 10).toFixed(1)} m`;
+  }
+  if(name === "Gewicht"){
+    prettyValue = `${(Number(value) / 10).toFixed(1)} kg`;
+  }
+    
   return (
     <StatWrapper className={border ? "border" : ""}>
       <div className="name">{name}</div>
-      <div className="value">{value}</div>
+      <div className="value">{prettyValue}</div>
     </StatWrapper>
   );
 };

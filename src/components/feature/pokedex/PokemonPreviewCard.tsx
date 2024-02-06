@@ -6,14 +6,16 @@ const PokedexPreview = ({
   pokemon,
   active,
   onClick,
+  innerRef
 }: {
   pokemon: Pokemon;
   active: boolean;
   onClick: () => void;
+  innerRef?: any
 }) => {
   const { image, name, id } = pokemon;
   return (
-    <PokedexCardWrapper className={active ? "active" : ""} onClick={onClick}>
+    <PokedexCardWrapper ref={innerRef} className={active ? "active" : ""} onClick={onClick}>
       <img className="pokemon-img" src={image} alt={name} />
       <h1>{name}</h1>
       <h2>{id}</h2>

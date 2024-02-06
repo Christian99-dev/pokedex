@@ -155,7 +155,6 @@ const Pokedex = () => {
       <PageWrapper>
         <div className="preview">
           <div className="search">
-            
             <ValueSlider
               value={filter.height}
               placeholder="Höhe"
@@ -163,7 +162,7 @@ const Pokedex = () => {
               max={pokemonMaxStats.height}
               className="height"
             />
-            
+
             <ValueSlider
               value={filter.weight}
               placeholder="Gewicht"
@@ -171,7 +170,7 @@ const Pokedex = () => {
               max={pokemonMaxStats.weight}
               className="weight"
             />
-            
+
             <ValueSlider
               value={filter.base_experience}
               placeholder="Basiserfahrung"
@@ -206,17 +205,17 @@ const Pokedex = () => {
             <div className="list">
               {filteredPokemonPagesFlattend?.map((pokemon, index) => {
                 return (
-                  <>
-                    <PokemonPreviewCard
-                      pokemon={pokemon}
-                      key={index}
-                      active={activePokemon === pokemon}
-                      onClick={() => setActivePokemon(pokemon)}
-                    />
-                    {index === filteredPokemonPagesFlattend.length - 1 && (
-                      <div ref={ref} />
-                    )}
-                  </>
+                  <PokemonPreviewCard
+                    pokemon={pokemon}
+                    key={index}
+                    active={activePokemon === pokemon}
+                    onClick={() => setActivePokemon(pokemon)}
+                    innerRef={
+                      index === filteredPokemonPagesFlattend.length - 1
+                        ? ref
+                        : null
+                    }
+                  />
                 );
               })}
             </div>
