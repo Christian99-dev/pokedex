@@ -86,7 +86,6 @@ const PokemonList = ({
       setState(filteredPokemon[0]);
 
     if (renderFlag && startPokemonID) {
-      console.log("here");
       setState(getPokemonById(startPokemonID) || null);
       setRenderFlag(false);
     }
