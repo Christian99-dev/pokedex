@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { gql, ApolloClient, InMemoryCache } from "@apollo/client";
-import { getAllPokemonsFromSession } from "@/utils/sessionTools";
-import { getRandomInt } from "@/utils/tools";
+import { getAllPokemonsFromSession } from "@/utils/session";
+import { getRandomInt } from "@/utils/helper";
 
 export type Pokemon = {
   id: number;
@@ -72,7 +72,7 @@ export const PokemonProvider = ({
     return allPokemon;
 
     // warum nicht ? return [...getAllPokemonsFromSession(),...pokemonData];
-    // useMemo würde dies immer als eine neues object sehen, und somit immer feuern
+    // useEffect würde dies immer als eine neues object sehen, und somit immer feuern
   };
 
   const getAllSessionPokemon = () => {
