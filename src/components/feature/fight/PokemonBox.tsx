@@ -1,19 +1,20 @@
-import React from "react";
-import styled from "styled-components";
-import { Pokemon } from "@/context/PokemonContext";
-import TypeButton from "@/components/shared/TypeButton";
-import { convertPokemonId } from "@/utils/helper";
+import React from 'react';
+import styled from 'styled-components';
+import TypeButton from '@/components/shared/TypeButton';
+import { convertPokemonId } from '@/utils/helper';
+import { Pokemon } from '@/context/PokemonContext';
 
-interface PokemonBoxProps {
+const PokemonBox = ({
+  selectedPokemon,
+}: {
   selectedPokemon: Pokemon | null;
-}
-
-const PokemonBox: React.FC<PokemonBoxProps> = ({ selectedPokemon }) => {
+}) => {
   return (
     <PokemonBoxWrapper>
-      <AnimatedPokemonImage
+      <img
         src={selectedPokemon?.image}
         alt={selectedPokemon?.name}
+        className="pokemon-img"
       />
       <div className="info">
         <div className="types-container">
@@ -29,8 +30,21 @@ const PokemonBox: React.FC<PokemonBoxProps> = ({ selectedPokemon }) => {
 };
 
 const PokemonBoxWrapper = styled.div`
-  img {
-    height: 300px;
+  .pokemon-img {
+    height: var(--pokemon-img-m);
+    animation: fadeIn 2s ease-in-out;
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-200px) translateX(-20px) rotate(90deg);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   }
 
   .info {
@@ -59,22 +73,6 @@ const PokemonBoxWrapper = styled.div`
       display: flex;
       gap: var(--space-xs);
       justify-content: center;
-    }
-  }
-`;
-
-const AnimatedPokemonImage = styled.img`
-  animation: fadeIn 2s ease-in-out;
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-200px) translateX(-20px) rotate(90deg);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
     }
   }
 `;

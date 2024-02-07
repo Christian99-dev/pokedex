@@ -12,6 +12,7 @@ import styled from "styled-components";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Icon from "@/components/shared/Icon";
+import { device } from "@/theme/breakpoints";
 
 const addPokemon = () => {
   const { getNextFreeId, getRandomPokemonImage } = usePokemonContext();
@@ -348,6 +349,12 @@ const AddPokemonWrapper = styled.div`
           background-color: var(--dark-pink) !important;
         }
       }
+    }
+  }
+
+  @media ${device.tablet} {
+    .add-section{
+      flex-direction: column;
     }
   }
 `;

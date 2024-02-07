@@ -1,21 +1,24 @@
 import { Pokemon } from "@/context/PokemonContext";
 import styled from "styled-components";
-import { responsiveCSS } from "@/theme/responsive";
 
 const PokedexPreview = ({
   pokemon,
   active,
   onClick,
-  innerRef
+  innerRef,
 }: {
   pokemon: Pokemon;
   active: boolean;
   onClick: () => void;
-  innerRef?: any
+  innerRef?: any;
 }) => {
   const { image, name, id } = pokemon;
   return (
-    <PokedexCardWrapper ref={innerRef} className={active ? "active" : ""} onClick={onClick}>
+    <PokedexCardWrapper
+      ref={innerRef}
+      className={active ? "active" : ""}
+      onClick={onClick}
+    >
       <img className="pokemon-img" src={image} alt={name} />
       <h1 className="name">{name}</h1>
       <h2 className="id">{id}</h2>
@@ -34,6 +37,7 @@ const PokedexCardWrapper = styled.div`
   gap: var(--space-lg);
   transition: all 0.02s ease-out;
   cursor: pointer;
+  height: min-content;
 
   .name {
     font-size: var(--fs-4);
@@ -46,13 +50,14 @@ const PokedexCardWrapper = styled.div`
   }
 
   .pokemon-img {
-    ${responsiveCSS("height", 100, 90, 80, 70, 60, 50)}
-    ${responsiveCSS("width", 100, 90, 80, 70, 60, 50)}
+    height: var(--pokemon-img-s);
+    width: var(--pokemon-img-s);
     object-fit: cover;
     border-radius: 10px;
   }
 
-  &:hover, &.active {
+  &:hover,
+  &.active {
     transition: all 0.08s ease-in;
     background-color: var(--purple);
     color: var(--pink);

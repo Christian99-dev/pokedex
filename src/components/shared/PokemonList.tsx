@@ -1,7 +1,7 @@
 import { Pokemon, usePokemonContext } from "@/context/PokemonContext";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import PokemonPreviewCard from "../feature/pokedex/PokemonPreviewCard";
+import PokemonPreviewCard from "./PokemonPreviewCard";
 import { useIntersection } from "@mantine/hooks";
 import pokemonMaxStats from "@/config/pokemonMaxStats";
 import ValueSlider from "./Slider";
@@ -10,6 +10,7 @@ import Input from "./Input";
 import styled from "styled-components";
 import PokemonDisplay from "../feature/pokedex/PokemonDisplay";
 import { responsiveCSS } from "@/theme/responsive";
+import { device } from "@/theme/breakpoints";
 
 const PokemonList = ({
   state,
@@ -113,7 +114,7 @@ const PokemonList = ({
   const lastPokemonPreviewRef = useRef<HTMLElement>(null);
   const { ref, entry } = useIntersection({
     root: lastPokemonPreviewRef.current,
-    threshold: 1,
+    threshold: 0.9,
   });
 
   if (entry?.isIntersecting) fetchNextPage();
@@ -240,7 +241,7 @@ const PokemonListWrapper = styled.div`
   .preview {
     display: flex;
     flex-direction: column;
-    ${responsiveCSS("width", 600, 400, 400, 400, 300, 300)}
+    ${responsiveCSS("width", 600, 400, 300, 400, 300, 300)}
 
     .search {
       display: grid;
@@ -318,5 +319,54 @@ const PokemonListWrapper = styled.div`
 
   &.details-show {
     width: 100%;
+  }
+
+  @media ${device.tablet} {
+    .preview {
+      flex-direction: row;
+      width: 100vw;
+      gap: var(--space-sm);
+      .list-wrapper {
+        .list {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
+          overflow-x: hidden;
+        }
+      }
+    }
+
+    &.details-show {
+      flex-direction: column;
+    }
+  }
+
+  @media ${device.tablet_sm} {
+    .preview {
+      flex-direction: column;
+      .list-wrapper {
+        .list {
+          display: flex;
+          flex-direction: row;
+          overflow-x: scroll;
+          overflow-y: hidden;
+
+          &::-webkit-scrollbar {
+            height: 5px;
+          }
+        }
+      }
+    }
+
+    &.details-show {
+      flex-direction: column;
+
+      .preview {
+        .list-wrapper {
+          flex: unset;
+          width: 100vw;
+          height: 80px;
+        }
+      }
+    }
   }
 `;

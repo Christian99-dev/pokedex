@@ -19,7 +19,7 @@ const Pokedex = () => {
     <Layout>
       <PageWrapper>
         <PokemonList
-          className="list"
+          className="whole-list"
           state={activePokemon}
           setState={setActivePokemon}
           details={true}
@@ -35,7 +35,7 @@ const PageWrapper = styled.div`
   display: flex;
   flex: 1;
 
-  .list {
+  .whole-list {
     padding-left: var(--space-sm);
     padding-top: var(--space-sm);
   }

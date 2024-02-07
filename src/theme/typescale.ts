@@ -49,12 +49,12 @@ export default css`
 	}
 
 	@media ${device.mobile} {
-		--fs-6: 15px;
-		--fs-5: 16px;
-		--fs-4: 17px;
-		--fs-3: 18px;
-		--fs-2: 19px;
-		--fs-1: 20px;
+		--fs-6: 14px;
+		--fs-5: 15px;
+		--fs-4: 16px;
+		--fs-3: 17px;
+		--fs-2: 18px;
+		--fs-1: 19px;
 	}
 
 }

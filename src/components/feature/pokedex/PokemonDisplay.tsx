@@ -1,18 +1,18 @@
-import { Pokemon } from "@/context/PokemonContext";
-import { responsiveCSS } from "@/theme/responsive";
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import Icon from "../../shared/Icon";
-import TypeButton from "../../shared/TypeButton";
-import Button from "../../shared/Button";
-import { BounceLoader } from "react-spinners";
+import Attack from './Attack';
+import Button from '../../shared/Button';
+import Icon from '../../shared/Icon';
+import React, { useEffect, useState } from 'react';
+import Stat from './Stat';
+import styled from 'styled-components';
+import TypeButton from '../../shared/TypeButton';
+import { BounceLoader } from 'react-spinners';
+import { convertPokemonId } from '@/utils/helper';
+import { Pokemon } from '@/context/PokemonContext';
 import type {
   SuccessResponse,
   ErrorResponse,
 } from "@/pages/api/generate-pokemon-description";
-import Stat from "./Stat";
-import Attack from "./Attack";
-import { convertPokemonId } from "@/utils/helper";
+import { device } from '@/theme/breakpoints';
 
 const PokemonDisplay = ({
   pokemon,
@@ -164,7 +164,6 @@ const PokemonDisplayWrapper = styled.div`
 
   .infos {
     color: white;
-
     display: flex;
     justify-content: center;
     gap: var(--space-md);
@@ -242,7 +241,7 @@ const PokemonDisplayWrapper = styled.div`
     .number {
       z-index: 0;
       position: absolute;
-      font-size: 150px;
+      font-size: var(--big-number);
       color: white;
       color: var(--pink);
       opacity: 0.2;
@@ -253,8 +252,8 @@ const PokemonDisplayWrapper = styled.div`
     .pokemon-img {
       position: relative;
       z-index: 1;
-      ${responsiveCSS("width", 450, 400, 350, 300, 250, 200)}
-      ${responsiveCSS("height", 450, 400, 350, 300, 250, 200)}
+      height: var(--pokemon-img-l);
+      width: var(--pokemon-img-l);
       margin: 0 auto;
     }
   }
@@ -281,6 +280,13 @@ const PokemonDisplayWrapper = styled.div`
       justify-content: left;
       align-items: center;
       flex: 1;
+    }
+  }
+
+  @media ${device.tablet_sm} {
+
+    .infos{
+      flex-direction: column;
     }
   }
 `;

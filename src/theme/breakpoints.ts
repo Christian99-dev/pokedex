@@ -2,7 +2,7 @@ export const size = {
   mobile: 411,
   tablet_sm: 768,
   tablet: 1000,
-  laptop: 1400,
+  laptop: 1600,
   desktop: 2500,
 };
 

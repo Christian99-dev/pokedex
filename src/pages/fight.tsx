@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Layout from "@/components/shared/Layout";
 import styled from "styled-components";
 import { device } from "@/theme/breakpoints";
@@ -83,9 +83,10 @@ const FightWrapper = styled.div`
     align-items: center;
     justify-content: center;
     width: 100%;
+    gap: var(--space-sm);
 
     .vs-icon {
-      max-block-size: 100px;
+      max-block-size: var(--icon-big);
       transition: all 0.1s ease-out;
       animation: bounce 4s infinite, rotate 2s linear 0s 1;
       &:hover {
@@ -97,13 +98,6 @@ const FightWrapper = styled.div`
     }
   }
 
-  @media ${device.tablet} {
-    flex-direction: column;
-
-    .pokemon-container {
-      flex-direction: column;
-    }
-  }
   @keyframes bounce {
     0%,
     20%,
@@ -126,6 +120,28 @@ const FightWrapper = styled.div`
 
     100% {
       transform: rotate(360deg); /* Rotate the vs-icon 360 degrees */
+    }
+  }
+
+  @media ${device.laptop} {
+    .pokemon-container {
+      flex-direction: column;
+    }
+  }
+
+  @media ${device.tablet} {
+    flex-direction: column;
+    .pokemon-container {
+      flex-direction: row;
+    }
+  }
+
+
+  @media ${device.tablet} {
+    flex-direction: column;
+    .pokemon-container {
+      flex-direction: row;
+      gap: 0;
     }
   }
 `;
