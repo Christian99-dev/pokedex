@@ -17,16 +17,22 @@ const PokemonList = ({
   details,
   className,
   scrollingQueryID,
+  startPokemonID,
 }: {
   state: Pokemon | null;
   setState: React.Dispatch<React.SetStateAction<Pokemon | null>>;
   details: boolean;
   className?: string;
-  scrollingQueryID?:string;
+  scrollingQueryID?: string;
+  startPokemonID?: number;
 }) => {
-  const { getAllPokemon, getAllSessionPokemon } = usePokemonContext();
+  const { getAllPokemon, getAllSessionPokemon, getPokemonById } =
+    usePokemonContext();
   const allPokemon = getAllPokemon();
   const infiniteScrollCount = 10;
+
+  // Render flag, to flag the first render with pokemons
+  const [renderFlag, setRenderFlag] = useState(true);
 
   // Setup State
   const [queryKey, setQueryKey] = useState(0); // State, um das Query zurückzusetzen
@@ -78,6 +84,12 @@ const PokemonList = ({
   useEffect(() => {
     if (filteredPokemon && filteredPokemon?.length !== 0)
       setState(filteredPokemon[0]);
+
+    if (renderFlag && startPokemonID) {
+      console.log("here");
+      setState(getPokemonById(startPokemonID) || null);
+      setRenderFlag(false);
+    }
     setQueryKey(queryKey + 1);
   }, [filteredPokemon]);
 

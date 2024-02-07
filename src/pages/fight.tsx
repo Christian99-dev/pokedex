@@ -47,6 +47,7 @@ const Fight = () => {
           setState={setPokemon2}
           details={false}
           scrollingQueryID="list2"
+          startPokemonID={4}
         />
       </FightWrapper>
       <BattleResult
