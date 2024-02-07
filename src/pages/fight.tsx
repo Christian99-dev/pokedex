@@ -7,77 +7,13 @@ import { Pokemon, usePokemonContext } from "@/context/PokemonContext";
 import Icon from "@/components/shared/Icon";
 import BattleResult from "@/components/feature/fight/BattleResult";
 import PokemonBox from "@/components/feature/fight/PokemonBox";
+import PokemonList from "@/components/shared/PokemonList";
 
 const Fight = () => {
-  const { isLoading, getPokemonById, getAllPokemon } = usePokemonContext();
-  const [showPokemonMenu1, setShowPokemonMenu1] = useState(false);
-  const [showPokemonMenu2, setShowPokemonMenu2] = useState(false);
-  const [selectedPokemon1, setSelectedPokemon1] = useState<Pokemon | null>(
-    getPokemonById(1) || null
-  );
-  const [selectedPokemon2, setSelectedPokemon2] = useState<Pokemon | null>(
-    getPokemonById(2) || null
-  );
-  const [modalIsOpen, setModalIsOpen] = useState(false); 
-  const [arrowIcon1, setArrowIcon1] = useState("arrow_down.svg");
-  const [arrowIcon2, setArrowIcon2] = useState("arrow_down.svg");  
-  const handlePokemonSwitch1 = (pokemonId: string) => {
-    const newSelectedPokemon = getPokemonById(parseInt(pokemonId));
-    if (newSelectedPokemon) {
-      setSelectedPokemon1(newSelectedPokemon);
-    } else {
-      console.error("Error, Pokemon not found yet");
-    }
-  };
-  const handlePokemonSwitch2 = (pokemonId: string) => {
-    const newSelectedPokemon = getPokemonById(parseInt(pokemonId));
-    if (newSelectedPokemon) {
-      setSelectedPokemon2(newSelectedPokemon);
-    } else {
-      console.error("Error, Pokemon not found yet");
-    }
-  };
-  const handlePokemonMenuToggle1 = () => {
-    setShowPokemonMenu1((prev) => !prev);
-  };
-  const handlePokemonMenuToggle2 = () => {
-    setShowPokemonMenu2((prev) => !prev);
-  };
-
-  const handlePokemonMenuClick1 = (pokemonId: number) => {
-    setArrowIcon1("arrow_down.svg");
-    handlePokemonSwitch1(String(pokemonId));
-    setShowPokemonMenu1(false);
-  };
-  const handlePokemonMenuClick2 = (pokemonId: number) => {
-    setArrowIcon2("arrow_down.svg"); 
-    handlePokemonSwitch2(String(pokemonId));
-    setShowPokemonMenu2(false);
-  };
-
-  const pokemonMenuItems = getAllPokemon();
-  
-  const handleVSIconClick = () => {
-    setModalIsOpen(true);
-  }; 
-  const handleCloseModal = () => {
-    setModalIsOpen(false);
-  };
-  const handleArrowIconClick1 = () => {
-    setArrowIcon1((prevIcon) => (prevIcon === "arrow_down.svg" ? "arrow_up.svg" : "arrow_down.svg"));
-    handlePokemonMenuToggle1();
-  };
-  const handleArrowIconClick2 = () => {
-    setArrowIcon2((prevIcon) => (prevIcon === "arrow_down.svg" ? "arrow_up.svg" : "arrow_down.svg"));
-    handlePokemonMenuToggle2();
-  };
-
-  useEffect(() => {
-    if (!isLoading) {
-      setSelectedPokemon1(getPokemonById(1) || null);
-      setSelectedPokemon2(getPokemonById(2) || null);
-    }
-  }, [isLoading]);
+  const { isLoading, getPokemonById } = usePokemonContext();
+  const [pokemon1, setPokemon1] = useState<Pokemon | null>(null);
+  const [pokemon2, setPokemon2] = useState<Pokemon | null>(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   if (isLoading || !getPokemonById) {
     return (
@@ -89,51 +25,63 @@ const Fight = () => {
   return (
     <Layout>
       <FightWrapper>
-        <h1> Fight </h1>
-        <div className="pokemon-container">
-          <PokemonBox
-            selectedPokemon={selectedPokemon1}
-            arrowIcon={arrowIcon1}
-            showMenu={showPokemonMenu1}
-            handleMenuToggle={handlePokemonMenuToggle1}
-            handleMenuClick={handlePokemonMenuClick1}
-            handleArrowIconClick={handleArrowIconClick1} 
-            pokemonMenuItems={pokemonMenuItems}        
-          />
-          <Icon iconname="vs_icon.png" className="vs-icon" onClick={handleVSIconClick}/>
-          <PokemonBox
-            selectedPokemon={selectedPokemon2}
-            arrowIcon={arrowIcon2}
-            showMenu={showPokemonMenu2}
-            handleMenuToggle={handlePokemonMenuToggle2}
-            handleMenuClick={handlePokemonMenuClick2}
-            handleArrowIconClick={handleArrowIconClick2}
-            pokemonMenuItems={pokemonMenuItems}
-          />
-        </div>
-        <BattleResult
-          selectedPokemon1={selectedPokemon1}
-          selectedPokemon2={selectedPokemon2}
-          modalIsOpen={modalIsOpen}
-          onCloseModal={handleCloseModal}
+        <PokemonList
+          className="list-left"
+          state={pokemon1}
+          setState={setPokemon1}
+          details={false}
+          scrollingQueryID="list1"
         />
-                   
+        <div className="pokemon-container">
+          <PokemonBox selectedPokemon={pokemon1} />
+          <Icon
+            iconname="vs_icon.png"
+            className="vs-icon"
+            onClick={() => setModalIsOpen(true)}
+          />
+          <PokemonBox selectedPokemon={pokemon2} />
+        </div>
+        <PokemonList
+          className="list-right"
+          state={pokemon2}
+          setState={setPokemon2}
+          details={false}
+          scrollingQueryID="list2"
+        />
       </FightWrapper>
+      <BattleResult
+        selectedPokemon1={pokemon1}
+        selectedPokemon2={pokemon2}
+        modalIsOpen={modalIsOpen}
+        onCloseModal={() => setModalIsOpen(false)}
+      />
     </Layout>
   );
 };
+
 const FightWrapper = styled.div`
+  flex: 1;
   display: flex;
   text-align: center;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+
+  .list-left {
+    padding-left: var(--space-sm);
+    padding-top: var(--space-sm);
+  }
+
+  .list-right {
+    padding-right: var(--space-sm);
+    padding-top: var(--space-sm);
+  }
 
   .pokemon-container {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
 
     .vs-icon {
       max-block-size: 100px;
@@ -148,18 +96,6 @@ const FightWrapper = styled.div`
     }
   }
 
-  h1 {
-    font-size: 50px;
-    color: var(--dark-pink);
-    letter-spacing: 2px;
-    margin-bottom: var(--space-xxl);
-  }
-
-  h2 {
-    color: var(--dark-pink);
-    font-size: var(--fs-2);
-    margin: 0;
-  }
   @media ${device.tablet} {
     flex-direction: column;
 
@@ -168,7 +104,10 @@ const FightWrapper = styled.div`
     }
   }
   @keyframes bounce {
-    0%, 20%, 50%, 80%,
+    0%,
+    20%,
+    50%,
+    80%,
     100% {
       transform: translateY(0);
     }
@@ -189,4 +128,5 @@ const FightWrapper = styled.div`
     }
   }
 `;
+
 export default Fight;

@@ -9,6 +9,10 @@ const GlobalStyle = createGlobalStyle`
     ${spacing}
     ${color}
 
+    *{
+        box-sizing: border-box;
+    }
+
     body {
         margin: 0;
         padding: 0;

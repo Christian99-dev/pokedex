@@ -1,36 +1,13 @@
-import React, {useState} from "react";
+import React from "react";
 import styled from "styled-components";
 import { Pokemon } from "@/context/PokemonContext";
 import TypeButton from "@/components/shared/TypeButton";
-import Icon from "@/components/shared/Icon";
-import PokemonMenu from "@/components/feature/fight/PokemonMenu";
 
 interface PokemonBoxProps {
   selectedPokemon: Pokemon | null;
-  arrowIcon: string;
-  showMenu: boolean;
-  handleMenuToggle: () => void;
-  handleMenuClick: (pokemonId: number) => void;
-  handleArrowIconClick: () => void;
-  pokemonMenuItems: Array<Pokemon>; 
 }
 
-const PokemonBox: React.FC<PokemonBoxProps> = ({
-  selectedPokemon,
-  arrowIcon,
-  showMenu,
-  handleMenuToggle,
-  handleMenuClick,
-  handleArrowIconClick,
-  pokemonMenuItems,
-}) => {
-    const [activeColumn, setActiveColumn] = useState<number | null>(null);
-
-    const handlePokemonMenuClick = (pokemonId: number) => {
-        setActiveColumn(pokemonId);
-        handleMenuClick(pokemonId);
-    };
-
+const PokemonBox: React.FC<PokemonBoxProps> = ({ selectedPokemon }) => {
   return (
     <PokemonBoxWrapper>
       <AnimatedPokemonImage
@@ -44,13 +21,6 @@ const PokemonBox: React.FC<PokemonBoxProps> = ({
       </div>
       <h2> {selectedPokemon?.name} </h2>
       <p>Number: 0{selectedPokemon?.id} </p>
-      <Icon iconname={arrowIcon} onClick={handleArrowIconClick} />
-      <PokemonMenu
-        show={showMenu}
-        menuItems={pokemonMenuItems}
-        handlePokemonMenuClick={handlePokemonMenuClick}
-        activeColumn= {activeColumn}
-      />
     </PokemonBoxWrapper>
   );
 };
@@ -62,11 +32,24 @@ const PokemonBoxWrapper = styled.div`
     gap: var(--space-xxl);
     margin-bottom: var(--space-xxs);
   }
-  
+
   p {
     font-size: var(--fs-5);
     color: #d3ade579;
     margin-bottom: -10px;
+  }
+
+  h1 {
+    font-size: 50px;
+    color: var(--dark-pink);
+    letter-spacing: 2px;
+    margin-bottom: var(--space-xxl);
+  }
+
+  h2 {
+    color: var(--dark-pink);
+    font-size: var(--fs-2);
+    margin: 0;
   }
 
   .types-container {
@@ -77,10 +60,10 @@ const PokemonBoxWrapper = styled.div`
 `;
 
 const AnimatedPokemonImage = styled.img`
-    margin-bottom: var(--space-md);
-    animation: fadeIn 2s ease-in-out;
+  margin-bottom: var(--space-md);
+  animation: fadeIn 2s ease-in-out;
 
-    @keyframes fadeIn {
+  @keyframes fadeIn {
     from {
       opacity: 0;
       transform: translateY(-200px) translateX(-20px) rotate(90deg);

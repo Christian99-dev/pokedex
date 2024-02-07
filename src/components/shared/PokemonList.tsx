@@ -1,6 +1,6 @@
 import { Pokemon, usePokemonContext } from "@/context/PokemonContext";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import PokemonPreviewCard from "../feature/pokedex/PokemonPreviewCard";
 import { useIntersection } from "@mantine/hooks";
 import pokemonMaxStats from "@/config/pokemonMaxStats";
@@ -15,17 +15,20 @@ const PokemonList = ({
   state,
   setState,
   details,
+  className,
+  scrollingQueryID,
 }: {
   state: Pokemon | null;
   setState: React.Dispatch<React.SetStateAction<Pokemon | null>>;
   details: boolean;
+  className?: string;
+  scrollingQueryID?:string;
 }) => {
   const { getAllPokemon, getAllSessionPokemon } = usePokemonContext();
   const allPokemon = getAllPokemon();
   const infiniteScrollCount = 10;
 
   // Setup State
-  const [filteredPokemon, setFilteredPokemon] = useState<Pokemon[]>([]);
   const [queryKey, setQueryKey] = useState(0); // State, um das Query zurückzusetzen
   const [typesFilter, setTypesFilter] = useState<string[]>([]);
   const [filter, setFilter] = useState({
@@ -36,56 +39,54 @@ const PokemonList = ({
     capture_rate: 0,
   });
 
-  // Filtered Pokemon state | Nicht mehr mit memo gelöst damit der setState von aussen nach der rendering phase ausgelöst wird
-  // if (filteredPokemon.length !== 0) setState(filteredPokemon[0]);
-  useEffect(() => {
+  // Filter
+  const filteredPokemon = useMemo(() => {
     // Noch keine pokemon da
     if (allPokemon.length === 0) return;
 
     // Filter anwenden
-    const filtered = [...getAllSessionPokemon(), ...allPokemon].filter(
-      (pokemon) => {
-        const nameMatch = pokemon.name
-          .toLowerCase()
-          .includes(filter.name.toLowerCase());
+    return [...getAllSessionPokemon(), ...allPokemon].filter((pokemon) => {
+      const nameMatch = pokemon.name
+        .toLowerCase()
+        .includes(filter.name.toLowerCase());
 
-        let typeMatch = true;
+      let typeMatch = true;
 
-        if (typesFilter.length === 1) {
-          typeMatch = pokemon.types.includes(typesFilter[0]);
-        } else if (typesFilter.length > 1) {
-          typeMatch = typesFilter.every((type) => pokemon.types.includes(type));
-        }
-
-        const heightMatch = pokemon.height >= filter.height;
-        const weightMatch = pokemon.weight >= filter.weight;
-        const base_experienceMatch =
-          pokemon.base_experience >= filter.base_experience;
-        const capture_rateMatch = pokemon.capture_rate >= filter.capture_rate;
-
-        return (
-          nameMatch &&
-          typeMatch &&
-          heightMatch &&
-          weightMatch &&
-          base_experienceMatch &&
-          capture_rateMatch
-        );
+      if (typesFilter.length === 1) {
+        typeMatch = pokemon.types.includes(typesFilter[0]);
+      } else if (typesFilter.length > 1) {
+        typeMatch = typesFilter.every((type) => pokemon.types.includes(type));
       }
-    );
 
-    // Wenn "neue liste"
-    if (filtered.length !== 0) setState(filtered[0]);
+      const heightMatch = pokemon.height >= filter.height;
+      const weightMatch = pokemon.weight >= filter.weight;
+      const base_experienceMatch =
+        pokemon.base_experience >= filter.base_experience;
+      const capture_rateMatch = pokemon.capture_rate >= filter.capture_rate;
 
-    setFilteredPokemon(filtered);
-    setQueryKey(queryKey + 1);
+      return (
+        nameMatch &&
+        typeMatch &&
+        heightMatch &&
+        weightMatch &&
+        base_experienceMatch &&
+        capture_rateMatch
+      );
+    });
   }, [filter, typesFilter, allPokemon]);
+
+  useEffect(() => {
+    if (filteredPokemon && filteredPokemon?.length !== 0)
+      setState(filteredPokemon[0]);
+    setQueryKey(queryKey + 1);
+  }, [filteredPokemon]);
 
   // Infinity Scroll
   const { data: filteredPokemonPages, fetchNextPage } = useInfiniteQuery({
-    queryKey: [queryKey],
+    // avoid bleeding and overlapping wenn multiple instances
+    queryKey: [scrollingQueryID ? scrollingQueryID + queryKey : queryKey],
     queryFn: ({ pageParam }: { pageParam: any }) => {
-      return filteredPokemon.slice(
+      return filteredPokemon?.slice(
         (pageParam - 1) * infiniteScrollCount,
         pageParam * infiniteScrollCount
       );
@@ -108,7 +109,7 @@ const PokemonList = ({
 
   // Helper
   const shiftPokemon = (dir: -1 | 1) => {
-    if (!state) return;
+    if (!state || !filteredPokemon) return;
     // Finding current pokemon array Index
     const arrayIdFromNextPokemon = filteredPokemon.indexOf(state) + 1 * dir;
 
@@ -134,7 +135,9 @@ const PokemonList = ({
   );
 
   return (
-    <PokemonListWrapper>
+    <PokemonListWrapper
+      className={className + " " + (details ? "details-show" : "")}
+    >
       <div className="preview">
         <div className="search">
           <ValueSlider
@@ -186,6 +189,7 @@ const PokemonList = ({
         <div className="list-wrapper">
           <div className="list">
             {filteredPokemonPagesFlattend?.map((pokemon, index) => {
+              if (!pokemon) return;
               return (
                 <PokemonPreviewCard
                   pokemon={pokemon}
@@ -221,12 +225,8 @@ export default PokemonList;
 const PokemonListWrapper = styled.div`
   height: 100%;
   display: flex;
-  width: 100%;
 
   .preview {
-    padding: var(--space-sm);
-    padding-right: 0;
-    padding-bottom: 0;
     display: flex;
     flex-direction: column;
     ${responsiveCSS("width", 600, 400, 400, 400, 300, 300)}
@@ -301,7 +301,11 @@ const PokemonListWrapper = styled.div`
   }
 
   .details {
-    flex: 1;
     margin: 0 var(--space-xxxl);
+    flex: 1;
+  }
+
+  &.details-show {
+    width: 100%;
   }
 `;

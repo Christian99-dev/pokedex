@@ -17,8 +17,8 @@ const PokedexPreview = ({
   return (
     <PokedexCardWrapper ref={innerRef} className={active ? "active" : ""} onClick={onClick}>
       <img className="pokemon-img" src={image} alt={name} />
-      <h1>{name}</h1>
-      <h2>{id}</h2>
+      <h1 className="name">{name}</h1>
+      <h2 className="id">{id}</h2>
     </PokedexCardWrapper>
   );
 };
@@ -35,16 +35,17 @@ const PokedexCardWrapper = styled.div`
   transition: all 0.02s ease-out;
   cursor: pointer;
 
-  h1 {
+  .name {
     font-size: var(--fs-4);
     font-weight: bold;
   }
-  h2 {
+  .id {
     font-size: var(--fs-5);
     font-weight: 200;
     margin-left: auto;
   }
-  img {
+
+  .pokemon-img {
     ${responsiveCSS("height", 100, 90, 80, 70, 60, 50)}
     ${responsiveCSS("width", 100, 90, 80, 70, 60, 50)}
     object-fit: cover;

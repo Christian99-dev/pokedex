@@ -38,6 +38,7 @@ const ValueSlider = ({
 export default ValueSlider;
 
 const SliderWrapper = styled.div`
+
   input {
     width: 100%;
   }
