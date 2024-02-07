@@ -219,7 +219,7 @@ const PokemonList = ({
           </div>
         </div>
       </div>
-      {details && (
+      {details && state && (
         <div className="details">
           <PokemonDisplay
             pokemon={state}
