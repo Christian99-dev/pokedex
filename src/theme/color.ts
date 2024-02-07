@@ -6,6 +6,7 @@ export default css`
     --dark-pink: #b76fb6;
     --purple: #633c7d;
     --dark: #231d24;
+    --dark-transparent:rgba(35, 29, 36, 0.5);
     --white: white;
 
     --type-bug: linear-gradient(90deg, #8cb330 50%, #bd9457 50%);

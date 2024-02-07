@@ -10,101 +10,96 @@ interface BattleResultModalProps {
   isOpen: boolean;
   onClose: () => void;
   winner?: Pokemon | null;
-  selectedPokemon1?: Pokemon |null; 
-  selectedPokemon2?: Pokemon|null; 
+  selectedPokemon1?: Pokemon | null;
+  selectedPokemon2?: Pokemon | null;
 }
 
-const BattleResultModal: React.FC<BattleResultModalProps> = ({
+const BattleResultModal = ({
   isOpen,
   onClose,
   winner,
   selectedPokemon1,
   selectedPokemon2,
-}) => {
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+}: BattleResultModalProps) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
-    useEffect(() => {
-      setModalIsOpen(isOpen);
-    }, [isOpen]);
-    const handleClose = () => {
-        setModalIsOpen(false);
-        onClose();
-      };
+  useEffect(() => {
+    setModalIsOpen(isOpen);
+  }, [isOpen]);
+
+  const handleClose = () => {
+    setModalIsOpen(false);
+    onClose();
+  };
+
   return (
     <Modal
-      isOpen={modalIsOpen}onRequestClose={handleClose}contentLabel="Battle Result Modal"
-      style = {{
+      isOpen={modalIsOpen}
+      onRequestClose={handleClose}
+      contentLabel="Battle Result Modal"
+      style={{
+        overlay: {
+          backgroundColor: "var(--dark-transparent)",
+        },
         content: {
-            width: "50%", 
-            height: "50%", 
-            margin: "auto", 
-            backgroundColor: "var(--pink)",
-            borderRadius: "20px",
-          },
+          width: "50%",
+          height: "50%",
+          margin: "auto",
+          backgroundColor: "var(--pink)",
+          borderRadius: "20px"
+        },
       }}
-      >
-        <Icon iconname="close.svg" className="close-icon" onClick={handleClose}/>
-        {winner && (
+    >
+      <Icon iconname="close.svg" className="close-icon" onClick={handleClose} />
+
+      {winner && (
         <ModalContent>
-            <h1> THE WINNER </h1>
-            <StyledWinnerImage src={winner.image} alt={winner.name} />
-            <WinnerInfo>
-                <h1>{winner.name}</h1>
-            </WinnerInfo>
+          <h1> THE WINNER </h1>
+          <StyledWinnerImage src={winner.image} alt={winner.name} />
+          <WinnerInfo>
+            <h1>{winner.name}</h1>
+          </WinnerInfo>
         </ModalContent>
       )}
- 
-        {(!winner && selectedPokemon1 &&selectedPokemon2) && (
-        
-        <DrawInfo>
 
-            <div className="pok">
-                <PokImage src ={selectedPokemon1.image} alt = {selectedPokemon1.name} />
-                <PokInfo> 
-                    <h2> {selectedPokemon1?.name} </h2>
-                    <div className="types-container">
-                        {selectedPokemon1?.types.map((type) => (
-                            <TypeButton key={type} typeName={type} />
-                        ))}
-                    </div>
-                </PokInfo>
-            </div> 
-            <div className="draw-message"> <h2>1:1</h2> </div>
-            <div className="pok" >
-                <PokImage src ={selectedPokemon2.image} alt = {selectedPokemon2.name} />
-                <PokInfo> 
-                    <h2>{selectedPokemon2?.name} </h2>
-                    <div className="types-container">
-                        {selectedPokemon2?.types.map((type) => (
-                            <TypeButton key={type} typeName={type} />
-                        ))}
-                    </div> 
-                </PokInfo>       
-            </div> 
+      {!winner && selectedPokemon1 && selectedPokemon2 && (
+        <DrawInfo>
+          <PokImage src={selectedPokemon1.image} alt={selectedPokemon1.name} />
+          <div className="draw-message">
+            <h2>1:1</h2>
+          </div>
+          <PokImage src={selectedPokemon2.image} alt={selectedPokemon2.name} />
         </DrawInfo>
-            )}
+      )}
     </Modal>
   );
 };
+
 const DrawInfo = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
-  height: 300px;
+  gap: 50px;
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  z-index: 0;
 
   .draw-message {
-       h2 {
-        color: var(--dark-pink);
-        font-size: var(--fs-2);
-        margin: 0;
-       }
+    h2 {
+      color: var(--dark-pink);
+      font-size: var(--fs-2);
+      margin: 0;
     }
+  }
 `;
-const PokImage = styled.img `
-  ${responsiveCSS("height", 300, 280, 260, 240, 210, 200)}
 
-`; 
+const PokImage = styled.img`
+  ${responsiveCSS("height", 300, 280, 260, 240, 210, 200)}
+`;
+
 const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -118,6 +113,7 @@ const ModalContent = styled.div`
     margin-bottom: var(--space-xxl);
   }
 `;
+
 const WinnerInfo = styled.div`
   text-align: center;
   h1 {
@@ -131,7 +127,6 @@ const WinnerInfo = styled.div`
     margin: 0;
     color: #431616;
   }
-  
 `;
 
 const rotateAndScaleAnimation = keyframes`
@@ -162,14 +157,5 @@ const StyledWinnerImage = styled.img`
   animation: ${rotateAndScaleAnimation} 3s linear 1;
 `;
 
-
-const PokInfo = styled.div`
-  text-align: center;
-  h2 {
-    color: var(--dark-pink);
-    letter-spacing: 2px;
-    margin-bottom: var(--space-xxl);
-  }
-`;
 
 export default BattleResultModal;

@@ -12,6 +12,7 @@ import type {
 } from "@/pages/api/generate-pokemon-description";
 import Stat from "./Stat";
 import Attack from "./Attack";
+import { convertPokemonId } from "@/utils/helper";
 
 const PokemonDisplay = ({
   pokemon,
@@ -70,7 +71,7 @@ const PokemonDisplay = ({
   return (
     <PokemonDisplayWrapper>
       <div className="img-wrapper">
-        <div className="number">{formatNumber(pokemon?.id)}</div>
+        <div className="number">{pokemon?.id && convertPokemonId(pokemon.id)}</div>
         <img className="pokemon-img" src={pokemon?.image} alt={pokemon?.name} />
       </div>
 
@@ -284,13 +285,3 @@ const PokemonDisplayWrapper = styled.div`
   }
 `;
 
-function formatNumber(num: number | undefined | null) {
-  let numStr = String(num);
-
-  if (numStr.length < 3) {
-    while (numStr.length < 3) {
-      numStr = "0" + numStr;
-    }
-  }
-  return "#" + numStr;
-}
