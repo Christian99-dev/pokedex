@@ -32,8 +32,16 @@ Die KI ist IP-gesperrt, und wir müssen den IP-Lock über Discord zurücksetzen,
 In der Demo wird aber alles über unseren Laptop funktionieren.
 
 ## Aufsetzen des Projektes
+npm install
 npm run dev
 Keine weiteren Instanzen...
+
+## Third Party Packages
+-"react-modal"              => Für das Fighting Modal
+-"react-spinners"           => Ladeanimation
+-"react-toastify"           => Popups für die Validierung
+-"@mantine/hooks"           => useIntersection für Invinite scrolling
+-"@tanstack/react-query":   => useInfiniteQuery für Invinite scrolling
 
 ## Ordnerstruktur
 ├── src
