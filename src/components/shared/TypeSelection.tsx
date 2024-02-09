@@ -17,6 +17,7 @@ const TypeSelection = ({
 }) => {
   const { allTypes } = usePokemonContext();
   const [open, setOpen] = useState<Boolean>(false);
+  console.log(allTypes)
 
   const addType = (type: string) => {
     setState((oldVal: string[]) => {
@@ -60,12 +61,17 @@ const TypeSelection = ({
         )}
         {active ? (
           <Icon
+            data-testid="add"
             iconname="add-circle.svg"
             className="add-icon"
             onClick={() => toggleFilter()}
           />
         ) : (
-          <Icon iconname="add-circle.svg" className="add-icon closed" />
+          <Icon
+            data-testid="add"
+            iconname="add-circle.svg"
+            className="add-icon closed"
+          />
         )}
       </div>
 

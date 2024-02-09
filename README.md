@@ -31,6 +31,21 @@ Die KI ist IP-gesperrt, und wir müssen den IP-Lock über Discord zurücksetzen,
 
 In der Demo wird aber alles über unseren Laptop funktionieren.
 
+## Testing
+
+-Coverage
+In den Unit-Tests, testen wir alle Utils/Helper sowie den Gesamnten Pokemon Context.
+In den E2E Tests, testen wir alle 3 Features (addPokemon, fight, pokedex)
+
+-Ausführen
+E2E  => npx playwright test
+Unit => npm test
+
+-Sidenode
+Leider konnten wir nicht die Components testen, da dort unerwartete Fehler aufgetreten sind.
+Z.b ist [allTypes] leer im Typeselection.notworking.tsx Test, obwohl in dem PokemonContext.test.tsx es keine Probleme mit diesem Test gibt.
+Ein anderer grund ist, das in der Test-Umgebung zusätliche probleme aufgekommen sind aufgrund der useInfinityQuery von "@tanstack/react-query".
+
 ## Aufsetzen des Projektes
 npm install
 npm run dev
@@ -46,14 +61,21 @@ Keine weiteren Instanzen...
 ## Ordnerstruktur
 ├── src
 |   └── components
-|       └── feature     => Feature-basierte Komponenten (z. B. Fight oder Pokedex) 
-|       └── shared      => Globale Komponenten (z. B. Button)
-|   └── config          => Wichtige Konstanten und Informationen projektwelt
-|   └── context         => Pokemon-Context, wo alle Pokemons gefetcht werden
-|   └── pages           => Seiten
-|       └── api         => API-Routen
-|   └── theme           => Alles, was mit dem Theme zu tun hat (global, Variablen, Spacing) inkl. Utils fürs Styling, z. B. responsiveCSS()
-|   └── utils           => Nützliche Helper und Tools, unter anderem Session-Methoden
-
+|       └── feature         => Feature-basierte Komponenten (z. B. Fight oder Pokedex) 
+|       └── shared          => Globale Komponenten (z. B. Button)
+|   └── config              => Wichtige Konstanten und Informationen projektwelt
+|   └── context             => Pokemon-Context, wo alle Pokemons gefetcht werden
+    └── mock                => Mock daten für Tests etc.
+|   └── pages               => Seiten
+|       └── api             => API-Routen
+    └── query               => GraphQL Querys
+    └── test                => Unit Tests
+        └── components
+            └── feature    
+|           └── shared     
+        └── utils
+|   └── theme               => Alles, was mit dem Theme zu tun hat (global, Variablen, Spacing) inkl. Utils fürs Styling, z. B. responsiveCSS()
+|   └── utils               => Nützliche Helper und Tools, unter anderem Session-Methoden
+├── tests                   => Playwright E2E Tests
 
 

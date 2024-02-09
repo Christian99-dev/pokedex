@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest --verbose --detectOpenHandles --runInBand --testPathIgnorePatterns='tests'"
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",
@@ -24,6 +24,7 @@
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.41.2",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
     "@types/jest": "^29.5.12",

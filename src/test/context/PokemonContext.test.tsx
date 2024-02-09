@@ -121,7 +121,7 @@ const TestComponentContextOperations = () => {
     allTypes,
   } = usePokemonContext();
   const allPokemon = getAllPokemon();
-
+  
   return (
     <>
       <div data-testid="get-all-pokemons">
@@ -134,6 +134,7 @@ const TestComponentContextOperations = () => {
       <div data-testid="get-next-free-pokemon-id">{getNextFreeId()}</div>
       <div data-testid="get-all-types">
         {allTypes.map((type) => type + " ")}
+        
       </div>
     </>
   );
