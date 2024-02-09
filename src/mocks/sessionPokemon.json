@@ -1,0 +1,16 @@
+{
+    "id": 1,
+    "image": "https://example.com/pokemon1.png",
+    "name": "Michael Jackson",
+    "types": ["grass", "steel"],
+    "description": "A grass/poison-type Pokémon.",
+    "moves": [
+      {"name": "Move1", "type": "Type1"},
+      {"name": "Move2", "type": "Type2"}
+    ],
+    "weight": 69,
+    "base_experience": 64,
+    "height": 7,
+    "capture_rate": 45
+  }
+  
