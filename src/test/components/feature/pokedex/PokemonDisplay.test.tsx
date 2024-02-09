@@ -65,7 +65,5 @@ describe('PokemonDisplay Component', () => {
     expect(screen.getByText('Generate Description')).toBeInTheDocument();
     expect(screen.getByText('AI')).toBeInTheDocument();
     expect(screen.getByText('Random')).toBeInTheDocument();
-
-    screen.debug()
   });
 });
