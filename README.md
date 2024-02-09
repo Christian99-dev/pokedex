@@ -51,6 +51,10 @@ npm install
 npm run dev
 Keine weiteren Instanzen...
 
+## Infos über pokeAPI
+Es kann vorkommen das die PokeAPI "GraphQL Beta" - Schnitstelle manschmal nicht funktioniert.
+Man kann den aktuelle status hier einsehen https://pokeapi.statuspage.io/ > Public services > GraphQL Beta
+
 ## Third Party Packages
 -"react-modal"              => Für das Fighting Modal
 -"react-spinners"           => Ladeanimation
