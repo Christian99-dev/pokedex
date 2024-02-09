@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RenderResult, act, render, waitFor } from "@testing-library/react";
 import { PokemonProvider, usePokemonContext } from "@/context/PokemonContext";
-import mockApolloClient from "@/mocks/apolloMocks";
+import mockApolloClient from "@/mocks/apolloMockClient";
 import mockSessionPokemon from "@/mocks/sessionPokemon.json";
 import "@testing-library/jest-dom/jest-globals";
 import "@testing-library/jest-dom";
@@ -83,7 +83,7 @@ describe("PokemonProvider", () => {
           new Promise((resolve) => {
             setTimeout(() => {
               resolve({ sprites: { front_default: "url" } });
-            }, 1000);
+            }, 100);
           }),
       });
 
@@ -104,12 +104,12 @@ describe("PokemonProvider", () => {
             component?.getByTestId("get-random-pokemon-img")
           ).toHaveTextContent("url");
         },
-        { timeout: 1200 }
+        { timeout: 300 }
       );
     });
   });
 
-  
+
 });
 
 const TestComponentContextOperations = () => {
