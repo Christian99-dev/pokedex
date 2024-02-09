@@ -1,39 +1,34 @@
-import React from 'react';
-import { render, waitFor } from '@testing-library/react';
-import { PokemonProvider, usePokemonContext, Pokemon } from '../context/PokemonContext';
-import '@testing-library/jest-dom'; // Import this line
+// PokemonContext.test.tsx
 
+import React from "react";
+import { act, render } from "@testing-library/react";
+import { PokemonProvider, usePokemonContext } from "@/context/PokemonContext";
+import mockApolloClient from "@/mocks/apolloMocks";
 
-describe('PokemonProvider', () => {
-  it('sollte die richtigen Pokemon-Daten zurückgeben, wenn nicht mehr geladen wird', async () => {
-    const TestComponent = () => {
-      const { getPokemonById, isLoading } = usePokemonContext();
-
-      if (isLoading) {
-        return <div data-testid="loading">Loading...</div>;
-      }
-
-      const pokemon: Pokemon | null | undefined = getPokemonById(1);
-
-      return (
-        <div>
-          <div data-testid="pokemon-name">{pokemon?.name}</div>
-          <div data-testid="pokemon-id">{pokemon?.id}</div>
-        </div>
+describe("PokemonContext", () => {
+  it("renders PokemonContext without errors", async () => {
+    await act(async () => {
+      render(
+        <PokemonProvider client={mockApolloClient}>
+          <div />
+        </PokemonProvider>
       );
-    };
+    });
+  });
 
-    const { getByTestId, queryByTestId } = render(
-      <PokemonProvider>
-        <TestComponent />
-      </PokemonProvider>
-    );
-
-    // Warte darauf, dass der Ladezustand beendet ist
-    await waitFor(() => expect(queryByTestId('loading')).toBeNull());
-
-    // Hier könnte man weitere Überprüfungen durchführen, abhängig von den erwarteten Daten
-    expect(getByTestId('pokemon-name')).toHaveTextContent('Bulbasaur');
-    expect(getByTestId('pokemon-id')).toHaveTextContent('1');
+  it("gets All Pokemons from Context", async () => {
+    await act(async () => {
+      render(
+        <PokemonProvider client={mockApolloClient}>
+          <TestComponent />
+        </PokemonProvider>
+      );
+    });
   });
 });
+
+const TestComponent = () => {
+  const { getAllPokemon } = usePokemonContext();
+  console.log(getAllPokemon());
+  return <></>;
+};

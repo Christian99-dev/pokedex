@@ -20,7 +20,8 @@
     "react-modal": "^3.16.1",
     "react-spinners": "^0.13.8",
     "react-toastify": "^10.0.4",
-    "styled-components": "^6.1.1"
+    "styled-components": "^6.1.1",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.2",

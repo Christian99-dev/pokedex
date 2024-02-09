@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import {usePokemonContext } from "@/context/PokemonContext";
 import LoadingBanner from "@/components/shared/LoadingBanner";
+import mock from "@/mocks/allPokemonResponse.json"
 
 export default function Home(){
   const { isLoading, getAllPokemon } = usePokemonContext();

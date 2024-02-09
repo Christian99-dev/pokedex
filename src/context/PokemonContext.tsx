@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { gql, ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { getAllPokemonsFromSession } from "@/utils/session";
 import { getRandomInt } from "@/utils/helper";
+import ALL_POKEMON from "@/query/allPokemon";
+import { nextPokemons, pokemonCount } from "@/config/pokemonFetchCount";
 
 export type Pokemon = {
   id: number;
@@ -42,15 +44,11 @@ export const usePokemonContext = () => useContext(PokemonContext);
 
 export const PokemonProvider = ({
   children,
+  client
 }: {
   children: React.ReactNode;
+  client: ApolloClient<NormalizedCacheObject>
 }) => {
-  const client = new ApolloClient({
-    uri: "https://beta.pokeapi.co/graphql/v1beta",
-    cache: new InMemoryCache(),
-  });
-  const pokemonCount = 493;
-  const nextRandomPokemons = 100;
   const [allPokemon, setAllPokemon] = useState<Pokemon[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [allTypes, setAllTypes] = useState<string[]>([]);
@@ -85,7 +83,7 @@ export const PokemonProvider = ({
 
   const getRandomPokemonImage = async () => {
     try {
-      const randomID = getRandomInt(pokemonCount + 1, pokemonCount + nextRandomPokemons)
+      const randomID = getRandomInt(pokemonCount + 1, pokemonCount + nextPokemons)
       // Fetch Pokémon-Daten
       const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomID}`);
       const pokemonData = await pokemonResponse.json();
@@ -101,40 +99,7 @@ export const PokemonProvider = ({
   useEffect(() => {
     client
       .query({
-        query: gql`
-          query MyQuery {
-            pokemon_v2_pokemon(limit: ${pokemonCount}) {
-              id
-              name
-              pokemon_v2_pokemontypes {
-                pokemon_v2_type {
-                  name
-                }
-              }
-              pokemon_v2_pokemonsprites {
-                sprites
-              }
-              pokemon_v2_pokemonmoves(limit: 4) {
-                pokemon_v2_move {
-                  name
-                  pokemon_v2_type {
-                    name
-                  }
-                }
-              }
-              pokemon_v2_pokemonstats(limit: 1) {
-                pokemon_v2_pokemon {
-                  base_experience
-                  height
-                  pokemon_v2_pokemonspecy {
-                    capture_rate
-                  }
-                }
-              }
-              weight
-            }
-          }
-        `,
+        query: ALL_POKEMON(pokemonCount),
       })
       .then(({ data }) => {
         let allTypesWithDuplicate: string[] = [];
